@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import { route } from 'nextjs-routes';
@@ -6,6 +6,7 @@ import { route } from 'nextjs-routes';
 import useApiQuery from 'lib/api/useApiQuery';
 import useIsMobile from 'lib/hooks/useIsMobile';
 import useNewTxsSocket from 'lib/hooks/useNewTxsSocket';
+import arrowRightIcon from "icons/arrows/east.svg";
 import { TX } from 'stubs/tx';
 import LinkInternal from 'ui/shared/LinkInternal';
 import SocketNewItemsNotice from 'ui/shared/SocketNewItemsNotice';
@@ -52,7 +53,10 @@ const LatestTransactions = () => {
           ))) }
         </Box>
         <Flex justifyContent="center">
-          <LinkInternal fontSize="sm" href={ txsUrl }>View all transactions</LinkInternal>
+          <Button colorScheme='blue' size={'sm'} rightIcon={<Icon as={arrowRightIcon} />} variant='outline'>
+            <LinkInternal fontSize="sm" href={ txsUrl } color="blue.600" _hover={{color: "blue.5000"}}>View all transactions</LinkInternal>
+          </Button>
+          
         </Flex>
       </>
     );

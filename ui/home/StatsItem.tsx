@@ -35,13 +35,13 @@ const StatsItem = ({ icon, title, value, className, tooltipLabel, url, isLoading
     [`@media screen and (min-width: ${ breakpoints.lg }) and (max-width: ${ LARGEST_BREAKPOINT })`]: { alignItems: 'center' },
   };
 
-  const bgColor = useColorModeValue('blue.50', 'blue.800');
   const loadingBgColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
   const infoColor = useColorModeValue('gray.600', 'gray.400');
 
   return (
     <Flex
-      backgroundColor={ isLoading ? loadingBgColor : bgColor }
+      backgroundColor={ isLoading ? loadingBgColor : "whiteAlpha.500" }
+      boxShadow="md"
       padding={ 3 }
       borderRadius="md"
       flexDirection="row"
@@ -63,7 +63,7 @@ const StatsItem = ({ icon, title, value, className, tooltipLabel, url, isLoading
         alignItems="start"
         sx={ sxText }
       >
-        <Skeleton isLoaded={ !isLoading } color="text_secondary" fontSize="xs" lineHeight="16px" borderRadius="base">
+        <Skeleton isLoaded={ !isLoading } color="blackAlpha.900" fontSize="xs" lineHeight="16px" borderRadius="base">
           <span>{ title }</span>
         </Skeleton>
         <Skeleton isLoaded={ !isLoading } fontWeight={ 500 } fontSize="md" color={ useColorModeValue('black', 'white') } borderRadius="base">

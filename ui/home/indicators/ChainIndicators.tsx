@@ -4,7 +4,7 @@ import React from 'react';
 import config from 'configs/app';
 import useApiQuery from 'lib/api/useApiQuery';
 import Hint from 'ui/shared/Hint';
-
+import gasIcon from 'icons/gas.svg';
 import ChainIndicatorChartContainer from './ChainIndicatorChartContainer';
 import ChainIndicatorItem from './ChainIndicatorItem';
 import useFetchChartData from './useFetchChartData';
@@ -60,6 +60,8 @@ const ChainIndicators = () => {
     <Flex
       p={{ base: 0, lg: 8 }}
       borderRadius={{ base: 'none', lg: 'lg' }}
+      boxShadow="lg"
+      background='blue.400'
       columnGap={ 12 }
       rowGap={ 0 }
       flexDir={{ base: 'column', lg: 'row' }}
@@ -67,35 +69,36 @@ const ChainIndicators = () => {
       alignItems="stretch"
       mt={ 8 }
     >
-      <Flex flexGrow={ 1 } flexDir="column" order={{ base: 2, lg: 1 }} p={{ base: 6, lg: 0 }} color="white">
+       { indicators.length > 0 && (
+        <Flex
+          w="40%"
+          justifyContent={"space-between"}
+          as="ul"
+          p={ 3 }
+          borderRadius="lg"
+          bgColor={{ base: listBgColorMobile, lg: listBgColorDesktop }}
+          rowGap={ 3 }
+          order={1}
+        >
+          { indicators.map((indicator) => {
+              if (indicator?.id !== 'daily_txs') {
+                return  <ChainIndicatorItem
+                key={ indicator.id }
+                { ...indicator }
+                stats={ statsQueryResult }
+              />
+              }
+          }) }
+        </Flex>
+      ) }
+      <Flex w="100%" flexDir="column" order={2} p={{ base: 6, lg: 0 }} color="white">
         <Flex alignItems="center" color="white">
           <Text fontWeight={ 500 } fontFamily="heading" fontSize="lg" color="white">{ indicator?.title }</Text>
         </Flex>
         { valueTitle }
         <ChainIndicatorChartContainer { ...queryResult }/>
       </Flex>
-      { indicators.length > 1 && (
-        <Flex
-          flexShrink={ 0 }
-          flexDir="column"
-          as="ul"
-          p={ 3 }
-          borderRadius="lg"
-          bgColor={{ base: listBgColorMobile, lg: listBgColorDesktop }}
-          rowGap={ 3 }
-          order={{ base: 1, lg: 2 }}
-        >
-          { indicators.map((indicator) => (
-            <ChainIndicatorItem
-              key={ indicator.id }
-              { ...indicator }
-              isSelected={ selectedIndicator === indicator.id }
-              onClick={ selectIndicator }
-              stats={ statsQueryResult }
-            />
-          )) }
-        </Flex>
-      ) }
+     
     </Flex>
   );
 };

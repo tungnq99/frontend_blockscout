@@ -1,8 +1,12 @@
-import { Flex, Box, VStack, Icon, useColorModeValue } from '@chakra-ui/react';
+import { Flex, Box, VStack, Icon, useColorModeValue, Link, Center } from '@chakra-ui/react';
 import React from 'react';
 
 import config from 'configs/app';
-import chevronIcon from 'icons/arrows/east-mini.svg';
+import redditIcon from 'icons/social/reddit_filled.svg';
+import teleIcon from 'icons/social/telegram_filled.svg';
+import discordIcon from 'icons/social/discord.svg';
+import twitterIcon from 'icons/social/tweet.svg';
+
 import testnetIcon from 'icons/testnet.svg';
 import { useAppContext } from 'lib/contexts/app';
 import * as cookies from 'lib/cookies';
@@ -47,6 +51,30 @@ const NavigationDesktop = () => {
 
   const isExpanded = isCollapsed === false;
 
+  const BLOCKSCOUT_LINKS = [
+    {
+      icon: teleIcon,
+      iconSize: '24px',
+      url: 'https://telegram.org/',
+    },
+    {
+      icon: twitterIcon,
+      iconSize: '24px',
+      url: 'https://www.twitter.com/',
+    },
+    {
+      icon: discordIcon,
+      iconSize: '24px',
+      url: 'https://discord.gg/',
+    },
+    {
+      icon: redditIcon,
+      iconSize: '24px',
+      text: 'Reddit',
+      url: 'https://www.reddit.com/?rdt=38449',
+    }
+  ];
+
   return (
     <Flex
       display={{ base: 'none', lg: 'flex' }}
@@ -60,7 +88,7 @@ const NavigationDesktop = () => {
       width={{ lg: isExpanded ? '235px' : '92px', xl: isCollapsed ? '92px' : '235px' }}
       { ...getDefaultTransitionProps({ transitionProperty: 'width, padding' }) }
     >
-      { config.chain.isTestnet && <Icon as={ testnetIcon } h="14px" w="auto" color="red.400" pl={ 3 } alignSelf="flex-start"/> }
+      
       <Box
         as="header"
         display="flex"
@@ -75,8 +103,13 @@ const NavigationDesktop = () => {
         transitionDuration="normal"
         transitionTimingFunction="ease"
       >
-        <NetworkLogo isCollapsed={ isCollapsed }/>
-        { Boolean(config.UI.sidebar.featuredNetworks) && <NetworkMenu isCollapsed={ isCollapsed }/> }
+        <Flex  flexDirection="column" justifyContent="flex-start" alignItems="center">
+          { config.chain.isTestnet && <Icon as={ testnetIcon } h="14px" w="auto" color="red.400"  alignSelf="flex-start"/> }
+          <Box mt={2}>
+            <NetworkLogo isCollapsed={ isCollapsed }/>
+            { Boolean(config.UI.sidebar.featuredNetworks) && <NetworkMenu isCollapsed={ isCollapsed }/> }
+          </Box>
+        </Flex>
       </Box>
       <Box as="nav" mt={ 20 } w="100%">
         <VStack as="ul" spacing="1" alignItems="flex-start">
@@ -89,13 +122,28 @@ const NavigationDesktop = () => {
           }) }
         </VStack>
       </Box>
-      { hasAccount && (
+      <Box as="nav" mt={ 20 } w="100%" h="50%" display="flex" alignItems="flex-end">
+        <VStack as="ul" spacing="1" >
+            <Flex justifyContent="space-between" alignItems="center" gap={6}>
+                {BLOCKSCOUT_LINKS.map((item) => {
+                  return <Link href={ item.url } variant="secondary" target="_blank" fontSize="xs">
+                          { item.icon && (
+                            <Center minW={ 6 } mr="6px">
+                              <Icon boxSize={ item.iconSize} as={ item.icon }/>
+                            </Center>
+                          ) }
+                        </Link> 
+                })}
+            </Flex>
+        </VStack>
+      </Box>
+      {/* { hasAccount && (
         <Box as="nav" borderTopWidth="1px" borderColor="divider" w="100%" mt={ 6 } pt={ 6 }>
           <VStack as="ul" spacing="1" alignItems="flex-start">
             { accountNavItems.map((item) => <NavLink key={ item.text } item={ item } isCollapsed={ isCollapsed }/>) }
           </VStack>
         </Box>
-      ) }
+      ) } */}
       {/* <Icon
         as={ chevronIcon }
         width={ 6 }

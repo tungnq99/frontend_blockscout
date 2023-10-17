@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, AlertTitle, chakra, Skeleton } from '@chakra-ui/react';
+import { Alert, AlertIcon, AlertTitle, chakra, Flex, Skeleton, Text } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 
@@ -12,6 +12,8 @@ import useIsMobile from 'lib/hooks/useIsMobile';
 import { nbsp, ndash } from 'lib/html-entities';
 import useSocketChannel from 'lib/socket/useSocketChannel';
 import useSocketMessage from 'lib/socket/useSocketMessage';
+import ColorModeToggler from 'ui/snippets/header/ColorModeToggler';
+import NetworkAddToWallet from 'ui/shared/NetworkAddToWallet';
 
 const IndexingAlertBlocks = ({ className }: { className?: string }) => {
   const isMobile = useIsMobile();
@@ -65,11 +67,10 @@ const IndexingAlertBlocks = ({ className }: { className?: string }) => {
   }
 
   return (
-    <Alert status="info" colorScheme="gray" py={ 3 } borderRadius="12px" mb={ 6 } className={ className }>
-      <AlertTitle>
-          Welcome to ZENODETEST explorer!
-      </AlertTitle>
-    </Alert>
+     <Flex flexWrap="wrap" columnGap={ 8 } rowGap={ 6 } justifyContent="space-between" alignItems="center" mb={ 6 }>
+      <Text fontSize={{base: '2xl', lg: '3xl'}} fontWeight={600}>BlockChain Explorer</Text>
+      <NetworkAddToWallet/>
+    </Flex>
   );
 };
 

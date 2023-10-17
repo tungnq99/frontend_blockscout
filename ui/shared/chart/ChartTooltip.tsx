@@ -25,12 +25,12 @@ const POINT_SIZE = 16;
 const LABEL_WIDTH = 80;
 
 const ChartTooltip = ({ xScale, yScale, width, tooltipWidth = 200, height, data, anchorEl, ...props }: Props) => {
-  const lineColor = useToken('colors', 'gray.400');
-  const titleColor = useToken('colors', 'blue.100');
-  const textColor = useToken('colors', 'white');
+  const lineColor = useToken('colors', 'gray.900');
+  const titleColor = useToken('colors', 'black');
+  const textColor = useToken('colors', 'black');
   const markerBgColor = useToken('colors', useColorModeValue('black', 'white'));
   const markerBorderColor = useToken('colors', useColorModeValue('white', 'black'));
-  const bgColor = useToken('colors', 'blackAlpha.900');
+  const bgColor = useToken('colors', 'white');
 
   const ref = React.useRef(null);
   const trackerId = React.useRef<number>();

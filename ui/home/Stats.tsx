@@ -81,6 +81,7 @@ const Stats = () => {
             _last={ isOdd ? lastItemTouchStyle : undefined }
             tooltipLabel={ gasLabel }
             isLoading={ isPlaceholderData }
+           
           />
         ) }
       </>

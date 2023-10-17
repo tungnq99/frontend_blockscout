@@ -12,21 +12,16 @@ interface Props {
   title: string;
   value: (stats: HomeStats) => string;
   icon: React.ReactNode;
-  isSelected: boolean;
-  onClick: (id: ChainIndicatorId) => void;
   stats: UseQueryResult<HomeStats>;
 }
 
-const ChainIndicatorItem = ({ id, title, value, icon, isSelected, onClick, stats }: Props) => {
+const ChainIndicatorItem = ({ id, title, value, icon, stats }: Props) => {
   const isMobile = useIsMobile();
 
   const activeBgColorDesktop = useColorModeValue('white', 'gray.900');
   const activeBgColorMobile = useColorModeValue('white', 'black');
   const activeBgColor = isMobile ? activeBgColorMobile : activeBgColorDesktop;
 
-  const handleClick = React.useCallback(() => {
-    onClick(id);
-  }, [ id, onClick ]);
 
   const valueContent = (() => {
     if (isMobile) {
@@ -49,32 +44,28 @@ const ChainIndicatorItem = ({ id, title, value, icon, isSelected, onClick, stats
       return <Text variant="secondary" fontWeight={ 400 }>no data</Text>;
     }
 
-    return <Text variant="secondary" fontWeight={ 600 }>{ value(stats.data) }</Text>;
+    return <Text variant="black" fontWeight={ 600 } fontSize={{base: '24px', lg: '32px'}}>{ value(stats.data) }</Text>;
   })();
 
   return (
-    <Flex
+    <Box
       alignItems="center"
       columnGap={ 3 }
       p={ 4 }
-      as="li"
       borderRadius="md"
       cursor="pointer"
-      onClick={ handleClick }
-      bgColor={ isSelected ? activeBgColor : 'inherit' }
-      boxShadow={ isSelected ? 'lg' : 'none' }
-      zIndex={ isSelected ? 1 : 'initial' }
       _hover={{
         activeBgColor,
         zIndex: 1,
       }}
     >
-      { icon }
-      <Box>
-        <Text fontFamily="heading" fontWeight={ 500 }>{ title }</Text>
-        { valueContent }
-      </Box>
-    </Flex>
+      
+      <Flex mb={5}>
+        { icon }
+        <Text fontFamily="heading" fontWeight={ 500 } mx={3} fontSize={'3sm'}>{ title }</Text>
+      </Flex>
+      { valueContent }
+    </Box>
   );
 };
 

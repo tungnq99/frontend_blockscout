@@ -9,45 +9,29 @@ import Transactions from 'ui/home/Transactions';
 import AdBanner from 'ui/shared/ad/AdBanner';
 import ProfileMenuDesktop from 'ui/snippets/profileMenu/ProfileMenuDesktop';
 import SearchBar from 'ui/snippets/searchBar/SearchBar';
+import NetworkAddToWallet from 'ui/shared/NetworkAddToWallet';
 
 const Home = () => {
   return (
     <>
+      
       <Box
         w="100%"
-        background={ config.UI.homepage.plate.background }
-        borderRadius="24px"
-        padding={{ base: '24px', lg: '48px' }}
         minW={{ base: 'unset', lg: '900px' }}
         data-label="hero plate"
       >
-        <LightMode>
-          <SearchBar isHomepage/>
-        </LightMode>
-        {/* <Flex mb={{ base: 6, lg: 8 }} justifyContent="space-between">
-          <Heading
-            as="h1"
-            size={{ base: 'md', lg: 'xl' }}
-            lineHeight={{ base: '32px', lg: '50px' }}
-            fontWeight={ 600 }
-            color={ config.UI.homepage.plate.textColor }
-          >
-            Welcome to { config.chain.name } explorer
-          </Heading>
-          <Box display={{ base: 'none', lg: 'block' }}>
-            { config.features.account.isEnabled && <ProfileMenuDesktop/> }
-          </Box>
-        </Flex> */}
-        
-        <ChainIndicators/>
+        <SearchBar isHomepage/>
       </Box>
       {/* <AdBanner mt={{ base: 6, lg: 8 }} mx="auto" display="flex" justifyContent="center"/> */}
       
+      <ChainIndicators/>
       
       <Stats/>
-      <Flex mt={ 8 } direction={{ base: 'column', lg: 'row' }} columnGap={ 12 } rowGap={ 8 }>
-        <LatestBlocks/>
-        <Box flexGrow={ 1 }>
+      <Flex mt={ 8 } direction={{ base: 'column', lg: 'row' }} columnGap={ 8 } rowGap={ 8 }>
+        <Box w="30%" boxShadow="lg" p={5} borderRadius={8}>
+          <LatestBlocks />
+        </Box>
+        <Box flexGrow={ 1 } boxShadow="lg" p={5} borderRadius={8}>
           <Transactions/>
         </Box>
       </Flex>

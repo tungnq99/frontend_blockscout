@@ -1,11 +1,11 @@
-import { Box, Heading, Flex, Text, VStack, Skeleton } from '@chakra-ui/react';
+import { Box, Heading, Flex, Text, VStack, Skeleton, Button, Icon } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
 
 import type { SocketMessage } from 'lib/socket/types';
 import type { Block } from 'types/api/block';
-
+import arrowRightIcon from "icons/arrows/east.svg";
 import { route } from 'nextjs-routes';
 
 import config from 'configs/app';
@@ -105,7 +105,9 @@ const LatestBlocks = () => {
           </AnimatePresence>
         </VStack>
         <Flex justifyContent="center">
-          <LinkInternal fontSize="sm" href={ route({ pathname: '/blocks' }) }>View all blocks</LinkInternal>
+          <Button colorScheme='blue' size={'sm'} rightIcon={<Icon as={arrowRightIcon} />} variant='outline'>
+            <LinkInternal fontSize="sm" href={ route({ pathname: '/blocks' }) } color="blue.500" _hover={{color: "blue.500"}}>View all blocks</LinkInternal>
+          </Button>
         </Flex>
       </>
     );
