@@ -103,13 +103,3 @@ export const stats: GetServerSideProps<Props> = async(context) => {
 
   return base(context);
 };
-
-export const suave: GetServerSideProps<Props> = async(context) => {
-  if (!config.features.suave.isEnabled) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return base(context);
-};

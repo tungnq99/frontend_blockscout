@@ -21,6 +21,7 @@ const NetworkMenuButton = ({ isMobile, isActive, onClick, className }: Props, re
       className={ className }
       variant="unstyled"
       display="inline-flex"
+      alignSelf="stretch"
       alignItems="center"
       ref={ ref }
       h="36px"

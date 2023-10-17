@@ -3,7 +3,6 @@ import { test as base, expect } from '@playwright/experimental-ct-react';
 import type { Locator } from '@playwright/test';
 import React from 'react';
 
-import { buildExternalAssetFilePath } from 'configs/app/utils';
 import * as cookies from 'lib/cookies';
 import authFixture from 'playwright/fixtures/auth';
 import contextWithEnvs, { createContextWithEnvs } from 'playwright/fixtures/contextWithEnvs';
@@ -21,7 +20,7 @@ const hooksConfig = {
   },
 };
 
-const FEATURED_NETWORKS_URL = buildExternalAssetFilePath('NEXT_PUBLIC_FEATURED_NETWORKS', 'https://localhost:3000/featured-networks.json') || '';
+const FEATURED_NETWORKS_URL = 'https://localhost:3000/featured-networks.json';
 
 const test = base.extend({
   context: contextWithEnvs([

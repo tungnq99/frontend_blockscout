@@ -8,7 +8,6 @@ import type { VerifiedAddress, TokenInfoApplication, TokenInfoApplications, Veri
 import config from 'configs/app';
 import useApiQuery, { getResourceKey } from 'lib/api/useApiQuery';
 import useRedirectForInvalidAuthToken from 'lib/hooks/useRedirectForInvalidAuthToken';
-import { PAGE_TYPE_DICT } from 'lib/mixpanel/getPageType';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import { TOKEN_INFO_APPLICATION, VERIFIED_ADDRESS } from 'stubs/account';
 import AddressVerificationModal from 'ui/addressVerification/AddressVerificationModal';
@@ -195,7 +194,6 @@ const VerifiedAddresses = () => {
       />
       { addButton }
       <AddressVerificationModal
-        pageType={ PAGE_TYPE_DICT['/account/verified-addresses'] }
         isOpen={ modalProps.isOpen }
         onClose={ modalProps.onClose }
         onSubmit={ handleAddressSubmit }

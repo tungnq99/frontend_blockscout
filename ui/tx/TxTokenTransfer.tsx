@@ -7,7 +7,7 @@ import type { TokenType } from 'types/api/token';
 import { SECOND } from 'lib/consts';
 import getFilterValuesFromQuery from 'lib/getFilterValuesFromQuery';
 import { apos } from 'lib/html-entities';
-import { TOKEN_TYPE_IDS } from 'lib/token/tokenTypes';
+import TOKEN_TYPE from 'lib/token/tokenTypes';
 import { getTokenTransfersStub } from 'stubs/token';
 import ActionBar from 'ui/shared/ActionBar';
 import DataFetchAlert from 'ui/shared/DataFetchAlert';
@@ -21,7 +21,9 @@ import TxPendingAlert from 'ui/tx/TxPendingAlert';
 import TxSocketAlert from 'ui/tx/TxSocketAlert';
 import useFetchTxInfo from 'ui/tx/useFetchTxInfo';
 
-const getTokenFilterValue = (getFilterValuesFromQuery<TokenType>).bind(null, TOKEN_TYPE_IDS);
+const TOKEN_TYPES = TOKEN_TYPE.map(i => i.id);
+
+const getTokenFilterValue = (getFilterValuesFromQuery<TokenType>).bind(null, TOKEN_TYPES);
 
 const TxTokenTransfer = () => {
   const txsInfo = useFetchTxInfo({ updateDelay: 5 * SECOND });

@@ -17,12 +17,7 @@ export default function useGetCsrfToken() {
       const csrfFromHeader = apiResponse.headers.get('x-bs-account-csrf');
 
       if (!csrfFromHeader) {
-        Sentry.captureException(new Error('Client fetch failed'), { tags: {
-          source: 'fetch',
-          'source.resource': 'csrf',
-          'status.code': 500,
-          'status.text': 'Unable to obtain csrf token from header',
-        } });
+        Sentry.captureException(new Error('Unable to get csrf token'), { tags: { source: 'csrf_token' } });
         return;
       }
 

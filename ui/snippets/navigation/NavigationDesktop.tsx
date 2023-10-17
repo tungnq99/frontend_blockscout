@@ -41,7 +41,7 @@ const NavigationDesktop = () => {
 
   const chevronIconStyles = {
     bgColor: useColorModeValue('white', 'black'),
-    color: useColorModeValue('blackAlpha.400', 'whiteAlpha.400'),
+    color: useColorModeValue('blue.400', 'blue.400'),
     borderColor: 'divider',
   };
 
@@ -57,10 +57,10 @@ const NavigationDesktop = () => {
       borderColor="divider"
       px={{ lg: isExpanded ? 6 : 4, xl: isCollapsed ? 4 : 6 }}
       py={ 12 }
-      width={{ lg: isExpanded ? '229px' : '92px', xl: isCollapsed ? '92px' : '229px' }}
+      width={{ lg: isExpanded ? '235px' : '92px', xl: isCollapsed ? '92px' : '235px' }}
       { ...getDefaultTransitionProps({ transitionProperty: 'width, padding' }) }
     >
-      { config.chain.isTestnet && <Icon as={ testnetIcon } h="14px" w="auto" color="red.400" position="absolute" pl={ 3 } top="34px"/> }
+      { config.chain.isTestnet && <Icon as={ testnetIcon } h="14px" w="auto" color="red.400" pl={ 3 } alignSelf="flex-start"/> }
       <Box
         as="header"
         display="flex"
@@ -78,7 +78,7 @@ const NavigationDesktop = () => {
         <NetworkLogo isCollapsed={ isCollapsed }/>
         { Boolean(config.UI.sidebar.featuredNetworks) && <NetworkMenu isCollapsed={ isCollapsed }/> }
       </Box>
-      <Box as="nav" mt={ 8 } w="100%">
+      <Box as="nav" mt={ 20 } w="100%">
         <VStack as="ul" spacing="1" alignItems="flex-start">
           { mainNavItems.map((item) => {
             if (isGroupItem(item)) {
@@ -96,7 +96,7 @@ const NavigationDesktop = () => {
           </VStack>
         </Box>
       ) }
-      <Icon
+      {/* <Icon
         as={ chevronIcon }
         width={ 6 }
         height={ 6 }
@@ -108,12 +108,12 @@ const NavigationDesktop = () => {
         { ...getDefaultTransitionProps({ transitionProperty: 'transform, left' }) }
         transformOrigin="center"
         position="absolute"
-        top="104px"
-        left={{ lg: isExpanded ? '216px' : '80px', xl: isCollapsed ? '80px' : '216px' }}
+        top="7%"
+        left={{ lg: isExpanded ? '222px' : '80px', xl: isCollapsed ? '80px' : '222px' }}
         cursor="pointer"
         onClick={ handleTogglerClick }
         aria-label="Expand/Collapse menu"
-      />
+      /> */}
     </Flex>
   );
 };

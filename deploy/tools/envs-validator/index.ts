@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import fs from 'fs';
 import path from 'path';
-import type { ValidationError } from 'yup';
+import type { ZodError } from 'zod-validation-error';
+import { fromZodError } from 'zod-validation-error';
 
-import schema from './schema';
+import { nextPublicEnvsSchema } from './schema';
 
 run();
 
@@ -17,81 +18,46 @@ async function run() {
         return result;
       }, {} as Record<string, string>);
 
+    await validateEnvsSchema(appEnvs);
     await checkPlaceholdersCongruity(appEnvs);
-    await validateEnvs(appEnvs);
 
   } catch (error) {
     process.exit(1);
   }
 }
 
-async function validateEnvs(appEnvs: Record<string, string>) {
-  console.log(`🌀 Validating ENV variables values...`);
-
+async function validateEnvsSchema(appEnvs: Record<string, string>) {
   try {
-    // replace ENVs with external JSON files content
-    appEnvs.NEXT_PUBLIC_FEATURED_NETWORKS = await getExternalJsonContent(
-      './public/assets/featured_networks.json',
-      appEnvs.NEXT_PUBLIC_FEATURED_NETWORKS,
-    ) || '[]';
-    appEnvs.NEXT_PUBLIC_MARKETPLACE_CONFIG_URL = await getExternalJsonContent(
-      './public/assets/marketplace_config.json',
-      appEnvs.NEXT_PUBLIC_MARKETPLACE_CONFIG_URL,
-    ) || '[]';
-    appEnvs.NEXT_PUBLIC_FOOTER_LINKS = await getExternalJsonContent(
-      './public/assets/footer_links.json',
-      appEnvs.NEXT_PUBLIC_FOOTER_LINKS,
-    ) || '[]';
+    console.log(`⏳ Validating environment variables schema...`);
+    nextPublicEnvsSchema.parse(appEnvs);
+    console.log('👍 All good!\n');
+  } catch (error) {
+    const validationError = fromZodError(
+      error as ZodError,
+      {
+        prefix: '',
+        prefixSeparator: '\n  ',
+        issueSeparator: ';\n  ',
+      },
+    );
+    console.log(validationError);
+    console.log('🚨 Environment variables set is invalid.\n');
 
-    await schema.validate(appEnvs, { stripUnknown: false, abortEarly: false });
-    console.log('👍 All good!');
-  } catch (_error) {
-    if (typeof _error === 'object' && _error !== null && 'errors' in _error) {
-      console.log('🚨 ENVs validation failed with the following errors:');
-      (_error as ValidationError).errors.forEach((error) => {
-        console.log('    ', error);
-      });
-    } else {
-      console.log('🚨 Unexpected error occurred during validation.');
-      console.error(_error);
-    }
-
-    throw _error;
+    throw error;
   }
-
-  console.log();
 }
 
-async function getExternalJsonContent(fileName: string, envValue: string): Promise<string | void> {
-  return new Promise((resolve, reject) => {
-    if (!envValue) {
-      resolve();
-      return;
-    }
-
-    fs.readFile(path.resolve(__dirname, fileName), 'utf8', (err, data) => {
-      if (err) {
-        console.log(`🚨 Unable to read file: ${ fileName }`);
-        reject(err);
-        return;
-      }
-
-      resolve(data);
-    });
-  });
-}
-
-async function checkPlaceholdersCongruity(envsMap: Record<string, string>) {
+async function checkPlaceholdersCongruity(runTimeEnvs: Record<string, string>) {
   try {
-    console.log(`🌀 Checking environment variables and their placeholders congruity...`);
+    console.log(`⏳ Checking environment variables and their placeholders congruity...`);
 
-    const runTimeEnvs = await getEnvsPlaceholders(path.resolve(__dirname, '.env.registry'));
+    const placeholders = await getEnvsPlaceholders(path.resolve(__dirname, '.env.production'));
     const buildTimeEnvs = await getEnvsPlaceholders(path.resolve(__dirname, '.env'));
-    const envs = Object.keys(envsMap).filter((env) => !buildTimeEnvs.includes(env));
+    const envs = Object.keys(runTimeEnvs).filter((env) => !buildTimeEnvs.includes(env));
 
     const inconsistencies: Array<string> = [];
     for (const env of envs) {
-      const hasPlaceholder = runTimeEnvs.includes(env);
+      const hasPlaceholder = placeholders.includes(env);
       if (!hasPlaceholder) {
         inconsistencies.push(env);
       }
@@ -119,7 +85,7 @@ function getEnvsPlaceholders(filePath: string): Promise<Array<string>> {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf8', (err, data) => {
       if (err) {
-        console.log(`🚨 Unable to read placeholders file.`);
+        console.log(`⛔ Unable to read placeholders file.`);
         reject(err);
         return;
       }

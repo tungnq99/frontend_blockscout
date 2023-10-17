@@ -5,7 +5,6 @@ import React from 'react';
 import config from 'configs/app';
 import iconArrow from 'icons/arrows/east-mini.svg';
 import useIsAccountActionAllowed from 'lib/hooks/useIsAccountActionAllowed';
-import * as mixpanel from 'lib/mixpanel/index';
 import getQueryParamString from 'lib/router/getQueryParamString';
 
 import PrivateTagMenuItem from './PrivateTagMenuItem';
@@ -23,18 +22,13 @@ const AddressActions = ({ isLoading }: Props) => {
   const isTokenPage = router.pathname === '/token/[hash]';
   const isAccountActionAllowed = useIsAccountActionAllowed();
 
-  const handleButtonClick = React.useCallback(() => {
-    mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, { Type: 'Address actions (more button)' });
-  }, []);
-
   return (
     <Menu>
-      <Skeleton isLoaded={ !isLoading } borderRadius="base">
+      <Skeleton isLoaded={ !isLoading } ml={ 2 } borderRadius="base">
         <MenuButton
           as={ Button }
           size="sm"
           variant="outline"
-          onClick={ handleButtonClick }
         >
           <Flex alignItems="center">
             <span>More</span>

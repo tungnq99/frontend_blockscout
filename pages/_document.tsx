@@ -5,6 +5,7 @@ import React from 'react';
 
 import * as serverTiming from 'nextjs/utils/serverTiming';
 
+import config from 'configs/app';
 import theme from 'theme';
 
 class MyDocument extends Document {
@@ -39,15 +40,25 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
 
-          { /* eslint-disable-next-line @next/next/no-sync-scripts */ }
-          <script src="/envs.js"/>
-
           { /* FAVICON */ }
           <link rel="icon" href="/favicon/favicon.ico" sizes="48x48"/>
           <link rel="icon" sizes="32x32" type="image/png" href="/favicon/favicon-32x32.png"/>
           <link rel="icon" sizes="16x16" type="image/png"href="/favicon/favicon-16x16.png"/>
           <link rel="apple-touch-icon" href="/favicon/apple-touch-icon-180x180.png"/>
           <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg"/>
+
+          { /* OG TAGS */ }
+          <meta property="og:title" content="Blockscout: A block explorer designed for a decentralized world."/>
+          <meta
+            property="og:description"
+            // eslint-disable-next-line max-len
+            content="Blockscout is the #1 open-source blockchain explorer available today. 100+ chains and counting rely on Blockscout data availability, APIs, and ecosystem tools to support their networks."
+          />
+          <meta property="og:image" content={ config.app.baseUrl + '/static/og.png' }/>
+          <meta property="og:site_name" content="Blockscout"/>
+          <meta property="og:type" content="website"/>
+          <meta name="twitter:card" content="summary_large_image"/>
+          <meta property="twitter:image" content={ config.app.baseUrl + '/static/og_twitter.png' }/>
         </Head>
         <body>
           <ColorModeScript initialColorMode={ theme.config.initialColorMode }/>

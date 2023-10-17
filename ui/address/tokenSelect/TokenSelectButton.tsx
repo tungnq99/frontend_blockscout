@@ -5,7 +5,6 @@ import type { FormattedData } from './types';
 
 import arrowIcon from 'icons/arrows/east-mini.svg';
 import tokensIcon from 'icons/tokens.svg';
-import * as mixpanel from 'lib/mixpanel/index';
 
 import { getTokensTotalInfo } from '../utils/tokenUtils';
 
@@ -26,8 +25,6 @@ const TokenSelectButton = ({ isOpen, isLoading, onClick, data }: Props, ref: Rea
     if (isLoading && !isOpen) {
       return;
     }
-
-    mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, { Type: 'Tokens dropdown' });
     onClick();
   }, [ isLoading, isOpen, onClick ]);
 

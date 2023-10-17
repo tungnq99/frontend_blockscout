@@ -1,13 +1,14 @@
-import { Flex, Icon, chakra } from '@chakra-ui/react';
+import { Flex, Link, Icon, chakra } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
 import React from 'react';
 
 import type { TxAction, TxActionGeneral } from 'types/api/txAction';
 
+import { route } from 'nextjs-routes';
+
 import config from 'configs/app';
 import uniswapIcon from 'icons/uniswap.svg';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
-import NftEntity from 'ui/shared/entities/nft/NftEntity';
 import TokenEntity from 'ui/shared/entities/token/TokenEntity';
 
 interface Props {
@@ -16,10 +17,10 @@ interface Props {
 
 function getActionText(actionType: TxActionGeneral['type']) {
   switch (actionType) {
-    case 'mint': return [ 'Added', 'liquidity to' ];
-    case 'burn': return [ 'Removed', 'liquidity from' ];
-    case 'collect': return [ 'Collected', 'from' ];
-    case 'swap': return [ 'Swapped', 'on' ];
+    case 'mint': return [ 'Add', 'Liquidity to' ];
+    case 'burn': return [ 'Remove', 'Liquidity from' ];
+    case 'collect': return [ 'Collect', 'From' ];
+    case 'swap': return [ 'Swap', 'On' ];
   }
 }
 
@@ -54,30 +55,26 @@ const TxDetailsAction = ({ action }: Props) => {
       };
 
       return (
-        <Flex flexWrap="wrap" columnGap={ 2 } rowGap={ 2 } alignItems="center" fontWeight={ 500 }>
-          <chakra.span color="text_secondary">{ text0 }</chakra.span>
+        <Flex flexWrap="wrap" columnGap={ 1 } rowGap={ 2 } alignItems="center">
+          <chakra.span color="text_secondary">{ text0 }: </chakra.span>
 
-          <span>{ amount0 }</span>
-
+          <chakra.span fontWeight={ 600 } mr={ 1 }>{ amount0 }</chakra.span>
           <TokenEntity
             token={ token0 }
             noLink={ data.symbol0 === 'Ether' }
             noCopy
-            noIcon
             noSymbol
             w="auto"
             maxW="200px"
             flexShrink={ 0 }
           />
 
-          <chakra.span color="text_secondary">{ type === 'swap' ? 'for' : 'and' }</chakra.span>
+          <chakra.span color="text_secondary">{ type === 'swap' ? 'For' : 'And' }: </chakra.span>
 
-          <span>{ amount1 }</span>
-
+          <chakra.span fontWeight={ 600 } mr={ 1 }>{ amount1 }</chakra.span>
           <TokenEntity
             token={ token1 }
             noLink={ data.symbol1 === 'Ether' }
-            noIcon
             noCopy
             noSymbol
             w="auto"
@@ -85,11 +82,10 @@ const TxDetailsAction = ({ action }: Props) => {
             flexShrink={ 0 }
           />
 
-          <chakra.span color="text_secondary">{ text1 }</chakra.span>
-
+          <chakra.span color="text_secondary" mr={ 1 }>{ text1 }</chakra.span>
           <Flex columnGap={ 2 }>
             <Icon as={ uniswapIcon } boxSize={ 5 } color="white" bgColor="#ff007a" borderRadius="full" p="2px"/>
-            <chakra.span>Uniswap V3</chakra.span>
+            <chakra.span color="text_secondary">Uniswap V3</chakra.span>
           </Flex>
         </Flex>
       );
@@ -106,18 +102,15 @@ const TxDetailsAction = ({ action }: Props) => {
 
       return (
         <div>
-          <Flex rowGap={ 2 } columnGap={ 2 } flexWrap="wrap" alignItems="center" whiteSpace="pre-wrap" fontWeight={ 500 }>
-            <chakra.span color="text_secondary">Minted</chakra.span>
-
+          <Flex rowGap={ 2 } flexWrap="wrap" alignItems="center" whiteSpace="pre-wrap">
+            <chakra.span mr={ 2 }>Mint of</chakra.span>
             <TokenEntity
               token={ token }
               noCopy
               w="auto"
               rowGap={ 2 }
             />
-
-            <chakra.span color="text_secondary">to</chakra.span>
-
+            <chakra.span> to </chakra.span>
             <AddressEntity
               address={{ hash: data.to }}
               truncation="constant"
@@ -126,14 +119,16 @@ const TxDetailsAction = ({ action }: Props) => {
             />
           </Flex>
 
-          <Flex columnGap={ 1 } rowGap={ 2 } pl={ 3 } flexDirection="column" mt={ 2 } fontWeight={ 500 }>
+          <Flex columnGap={ 1 } rowGap={ 2 } pl={ 3 } flexDirection="column" mt={ 2 }>
             {
               data.ids.map((id: string) => {
+                const url = route({ pathname: '/token/[hash]/instance/[id]', query: { hash: data.address, id } });
                 return (
-                  <Flex key={ data.address + id } whiteSpace="pre-wrap" columnGap={ 2 }>
-                    <chakra.span flexShrink={ 0 }>1</chakra.span>
-                    <chakra.span color="text_secondary" flexShrink={ 0 }>of token ID</chakra.span>
-                    <NftEntity hash={ data.address } id={ id } w="min-content" iconSize="md"/>
+                  <Flex key={ data.address + id } whiteSpace="pre-wrap">
+                    <span>1 of </span>
+                    <chakra.span color="text_secondary">Token ID [</chakra.span>
+                    <Link href={ url }>{ id }</Link>
+                    <chakra.span color="text_secondary">]</chakra.span>
                   </Flex>
                 );
               })

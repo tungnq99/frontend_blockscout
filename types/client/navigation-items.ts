@@ -17,8 +17,7 @@ export type NavItemInternal = NavItemCommon & {
   isActive?: boolean;
 }
 
-export type NavItemExternal = {
-  text: string;
+export type NavItemExternal = NavItemCommon & {
   url: string;
 }
 

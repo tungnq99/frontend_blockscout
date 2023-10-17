@@ -4,7 +4,6 @@ import React from 'react';
 
 import useFetchProfileInfo from 'lib/hooks/useFetchProfileInfo';
 import useLoginUrl from 'lib/hooks/useLoginUrl';
-import * as mixpanel from 'lib/mixpanel/index';
 import UserAvatar from 'ui/shared/UserAvatar';
 import ProfileMenuContent from 'ui/snippets/profileMenu/ProfileMenuContent';
 
@@ -19,14 +18,6 @@ const ProfileMenuDesktop = () => {
     }
   }, [ data, error?.status, isLoading ]);
 
-  const handleSignInClick = React.useCallback(() => {
-    mixpanel.logEvent(
-      mixpanel.EventTypes.ACCOUNT_ACCESS,
-      { Action: 'Auth0 init' },
-      { send_immediately: true },
-    );
-  }, []);
-
   const buttonProps: Partial<ButtonProps> = (() => {
     if (hasMenu || !loginUrl) {
       return {};
@@ -35,7 +26,6 @@ const ProfileMenuDesktop = () => {
     return {
       as: 'a',
       href: loginUrl,
-      onClick: handleSignInClick,
     };
   })();
 
@@ -44,8 +34,8 @@ const ProfileMenuDesktop = () => {
       <PopoverTrigger>
         <Button
           variant="unstyled"
-          display="block"
-          boxSize="50px"
+          display="inline-flex"
+          height="auto"
           flexShrink={ 0 }
           { ...buttonProps }
         >

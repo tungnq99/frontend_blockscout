@@ -4,7 +4,6 @@ import React, { useCallback, useState } from 'react';
 import type { AddressTag } from 'types/api/account';
 
 import useApiQuery from 'lib/api/useApiQuery';
-import { PAGE_TYPE_DICT } from 'lib/mixpanel/getPageType';
 import { PRIVATE_TAG_ADDRESS } from 'stubs/account';
 import AccountPageDescription from 'ui/shared/AccountPageDescription';
 import DataFetchAlert from 'ui/shared/DataFetchAlert';
@@ -95,13 +94,7 @@ const PrivateAddressTags = () => {
             Add address tag
         </Button>
       </Skeleton>
-      <AddressModal
-        { ...addressModalProps }
-        data={ addressModalData }
-        pageType={ PAGE_TYPE_DICT['/account/tag-address'] }
-        onClose={ onAddressModalClose }
-        onSuccess={ onAddOrEditSuccess }
-      />
+      <AddressModal { ...addressModalProps } onClose={ onAddressModalClose } data={ addressModalData } onSuccess={ onAddOrEditSuccess }/>
       { deleteModalData && (
         <DeletePrivateTagModal
           { ...deleteModalProps }

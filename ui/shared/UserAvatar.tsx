@@ -1,10 +1,35 @@
-import { SkeletonCircle, Image } from '@chakra-ui/react';
+import { useColorModeValue, useToken, SkeletonCircle, Image, Box } from '@chakra-ui/react';
 import React from 'react';
+import Identicon from 'react-identicons';
 
 import { useAppContext } from 'lib/contexts/app';
 import * as cookies from 'lib/cookies';
 import useFetchProfileInfo from 'lib/hooks/useFetchProfileInfo';
-import IdenticonGithub from 'ui/shared/IdenticonGithub';
+
+const IdenticonComponent = typeof Identicon === 'object' && 'default' in Identicon ? Identicon.default : Identicon;
+
+// for those who haven't got profile
+// or if we cannot download the profile picture for some reasons
+const FallbackImage = ({ size, id }: { size: number; id: string }) => {
+  const bgColor = useToken('colors', useColorModeValue('gray.100', 'white'));
+
+  return (
+    <Box
+      flexShrink={ 0 }
+      maxWidth={ `${ size }px` }
+      maxHeight={ `${ size }px` }
+    >
+      <Box boxSize={ `${ size * 2 }px` } transformOrigin="left top" transform="scale(0.5)" borderRadius="full" overflow="hidden">
+        <IdenticonComponent
+          bg={ bgColor }
+          string={ id }
+          // the displayed size is doubled for retina displays and then scaled down
+          size={ size * 2 }
+        />
+      </Box>
+    </Box>
+  );
+};
 
 interface Props {
   size: number;
@@ -31,10 +56,13 @@ const UserAvatar = ({ size }: Props) => {
       flexShrink={ 0 }
       src={ data?.avatar }
       alt={ `Profile picture of ${ data?.name || data?.nickname || '' }` }
-      boxSize={ `${ size }px` }
+      w={ sizeString }
+      minW={ sizeString }
+      h={ sizeString }
+      minH={ sizeString }
       borderRadius="full"
       overflow="hidden"
-      fallback={ isImageLoadError || !data?.avatar ? <IdenticonGithub size={ size } seed={ data?.email || 'randomness' } flexShrink={ 0 }/> : undefined }
+      fallback={ isImageLoadError || !data?.avatar ? <FallbackImage size={ size } id={ data?.email || 'randomness' }/> : undefined }
       onError={ handleImageLoadError }
     />
   );

@@ -18,7 +18,7 @@ import { apos } from 'lib/html-entities';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import useSocketChannel from 'lib/socket/useSocketChannel';
 import useSocketMessage from 'lib/socket/useSocketMessage';
-import { TOKEN_TYPE_IDS } from 'lib/token/tokenTypes';
+import TOKEN_TYPE from 'lib/token/tokenTypes';
 import { getTokenTransfersStub } from 'stubs/token';
 import ActionBar from 'ui/shared/ActionBar';
 import DataListDisplay from 'ui/shared/DataListDisplay';
@@ -38,7 +38,9 @@ type Filters = {
   filter: AddressFromToFilter | undefined;
 }
 
-const getTokenFilterValue = (getFilterValuesFromQuery<TokenType>).bind(null, TOKEN_TYPE_IDS);
+const TOKEN_TYPES = TOKEN_TYPE.map(i => i.id);
+
+const getTokenFilterValue = (getFilterValuesFromQuery<TokenType>).bind(null, TOKEN_TYPES);
 const getAddressFilterValue = (getFilterValueFromQuery<AddressFromToFilter>).bind(null, AddressFromToFilterValues);
 
 const OVERLOAD_COUNT = 75;
@@ -226,7 +228,6 @@ const AddressTokenTransfers = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Pr
     name: '',
     icon_url: '',
     symbol: '',
-    type: 'ERC-20' as const,
   }), [ tokenFilter ]);
 
   const tokenFilterComponent = tokenFilter && (

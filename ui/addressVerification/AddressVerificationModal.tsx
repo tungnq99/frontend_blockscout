@@ -5,7 +5,6 @@ import type { AddressVerificationFormFirstStepFields, AddressCheckStatusSuccess 
 import type { VerifiedAddress } from 'types/api/account';
 
 import eastArrowIcon from 'icons/arrows/east.svg';
-import * as mixpanel from 'lib/mixpanel/index';
 import Web3ModalProvider from 'ui/shared/Web3ModalProvider';
 
 import AddressVerificationStepAddress from './steps/AddressVerificationStepAddress';
@@ -21,38 +20,22 @@ interface Props {
   onAddTokenInfoClick: (address: string) => void;
   onShowListClick: () => void;
   defaultAddress?: string;
-  pageType: string;
 }
 
-const AddressVerificationModal = ({ defaultAddress, isOpen, onClose, onSubmit, onAddTokenInfoClick, onShowListClick, pageType }: Props) => {
+const AddressVerificationModal = ({ defaultAddress, isOpen, onClose, onSubmit, onAddTokenInfoClick, onShowListClick }: Props) => {
   const [ stepIndex, setStepIndex ] = React.useState(0);
   const [ data, setData ] = React.useState<StateData>({ address: '', signingMessage: '' });
-
-  React.useEffect(() => {
-    isOpen && mixpanel.logEvent(
-      mixpanel.EventTypes.VERIFY_ADDRESS,
-      { Action: 'Form opened', 'Page type': pageType },
-    );
-  }, [ isOpen, pageType ]);
 
   const handleGoToSecondStep = React.useCallback((firstStepResult: typeof data) => {
     setData(firstStepResult);
     setStepIndex((prev) => prev + 1);
-    mixpanel.logEvent(
-      mixpanel.EventTypes.VERIFY_ADDRESS,
-      { Action: 'Address entered', 'Page type': pageType },
-    );
-  }, [ pageType ]);
+  }, []);
 
-  const handleGoToThirdStep = React.useCallback((address: VerifiedAddress, signMethod: 'wallet' | 'manual') => {
+  const handleGoToThirdStep = React.useCallback((address: VerifiedAddress) => {
     onSubmit(address);
     setStepIndex((prev) => prev + 1);
     setData((prev) => ({ ...prev, isToken: Boolean(address.metadata.tokenName) }));
-    mixpanel.logEvent(
-      mixpanel.EventTypes.VERIFY_ADDRESS,
-      { Action: 'Sign ownership', 'Page type': pageType, 'Sign method': signMethod },
-    );
-  }, [ onSubmit, pageType ]);
+  }, [ onSubmit ]);
 
   const handleGoToPrevStep = React.useCallback(() => {
     setStepIndex((prev) => prev - 1);

@@ -11,7 +11,6 @@ import useApiQuery from 'lib/api/useApiQuery';
 import { useAppContext } from 'lib/contexts/app';
 import useContractTabs from 'lib/hooks/useContractTabs';
 import useIsMobile from 'lib/hooks/useIsMobile';
-import useIsSafeAddress from 'lib/hooks/useIsSafeAddress';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import { ADDRESS_INFO, ADDRESS_TABS_COUNTERS } from 'stubs/address';
 import AddressBlocksValidated from 'ui/address/AddressBlocksValidated';
@@ -63,8 +62,6 @@ const AddressPageContent = () => {
     },
   });
 
-  const isSafeAddress = useIsSafeAddress(!addressQuery.isPlaceholderData && addressQuery.data?.is_contract ? hash : undefined);
-
   const contractTabs = useContractTabs(addressQuery.data);
 
   const tabs: Array<RoutedTab> = React.useMemo(() => {
@@ -75,7 +72,7 @@ const AddressPageContent = () => {
         count: addressTabsCountersQuery.data?.transactions_count,
         component: <AddressTxs scrollRef={ tabsScrollRef }/>,
       },
-      config.features.beaconChain.isEnabled && addressTabsCountersQuery.data?.withdrawals_count ?
+      config.features.beaconChain.isEnabled ?
         {
           id: 'withdrawals',
           title: 'Withdrawals',
@@ -108,7 +105,7 @@ const AddressPageContent = () => {
         count: addressTabsCountersQuery.data?.coin_balances_count,
         component: <AddressCoinBalance/>,
       },
-      config.chain.verificationType === 'validation' && addressTabsCountersQuery.data?.validations_count ?
+      config.chain.verificationType === 'validation' ?
         {
           id: 'blocks_validated',
           title: 'Blocks validated',
@@ -116,14 +113,12 @@ const AddressPageContent = () => {
           component: <AddressBlocksValidated scrollRef={ tabsScrollRef }/>,
         } :
         undefined,
-      addressTabsCountersQuery.data?.logs_count ?
-        {
-          id: 'logs',
-          title: 'Logs',
-          count: addressTabsCountersQuery.data?.logs_count,
-          component: <AddressLogs scrollRef={ tabsScrollRef }/>,
-        } :
-        undefined,
+      {
+        id: 'logs',
+        title: 'Logs',
+        count: addressTabsCountersQuery.data?.logs_count,
+        component: <AddressLogs scrollRef={ tabsScrollRef }/>,
+      },
       addressQuery.data?.is_contract ? {
         id: 'contract',
         title: () => {
@@ -152,7 +147,6 @@ const AddressPageContent = () => {
         addressQuery.data?.is_contract ? { label: 'contract', display_name: 'Contract' } : { label: 'eoa', display_name: 'EOA' },
         addressQuery.data?.implementation_address ? { label: 'proxy', display_name: 'Proxy' } : undefined,
         addressQuery.data?.token ? { label: 'token', display_name: 'Token' } : undefined,
-        isSafeAddress ? { label: 'safe', display_name: 'Multisig: Safe' } : undefined,
       ] }
       contentAfter={
         <NetworkExplorers type="address" pathParam={ hash } ml="auto" hideText={ isMobile }/>

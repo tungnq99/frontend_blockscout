@@ -9,11 +9,7 @@ import NavLink from 'ui/snippets/navigation/NavLink';
 
 import NavLinkGroupMobile from './NavLinkGroupMobile';
 
-interface Props {
-  onNavLinkClick?: () => void;
-}
-
-const NavigationMobile = ({ onNavLinkClick }: Props) => {
+const NavigationMobile = () => {
   const { mainNavItems, accountNavItems } = useNavItems();
 
   const [ openedGroupIndex, setOpenedGroupIndex ] = React.useState(-1);
@@ -63,7 +59,7 @@ const NavigationMobile = ({ onNavLinkClick }: Props) => {
               if (isGroupItem(item)) {
                 return <NavLinkGroupMobile key={ item.text } item={ item } onClick={ onGroupItemOpen(index) }/>;
               } else {
-                return <NavLink key={ item.text } item={ item } onClick={ onNavLinkClick }/>;
+                return <NavLink key={ item.text } item={ item }/>;
               }
             }) }
           </VStack>
@@ -77,7 +73,7 @@ const NavigationMobile = ({ onNavLinkClick }: Props) => {
             borderColor="divider"
           >
             <VStack as="ul" spacing="1" alignItems="flex-start">
-              { accountNavItems.map((item) => <NavLink key={ item.text } item={ item } onClick={ onNavLinkClick }/>) }
+              { accountNavItems.map((item) => <NavLink key={ item.text } item={ item }/>) }
             </VStack>
           </Box>
         ) }
@@ -113,10 +109,10 @@ const NavigationMobile = ({ onNavLinkClick }: Props) => {
                     borderColor: 'divider',
                   }}
                 >
-                  { item.map(subItem => <NavLink key={ subItem.text } item={ subItem } onClick={ onNavLinkClick }/>) }
+                  { item.map(subItem => <NavLink key={ subItem.text } item={ subItem }/>) }
                 </Box>
               ) :
-                <NavLink key={ item.text } item={ item } mb={ 1 } onClick={ onNavLinkClick }/>,
+                <NavLink key={ item.text } item={ item } mb={ 1 }/>,
             ) }
           </Box>
         </Box>

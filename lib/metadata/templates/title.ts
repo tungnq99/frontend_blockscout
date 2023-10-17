@@ -3,7 +3,6 @@ import type { Route } from 'nextjs-routes';
 const TEMPLATE_MAP: Record<Route['pathname'], string> = {
   '/': 'blockchain explorer',
   '/txs': 'transactions',
-  '/txs/computor/[hash]': 'computor %hash% transactions',
   '/tx/[hash]': 'transaction %hash%',
   '/blocks': 'blocks',
   '/block/[height_or_hash]': 'block %height_or_hash%',
@@ -49,5 +48,5 @@ const TEMPLATE_MAP: Record<Route['pathname'], string> = {
 export function make(pathname: Route['pathname']) {
   const template = TEMPLATE_MAP[pathname];
 
-  return `%network_name% ${ template }`;
+  return `%network_name% ${ template } | Blockscout`;
 }

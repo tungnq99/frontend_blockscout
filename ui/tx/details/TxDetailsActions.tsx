@@ -7,8 +7,6 @@ import DetailsInfoItem from 'ui/shared/DetailsInfoItem';
 
 import TxDetailsAction from './TxDetailsAction';
 
-const SCROLL_GRADIENT_HEIGHT = 48;
-
 interface Props {
   actions: Array<TxAction>;
 }
@@ -24,8 +22,7 @@ const TxDetailsActions = ({ actions }: Props) => {
     if (!containerRef.current) {
       return;
     }
-
-    setHasScroll(containerRef.current.scrollHeight >= containerRef.current.clientHeight + SCROLL_GRADIENT_HEIGHT / 2);
+    setHasScroll(containerRef.current.scrollHeight > containerRef.current.clientHeight);
   }, []);
 
   return (
@@ -49,7 +46,7 @@ const TxDetailsActions = ({ actions }: Props) => {
           bottom: 0,
           left: 0,
           right: '20px',
-          height: `${ SCROLL_GRADIENT_HEIGHT }px`,
+          height: '48px',
           bgGradient: `linear(to-b, ${ gradientStartColor } 37.5%, ${ gradientEndColor } 77.5%)`,
         } : undefined }
         pr={ hasScroll ? 5 : 0 }

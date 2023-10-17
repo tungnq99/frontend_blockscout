@@ -1,4 +1,4 @@
-import { Tr, Td, Text, Flex, Icon, Image, Box, Skeleton, useColorMode, Tag } from '@chakra-ui/react';
+import { Tr, Td, Text, Flex, Icon, Image, Box, Skeleton, useColorMode } from '@chakra-ui/react';
 import React from 'react';
 import xss from 'xss';
 
@@ -51,7 +51,7 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading }: Props) => {
           <>
             <Td fontSize="sm">
               <Flex alignItems="center">
-                <TokenEntity.Icon token={{ ...data, type: data.token_type }} isLoading={ isLoading }/>
+                <TokenEntity.Icon token={ data } isLoading={ isLoading }/>
                 <LinkInternal
                   href={ route({ pathname: '/token/[hash]', query: { hash: data.address } }) }
                   fontWeight={ 700 }
@@ -263,12 +263,9 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading }: Props) => {
               </BlockEntity.Container>
             </Td>
             <Td fontSize="sm" verticalAlign="middle">
-              <Flex columnGap={ 2 } alignItems="center">
-                { data.block_type === 'reorg' && <Tag flexShrink={ 0 }>Reorg</Tag> }
-                <Box overflow="hidden" whiteSpace="nowrap" as={ shouldHighlightHash ? 'mark' : 'span' } display="block">
-                  <HashStringShortenDynamic hash={ data.block_hash }/>
-                </Box>
-              </Flex>
+              <Box overflow="hidden" whiteSpace="nowrap" as={ shouldHighlightHash ? 'mark' : 'span' } display="block">
+                <HashStringShortenDynamic hash={ data.block_hash }/>
+              </Box>
             </Td>
             <Td fontSize="sm" verticalAlign="middle" isNumeric>
               <Text variant="secondary">{ dayjs(data.timestamp).format('llll') }</Text>

@@ -1,4 +1,4 @@
-export type CustomLink = {
+type CustomLink = {
   text: string;
   url: string;
 }

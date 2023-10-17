@@ -1,7 +1,6 @@
 import { test as base, expect, devices } from '@playwright/experimental-ct-react';
 import React from 'react';
 
-import { buildExternalAssetFilePath } from 'configs/app/utils';
 import { FEATURED_NETWORKS_MOCK } from 'mocks/config/network';
 import authFixture from 'playwright/fixtures/auth';
 import contextWithEnvs, { createContextWithEnvs } from 'playwright/fixtures/contextWithEnvs';
@@ -9,7 +8,7 @@ import TestApp from 'playwright/TestApp';
 
 import Burger from './Burger';
 
-const FEATURED_NETWORKS_URL = buildExternalAssetFilePath('NEXT_PUBLIC_FEATURED_NETWORKS', 'https://localhost:3000/featured-networks.json') || '';
+const FEATURED_NETWORKS_URL = 'https://localhost:3000/featured-networks.json';
 const LOGO_URL = 'https://localhost:3000/my-logo.png';
 
 base.use({ viewport: devices['iPhone 13 Pro'].viewport });

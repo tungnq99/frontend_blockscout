@@ -24,7 +24,6 @@ import Icon from 'ui/shared/chakra/Icon';
 import CopyToClipboard from 'ui/shared/CopyToClipboard';
 import DataFetchAlert from 'ui/shared/DataFetchAlert';
 import DetailsInfoItem from 'ui/shared/DetailsInfoItem';
-import DetailsInfoItemDivider from 'ui/shared/DetailsInfoItemDivider';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import GasUsedToTargetRatio from 'ui/shared/GasUsedToTargetRatio';
 import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
@@ -82,6 +81,15 @@ const BlockDetails = ({ query }: Props) => {
     return null;
   }
 
+  const sectionGap = (
+    <GridItem
+      colSpan={{ base: undefined, lg: 2 }}
+      mt={{ base: 2, lg: 3 }}
+      mb={{ base: 0, lg: 3 }}
+      borderBottom="1px solid"
+      borderColor="divider"
+    />
+  );
   const { totalReward, staticReward, burntFees, txFees } = getBlockReward(data);
 
   const validatorTitle = getNetworkValidatorTitle();
@@ -235,7 +243,7 @@ const BlockDetails = ({ query }: Props) => {
         ))
       }
 
-      <DetailsInfoItemDivider/>
+      { sectionGap }
 
       <DetailsInfoItem
         title="Gas used"
@@ -307,7 +315,7 @@ const BlockDetails = ({ query }: Props) => {
           isLoading={ isPlaceholderData }
         >
           <Icon as={ flameIcon } boxSize={ 5 } color="gray.500" isLoading={ isPlaceholderData }/>
-          <Skeleton isLoaded={ !isPlaceholderData } ml={ 2 }>
+          <Skeleton isLoaded={ !isPlaceholderData } ml={ 1 }>
             { burntFees.dividedBy(WEI).toFixed() } { config.chain.currency.symbol }
           </Skeleton>
           { !txFees.isEqualTo(ZERO) && (
@@ -434,7 +442,7 @@ const BlockDetails = ({ query }: Props) => {
             </Box>
           </DetailsInfoItem>
 
-          <DetailsInfoItemDivider/>
+          { sectionGap }
 
           <DetailsInfoItem
             title="Hash"
@@ -471,7 +479,7 @@ const BlockDetails = ({ query }: Props) => {
           >
             <Text wordBreak="break-all" whiteSpace="break-spaces">{ data.state_root }</Text>
           </DetailsInfoItem> */ }
-          { !config.UI.views.block.hiddenFields?.nonce && (
+          { config.chain.verificationType !== 'validation' && !config.UI.views.block.hiddenFields?.nonce && (
             <DetailsInfoItem
               title="Nonce"
               hint="Block nonce is a value used during mining to demonstrate proof of work for a block"

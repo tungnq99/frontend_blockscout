@@ -1,4 +1,4 @@
-import { Text, Flex, Grid, Tag } from '@chakra-ui/react';
+import { Text, Flex, Grid } from '@chakra-ui/react';
 import React from 'react';
 
 import type { SearchResultBlock } from 'types/api/search';
@@ -46,7 +46,6 @@ const SearchBarSuggestBlock = ({ data, isMobile, searchTerm }: Props) => {
         <Flex alignItems="center">
           { icon }
           { blockNumber }
-          { data.block_type === 'reorg' && <Tag ml="auto">Reorg</Tag> }
         </Flex>
         { hash }
         <Text variant="secondary">{ date }</Text>
@@ -60,10 +59,7 @@ const SearchBarSuggestBlock = ({ data, isMobile, searchTerm }: Props) => {
         { icon }
         { blockNumber }
       </Flex>
-      <Flex columnGap={ 3 } minW={ 0 }>
-        { data.block_type === 'reorg' && <Tag flexShrink={ 0 }>Reorg</Tag> }
-        { hash }
-      </Flex>
+      { hash }
       <Text variant="secondary" textAlign="end">{ date }</Text>
     </Grid>
   );

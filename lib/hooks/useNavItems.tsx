@@ -11,13 +11,12 @@ import withdrawalsIcon from 'icons/arrows/north-east.svg';
 import depositsIcon from 'icons/arrows/south-east.svg';
 import blocksIcon from 'icons/block.svg';
 import gearIcon from 'icons/gear.svg';
-import globeIcon from 'icons/globe-b.svg';
-import graphQLIcon from 'icons/graphQL.svg';
+import apiDocsIcon from 'icons/API.svg';
 import outputRootsIcon from 'icons/output_roots.svg';
 import privateTagIcon from 'icons/privattags.svg';
 import publicTagIcon from 'icons/publictags.svg';
-import apiDocsIcon from 'icons/restAPI.svg';
-import rpcIcon from 'icons/RPC.svg';
+import discordIcon from 'icons/social/discord_filled.svg';
+import teleIcon from 'icons/social/telegram_filled.svg';
 import statsIcon from 'icons/stats.svg';
 import tokensIcon from 'icons/token.svg';
 import topAccountsIcon from 'icons/top-accounts.svg';
@@ -114,31 +113,23 @@ export default function useNavItems(): ReturnType {
         icon: apiDocsIcon,
         isActive: pathname === '/api-docs',
       } : null,
-      config.features.graphqlApiDocs.isEnabled ? {
-        text: 'GraphQL',
-        nextRoute: { pathname: '/graphiql' as const },
-        icon: graphQLIcon,
-        isActive: pathname === '/graphiql',
-      } : null,
       {
-        text: 'RPC API',
-        icon: rpcIcon,
-        url: 'https://docs.blockscout.com/for-users/api/rpc-endpoints',
+        text: 'TELEGRAM',
+        icon: teleIcon,
+        url: 'https://telegram.org/',
       },
       {
-        text: 'Eth RPC API',
-        icon: rpcIcon,
-        url: ' https://docs.blockscout.com/for-users/api/eth-rpc',
+        text: 'DISCORD',
+        icon: discordIcon,
+        url: 'https://discord.com/',
       },
     ].filter(Boolean);
 
     const mainNavItems: ReturnType['mainNavItems'] = [
-      {
-        text: 'Blockchain',
-        icon: globeIcon,
-        isActive: blockchainNavItems.flat().some(item => isInternalItem(item) && item.isActive),
-        subItems: blockchainNavItems,
-      },
+     
+      blocks,
+      verifiedContracts,
+      txs,
       {
         text: 'Tokens',
         nextRoute: { pathname: '/tokens' as const },
@@ -158,16 +149,16 @@ export default function useNavItems(): ReturnType {
         isActive: pathname === '/stats',
       } : null,
       {
-        text: 'API',
-        icon: apiDocsIcon,
-        isActive: apiNavItems.some(item => isInternalItem(item) && item.isActive),
-        subItems: apiNavItems,
+        text: 'Withdrawals',
+        nextRoute: { pathname: '/withdrawals' as const },
+        icon: withdrawalsIcon,
+        isActive: pathname === '/withdrawals',
       },
-      config.UI.sidebar.otherLinks.length > 0 ? {
+      {
         text: 'Other',
         icon: gearIcon,
-        subItems: config.UI.sidebar.otherLinks,
-      } : null,
+        subItems: apiNavItems,
+      }
     ].filter(Boolean);
 
     const accountNavItems: ReturnType['accountNavItems'] = [

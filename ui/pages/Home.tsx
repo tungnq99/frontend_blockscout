@@ -12,7 +12,7 @@ import SearchBar from 'ui/snippets/searchBar/SearchBar';
 
 const Home = () => {
   return (
-    <Box as="main">
+    <>
       <Box
         w="100%"
         background={ config.UI.homepage.plate.background }
@@ -21,7 +21,10 @@ const Home = () => {
         minW={{ base: 'unset', lg: '900px' }}
         data-label="hero plate"
       >
-        <Flex mb={{ base: 6, lg: 8 }} justifyContent="space-between">
+        <LightMode>
+          <SearchBar isHomepage/>
+        </LightMode>
+        {/* <Flex mb={{ base: 6, lg: 8 }} justifyContent="space-between">
           <Heading
             as="h1"
             size={{ base: 'md', lg: 'xl' }}
@@ -34,21 +37,21 @@ const Home = () => {
           <Box display={{ base: 'none', lg: 'block' }}>
             { config.features.account.isEnabled && <ProfileMenuDesktop/> }
           </Box>
-        </Flex>
-        <LightMode>
-          <SearchBar isHomepage/>
-        </LightMode>
+        </Flex> */}
+        
+        <ChainIndicators/>
       </Box>
+      {/* <AdBanner mt={{ base: 6, lg: 8 }} mx="auto" display="flex" justifyContent="center"/> */}
+      
+      
       <Stats/>
-      <ChainIndicators/>
-      <AdBanner mt={{ base: 6, lg: 8 }} mx="auto" display="flex" justifyContent="center"/>
       <Flex mt={ 8 } direction={{ base: 'column', lg: 'row' }} columnGap={ 12 } rowGap={ 8 }>
         <LatestBlocks/>
         <Box flexGrow={ 1 }>
           <Transactions/>
         </Box>
       </Flex>
-    </Box>
+    </>
   );
 };
 

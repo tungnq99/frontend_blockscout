@@ -1,4 +1,4 @@
-import { Flex, Grid, Icon, Image, Box, Text, Skeleton, useColorMode, Tag } from '@chakra-ui/react';
+import { Flex, Grid, Icon, Image, Box, Text, Skeleton, useColorMode } from '@chakra-ui/react';
 import React from 'react';
 import xss from 'xss';
 
@@ -50,7 +50,7 @@ const SearchResultListItem = ({ data, searchTerm, isLoading }: Props) => {
 
         return (
           <Flex alignItems="center" overflow="hidden">
-            <TokenEntity.Icon token={{ ...data, type: data.token_type }} isLoading={ isLoading }/>
+            <TokenEntity.Icon token={ data } isLoading={ isLoading }/>
             <LinkInternal
               href={ route({ pathname: '/token/[hash]', query: { hash: data.address } }) }
               fontWeight={ 700 }
@@ -174,7 +174,6 @@ const SearchResultListItem = ({ data, searchTerm, isLoading }: Props) => {
                 fontWeight={ 700 }
               />
             </BlockEntity.Link>
-            { data.block_type === 'reorg' && <Tag ml={ 2 }>Reorg</Tag> }
           </BlockEntity.Container>
         );
       }

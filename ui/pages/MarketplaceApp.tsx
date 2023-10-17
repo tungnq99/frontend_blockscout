@@ -37,7 +37,7 @@ const MarketplaceApp = () => {
   const { isLoading, isError, error, data } = useQuery<unknown, ResourceError<unknown>, MarketplaceAppOverview>(
     [ 'marketplace-apps', id ],
     async() => {
-      const result = await apiFetch<Array<MarketplaceAppOverview>, unknown>(configUrl, undefined, { resource: 'marketplace-apps' });
+      const result = await apiFetch<Array<MarketplaceAppOverview>, unknown>(configUrl);
       if (!Array.isArray(result)) {
         throw result;
       }

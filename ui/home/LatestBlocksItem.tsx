@@ -18,23 +18,26 @@ import BlockEntity from 'ui/shared/entities/block/BlockEntity';
 
 type Props = {
   block: Block;
+  h: number;
   isLoading?: boolean;
 }
 
-const LatestBlocksItem = ({ block, isLoading }: Props) => {
+const LatestBlocksItem = ({ block, h, isLoading }: Props) => {
   const totalReward = getBlockTotalReward(block);
   return (
     <Box
       as={ motion.div }
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ display: 'none' }}
       transitionDuration="normal"
       transitionTimingFunction="linear"
-      borderRadius="md"
+      borderRadius="12px"
       border="1px solid"
       borderColor="divider"
       p={ 6 }
+      h={ `${ h }px` }
+      minWidth={{ base: '100%', lg: '280px' }}
+      w="100%"
     >
       <Flex alignItems="center" overflow="hidden" w="100%" mb={ 3 }>
         <BlockEntity
@@ -58,16 +61,10 @@ const LatestBlocksItem = ({ block, isLoading }: Props) => {
       <Grid gridGap={ 2 } templateColumns="auto minmax(0, 1fr)" fontSize="sm">
         <Skeleton isLoaded={ !isLoading }>Txn</Skeleton>
         <Skeleton isLoaded={ !isLoading } color="text_secondary"><span>{ block.tx_count }</span></Skeleton>
-
-        { !config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.total_reward && (
+        { !config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.nonce && (
           <>
             <Skeleton isLoaded={ !isLoading }>Reward</Skeleton>
             <Skeleton isLoaded={ !isLoading } color="text_secondary"><span>{ totalReward.dp(10).toFixed() }</span></Skeleton>
-          </>
-        ) }
-
-        { !config.features.rollup.isEnabled && (
-          <>
             <Skeleton isLoaded={ !isLoading } textTransform="capitalize">{ getNetworkValidatorTitle() }</Skeleton>
             <AddressEntity
               address={ block.miner }

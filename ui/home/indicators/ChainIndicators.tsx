@@ -50,7 +50,7 @@ const ChainIndicators = () => {
     }
 
     return (
-      <Text fontWeight={ 600 } fontFamily="heading" fontSize="48px" lineHeight="48px" mt={ 3 } mb={ 4 }>
+      <Text fontWeight={ 600 } fontFamily="heading" fontSize="48px" lineHeight="48px" mt={ 3 } mb={ 4 } color="white">
         { indicator?.value(statsQueryResult.data) }
       </Text>
     );
@@ -60,8 +60,6 @@ const ChainIndicators = () => {
     <Flex
       p={{ base: 0, lg: 8 }}
       borderRadius={{ base: 'none', lg: 'lg' }}
-      boxShadow={{ base: 'none', lg: 'xl' }}
-      bgColor={{ base: bgColorMobile, lg: bgColorDesktop }}
       columnGap={ 12 }
       rowGap={ 0 }
       flexDir={{ base: 'column', lg: 'row' }}
@@ -69,10 +67,9 @@ const ChainIndicators = () => {
       alignItems="stretch"
       mt={ 8 }
     >
-      <Flex flexGrow={ 1 } flexDir="column" order={{ base: 2, lg: 1 }} p={{ base: 6, lg: 0 }}>
-        <Flex alignItems="center">
-          <Text fontWeight={ 500 } fontFamily="heading" fontSize="lg">{ indicator?.title }</Text>
-          { indicator?.hint && <Hint label={ indicator.hint } ml={ 1 }/> }
+      <Flex flexGrow={ 1 } flexDir="column" order={{ base: 2, lg: 1 }} p={{ base: 6, lg: 0 }} color="white">
+        <Flex alignItems="center" color="white">
+          <Text fontWeight={ 500 } fontFamily="heading" fontSize="lg" color="white">{ indicator?.title }</Text>
         </Flex>
         { valueTitle }
         <ChainIndicatorChartContainer { ...queryResult }/>

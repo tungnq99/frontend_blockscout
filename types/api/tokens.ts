@@ -13,8 +13,6 @@ export type TokensResponse = {
 
 export type TokensFilters = { q: string; type: Array<TokenType> | undefined };
 
-export type TokensBridgedFilters = { q: string; chain_ids: Array<string> | undefined };
-
 export interface TokenInstanceTransferResponse {
   items: Array<TokenTransfer>;
   next_page_params: TokenInstanceTransferPagination | null;
@@ -31,7 +29,3 @@ export interface TokensSorting {
   sort: 'fiat_value' | 'holder_count' | 'circulating_market_cap';
   order: 'asc' | 'desc';
 }
-
-export type TokensSortingField = TokensSorting['sort'];
-
-export type TokensSortingValue = `${ TokensSortingField }-${ TokensSorting['order'] }`;

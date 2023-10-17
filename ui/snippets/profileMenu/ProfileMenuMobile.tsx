@@ -4,7 +4,6 @@ import React from 'react';
 
 import useFetchProfileInfo from 'lib/hooks/useFetchProfileInfo';
 import useLoginUrl from 'lib/hooks/useLoginUrl';
-import * as mixpanel from 'lib/mixpanel/index';
 import UserAvatar from 'ui/shared/UserAvatar';
 import ProfileMenuContent from 'ui/snippets/profileMenu/ProfileMenuContent';
 
@@ -14,14 +13,6 @@ const ProfileMenuMobile = () => {
   const { data, error, isLoading } = useFetchProfileInfo();
   const loginUrl = useLoginUrl();
   const [ hasMenu, setHasMenu ] = React.useState(false);
-
-  const handleSignInClick = React.useCallback(() => {
-    mixpanel.logEvent(
-      mixpanel.EventTypes.ACCOUNT_ACCESS,
-      { Action: 'Auth0 init' },
-      { send_immediately: true },
-    );
-  }, []);
 
   React.useEffect(() => {
     if (!isLoading) {
@@ -37,7 +28,6 @@ const ProfileMenuMobile = () => {
     return {
       as: 'a',
       href: loginUrl,
-      onClick: handleSignInClick,
     };
   })();
 
@@ -46,9 +36,7 @@ const ProfileMenuMobile = () => {
       <Box padding={ 2 } onClick={ hasMenu ? onOpen : undefined }>
         <Button
           variant="unstyled"
-          display="block"
-          boxSize="24px"
-          flexShrink={ 0 }
+          height="auto"
           { ...buttonProps }
         >
           <UserAvatar size={ 24 }/>
@@ -64,7 +52,7 @@ const ProfileMenuMobile = () => {
           <DrawerOverlay/>
           <DrawerContent maxWidth="260px">
             <DrawerBody p={ 6 }>
-              <ProfileMenuContent data={ data } onNavLinkClick={ onClose }/>
+              <ProfileMenuContent data={ data }/>
             </DrawerBody>
           </DrawerContent>
         </Drawer>

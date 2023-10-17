@@ -8,7 +8,6 @@ import type { MethodFormFields, ContractMethodCallResult } from './types';
 import type { SmartContractMethodInput, SmartContractMethod } from 'types/api/contract';
 
 import arrowIcon from 'icons/arrows/down-right.svg';
-import * as mixpanel from 'lib/mixpanel/index';
 
 import ContractMethodField from './ContractMethodField';
 
@@ -106,14 +105,8 @@ const ContractMethodCallable = <T extends SmartContractMethod>({ data, onSubmit,
       .catch((error) => {
         setResult(error?.error || error?.data || (error?.reason && { message: error.reason }) || error);
         setLoading(false);
-      })
-      .finally(() => {
-        mixpanel.logEvent(mixpanel.EventTypes.CONTRACT_INTERACTION, {
-          'Method type': isWrite ? 'Write' : 'Read',
-          'Method name': 'name' in data ? data.name : 'Fallback',
-        });
       });
-  }, [ inputs, onSubmit, data, isWrite ]);
+  }, [ onSubmit, data, inputs ]);
 
   return (
     <Box>

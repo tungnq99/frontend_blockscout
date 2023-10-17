@@ -18,10 +18,9 @@ type Props = {
   isCollapsed?: boolean;
   px?: string | number;
   className?: string;
-  onClick?: () => void;
 }
 
-const NavLink = ({ item, isCollapsed, px, className, onClick }: Props) => {
+const NavLink = ({ item, isCollapsed, px, className }: Props) => {
   const isMobile = useIsMobile();
   const colors = useColors();
 
@@ -42,7 +41,6 @@ const NavLink = ({ item, isCollapsed, px, className, onClick }: Props) => {
       px={ px || { base: 3, lg: isExpanded ? 3 : '15px', xl: isCollapsed ? '15px' : 3 } }
       aria-label={ `${ item.text } link` }
       whiteSpace="nowrap"
-      onClick={ onClick }
     >
       <Tooltip
         label={ item.text }

@@ -1,7 +1,4 @@
-import type { ArrayElement } from 'types/utils';
-
-export const NETWORK_GROUPS = [ 'Mainnets', 'Testnets', 'Other' ] as const;
-export type NetworkGroup = ArrayElement<typeof NETWORK_GROUPS>;
+export type NetworkGroup = 'Mainnets' | 'Testnets' | 'Other';
 
 export interface FeaturedNetwork {
   title: string;
