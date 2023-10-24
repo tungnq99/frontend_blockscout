@@ -43,7 +43,6 @@ const TxsTable = ({
     <Table variant="simple" minWidth="950px" size="xs">
       <TheadSticky top={ top }>
         <Tr>
-          <Th width="54px"></Th>
           <Th width="22%">Txn hash</Th>
           <Th width="160px">Type</Th>
           <Th width="20%">Method</Th>

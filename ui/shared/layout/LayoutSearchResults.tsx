@@ -14,7 +14,7 @@ const LayoutSearchResults = ({ children }: Props) => {
           { children }
         </Layout.MainColumn>
       </Layout.MainArea>
-      <Layout.Footer/>
+      {/* <Layout.Footer/> */}
     </Layout.Container>
   );
 };

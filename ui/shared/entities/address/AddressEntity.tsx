@@ -129,7 +129,7 @@ const AddressEntry = (props: EntityProps) => {
 
   return (
     <Container className={ props.className }>
-      <Icon { ...partsProps }/>
+      {/* <Icon { ...partsProps }/> */}
       <Link { ...linkProps }>
         <Content { ...partsProps }/>
       </Link>

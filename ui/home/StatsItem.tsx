@@ -40,7 +40,7 @@ const StatsItem = ({ icon, title, value, className, tooltipLabel, url, isLoading
 
   return (
     <Flex
-      backgroundColor={ isLoading ? loadingBgColor : "whiteAlpha.500" }
+      backgroundColor={ isLoading ? loadingBgColor : "white" }
       boxShadow="md"
       padding={ 3 }
       borderRadius="md"
@@ -49,6 +49,8 @@ const StatsItem = ({ icon, title, value, className, tooltipLabel, url, isLoading
       alignItems="center"
       columnGap={ 3 }
       rowGap={ 2 }
+      w={{base: '190px', lg: "210px"}}
+      h="100px"
       className={ className }
       color={ useColorModeValue('black', 'white') }
       position="relative"

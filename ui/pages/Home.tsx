@@ -26,9 +26,8 @@ const Home = () => {
       
       <ChainIndicators/>
       
-      <Stats/>
       <Flex mt={ 8 } direction={{ base: 'column', lg: 'row' }} columnGap={ 8 } rowGap={ 8 }>
-        <Box w="30%" boxShadow="lg" p={5} borderRadius={8}>
+        <Box w={{base: "100%", lg: "30%"}} boxShadow="lg" p={5} borderRadius={8}>
           <LatestBlocks />
         </Box>
         <Box flexGrow={ 1 } boxShadow="lg" p={5} borderRadius={8}>

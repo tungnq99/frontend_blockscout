@@ -14,11 +14,22 @@ const VerifiedContractsCounters = () => {
 
   const content = (() => {
     if (countersQuery.isLoading) {
-      const item = <Skeleton w={{ base: '100%', lg: 'calc((100% - 12px)/2)' }} h="69px" borderRadius="12px"/>;
       return (
         <>
-          { item }
-          { item }
+            <Skeleton>
+              <VerifiedContractsCountersItem
+              name=""
+              total=""
+              new24=""
+            />
+            </Skeleton>
+            <Skeleton>
+              <VerifiedContractsCountersItem
+                name=""
+                total=""
+                new24=""
+              />
+            </Skeleton>
         </>
       );
     }
@@ -26,12 +37,12 @@ const VerifiedContractsCounters = () => {
     return (
       <>
         <VerifiedContractsCountersItem
-          name="Total contracts"
+          name="Total"
           total={ countersQuery.data.smart_contracts }
           new24={ countersQuery.data.new_smart_contracts_24h }
         />
         <VerifiedContractsCountersItem
-          name="Verified contracts"
+          name="Verified"
           total={ countersQuery.data.verified_smart_contracts }
           new24={ countersQuery.data.new_verified_smart_contracts_24h }
         />
@@ -40,7 +51,7 @@ const VerifiedContractsCounters = () => {
   })();
 
   return (
-    <Flex columnGap={ 3 } rowGap={ 3 } flexDirection={{ base: 'column', lg: 'row' }} mb={ 6 }>
+    <Flex columnGap={ 3 } rowGap={ 3 } flexDirection={{ base: 'column', lg: 'row' }}>
       { content }
     </Flex>
   );

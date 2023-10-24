@@ -9,6 +9,7 @@ import ProfileMenuMobile from 'ui/snippets/profileMenu/ProfileMenuMobile';
 import SearchBar from 'ui/snippets/searchBar/SearchBar';
 
 import Burger from './Burger';
+import NetworkAddToWallet from 'ui/shared/NetworkAddToWallet';
 
 type Props = {
   isHomePage?: boolean;
@@ -42,7 +43,8 @@ const Header = ({ isHomePage, renderSearchBar }: Props) => {
         >
           <Burger/>
           <NetworkLogo/>
-          { config.features.account.isEnabled ? <ProfileMenuMobile/> : <Box boxSize={ 10 }/> }
+          <NetworkAddToWallet/>
+          {/* { config.features.account.isEnabled ? <ProfileMenuMobile/> : <Box boxSize={ 10 }/> } */}
         </Flex>
         { !isHomePage && searchBar }
       </Box>

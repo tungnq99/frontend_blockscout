@@ -104,7 +104,7 @@ const SearchBarSuggest = ({ query, searchTerm, onItemClick, containerId }: Props
     }
 
     if (query.isError) {
-      return <Text>Something went wrong. Try refreshing the page or come back later.</Text>;
+      return <Text color="black">Something went wrong. Try refreshing the page or come back later.</Text>;
     }
 
     if (!query.data || query.data.length === 0) {

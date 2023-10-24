@@ -93,6 +93,8 @@ const VerifiedContracts = () => {
     />
   );
 
+  const totalCount = ( <VerifiedContractsCounters />)
+
   const actionBar = (
     <>
       <HStack spacing={ 3 } mb={ 6 } display={{ base: 'flex', lg: 'none' }}>
@@ -104,9 +106,14 @@ const VerifiedContracts = () => {
         <ActionBar mt={ -6 }>
           <HStack spacing={ 3 } display={{ base: 'none', lg: 'flex' }}>
             { typeFilter }
+            { sortButton }
             { filterInput }
           </HStack>
+          <HStack>
+          { totalCount }
           <Pagination ml="auto" { ...pagination }/>
+          </HStack>
+         
         </ActionBar>
       ) }
     </>
@@ -128,7 +135,6 @@ const VerifiedContracts = () => {
   return (
     <Box>
       <PageTitle title="Verified contracts" withTextAd/>
-      <VerifiedContractsCounters/>
       <DataListDisplay
         isError={ isError }
         items={ data?.items }

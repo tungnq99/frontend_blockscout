@@ -9,6 +9,7 @@ import ChainIndicatorChartContainer from './ChainIndicatorChartContainer';
 import ChainIndicatorItem from './ChainIndicatorItem';
 import useFetchChartData from './useFetchChartData';
 import INDICATORS from './utils/indicators';
+import Stats from '../Stats';
 
 const indicators = INDICATORS
   .filter(({ id }) => config.UI.homepage.charts.includes(id))
@@ -69,36 +70,26 @@ const ChainIndicators = () => {
       alignItems="stretch"
       mt={ 8 }
     >
-       { indicators.length > 0 && (
+        <Flex flexGrow={ 1 } flexDir="column" order={{ base: 2, lg: 1 }} p={{ base: 6, lg: 0 }} color="white">
+          <Flex alignItems="center" color="white">
+            <Text fontWeight={ 500 } fontFamily="heading" fontSize="lg" color="white">Transactions</Text>
+          </Flex>
+          { valueTitle }
+          <ChainIndicatorChartContainer { ...queryResult }/>
+        </Flex>
+
         <Flex
-          w="40%"
-          justifyContent={"space-between"}
+          flexShrink={ 0 }
+          flexDir="column"
           as="ul"
           p={ 3 }
           borderRadius="lg"
-          bgColor={{ base: listBgColorMobile, lg: listBgColorDesktop }}
           rowGap={ 3 }
-          order={1}
+          order={{ base: 1, lg: 2 }}
         >
-          { indicators.map((indicator) => {
-              if (indicator?.id !== 'daily_txs') {
-                return  <ChainIndicatorItem
-                key={ indicator.id }
-                { ...indicator }
-                stats={ statsQueryResult }
-              />
-              }
-          }) }
+          <Stats/>
         </Flex>
-      ) }
-      <Flex w="100%" flexDir="column" order={2} p={{ base: 6, lg: 0 }} color="white">
-        <Flex alignItems="center" color="white">
-          <Text fontWeight={ 500 } fontFamily="heading" fontSize="lg" color="white">{ indicator?.title }</Text>
-        </Flex>
-        { valueTitle }
-        <ChainIndicatorChartContainer { ...queryResult }/>
-      </Flex>
-     
+        
     </Flex>
   );
 };

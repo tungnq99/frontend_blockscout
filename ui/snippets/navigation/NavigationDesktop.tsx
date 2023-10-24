@@ -104,7 +104,7 @@ const NavigationDesktop = () => {
         transitionTimingFunction="ease"
       >
         <Flex  flexDirection="column" justifyContent="flex-start" alignItems="center">
-          { config.chain.isTestnet && <Icon as={ testnetIcon } h="14px" w="auto" color="red.400"  alignSelf="flex-start"/> }
+          {/* { config.chain.isTestnet && <Icon as={ testnetIcon } h="14px" w="auto" color="red.400"  alignSelf="flex-start"/> } */}
           <Box mt={2}>
             <NetworkLogo isCollapsed={ isCollapsed }/>
             { Boolean(config.UI.sidebar.featuredNetworks) && <NetworkMenu isCollapsed={ isCollapsed }/> }
@@ -125,8 +125,8 @@ const NavigationDesktop = () => {
       <Box as="nav" mt={ 20 } w="100%" h="50%" display="flex" alignItems="flex-end">
         <VStack as="ul" spacing="1" >
             <Flex justifyContent="space-between" alignItems="center" gap={6}>
-                {BLOCKSCOUT_LINKS.map((item) => {
-                  return <Link href={ item.url } variant="secondary" target="_blank" fontSize="xs">
+                {BLOCKSCOUT_LINKS.map((item, index) => {
+                  return <Link key={index} href={ item.url } variant="secondary" target="_blank" fontSize="xs">
                           { item.icon && (
                             <Center minW={ 6 } mr="6px">
                               <Icon boxSize={ item.iconSize} as={ item.icon }/>

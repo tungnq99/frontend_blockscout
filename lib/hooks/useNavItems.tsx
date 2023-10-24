@@ -113,16 +113,6 @@ export default function useNavItems(): ReturnType {
         icon: apiDocsIcon,
         isActive: pathname === '/api-docs',
       } : null,
-      {
-        text: 'TELEGRAM',
-        icon: teleIcon,
-        url: 'https://telegram.org/',
-      },
-      {
-        text: 'DISCORD',
-        icon: discordIcon,
-        url: 'https://discord.com/',
-      },
     ].filter(Boolean);
 
     const mainNavItems: ReturnType['mainNavItems'] = [
@@ -136,29 +126,30 @@ export default function useNavItems(): ReturnType {
         icon: tokensIcon,
         isActive: pathname.startsWith('/token'),
       },
-      config.features.marketplace.isEnabled ? {
-        text: 'Apps',
-        nextRoute: { pathname: '/apps' as const },
-        icon: appsIcon,
-        isActive: pathname.startsWith('/app'),
+      // config.features.marketplace.isEnabled ? {
+      //   text: 'Apps',
+      //   nextRoute: { pathname: '/apps' as const },
+      //   icon: appsIcon,
+      //   isActive: pathname.startsWith('/app'),
+      // } : null,
+      // config.features.stats.isEnabled ? {
+      //   text: 'Charts & stats',
+      //   nextRoute: { pathname: '/stats' as const },
+      //   icon: statsIcon,
+      //   isActive: pathname === '/stats',
+      // } : null,
+      // {
+      //   text: 'Withdrawals',
+      //   nextRoute: { pathname: '/withdrawals' as const },
+      //   icon: withdrawalsIcon,
+      //   isActive: pathname === '/withdrawals',
+      // },
+      config.features.restApiDocs.isEnabled ? {
+        text: 'REST API',
+        nextRoute: { pathname: '/api-docs' as const },
+        icon: apiDocsIcon,
+        isActive: pathname === '/api-docs',
       } : null,
-      config.features.stats.isEnabled ? {
-        text: 'Charts & stats',
-        nextRoute: { pathname: '/stats' as const },
-        icon: statsIcon,
-        isActive: pathname === '/stats',
-      } : null,
-      {
-        text: 'Withdrawals',
-        nextRoute: { pathname: '/withdrawals' as const },
-        icon: withdrawalsIcon,
-        isActive: pathname === '/withdrawals',
-      },
-      {
-        text: 'Other',
-        icon: gearIcon,
-        subItems: apiNavItems,
-      }
     ].filter(Boolean);
 
     const accountNavItems: ReturnType['accountNavItems'] = [

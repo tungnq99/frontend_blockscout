@@ -26,7 +26,7 @@ const LatestTransactions = () => {
   const { num, socketAlert } = useNewTxsSocket();
 
   if (isError) {
-    return <Text mt={ 4 }>No data. Please reload page.</Text>;
+    return <Text>No data. Please reload page.</Text>;
   }
 
   if (data) {
@@ -52,12 +52,6 @@ const LatestTransactions = () => {
             />
           ))) }
         </Box>
-        <Flex justifyContent="center">
-          <Button colorScheme='blue' size={'sm'} rightIcon={<Icon as={arrowRightIcon} />} variant='outline'>
-            <LinkInternal fontSize="sm" href={ txsUrl } color="blue.600" _hover={{color: "blue.5000"}}>View all transactions</LinkInternal>
-          </Button>
-          
-        </Flex>
       </>
     );
   }

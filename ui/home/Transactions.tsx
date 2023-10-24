@@ -1,4 +1,4 @@
-import { Heading } from '@chakra-ui/react';
+import { Button, Flex, Heading } from '@chakra-ui/react';
 import React from 'react';
 
 import config from 'configs/app';
@@ -7,6 +7,10 @@ import LatestDeposits from 'ui/home/LatestDeposits';
 import LatestTxs from 'ui/home/LatestTxs';
 import LatestWatchlistTxs from 'ui/home/LatestWatchlistTxs';
 import TabsWithScroll from 'ui/shared/Tabs/TabsWithScroll';
+import LinkInternal from 'ui/shared/LinkInternal';
+import { route } from 'nextjs-routes';
+import Icon from 'ui/shared/chakra/Icon';
+import arrowRightIcon from "icons/arrows/east.svg";
 
 const TransactionsHome = () => {
   const hasAccount = useHasAccount();
@@ -26,7 +30,13 @@ const TransactionsHome = () => {
 
   return (
     <>
-      <Heading as="h4" size="sm" mb={ 4 }>Latest transactions</Heading>
+      <Flex justifyContent="space-between" alignItems='flex-start'>
+          <Heading as="h4" size="md" mb={ 4 }>Latest Transactions</Heading>
+          <LinkInternal fontSize="sm" href={ route({ pathname: '/txs' })} p={1} px={2} border="1px solid" borderRadius="4px" _hover={{ textDecoration : "none", color:"blue.400"}}>
+              View all
+          </LinkInternal>
+      </Flex>
+      
       <LatestTxs/>
     </>
   );

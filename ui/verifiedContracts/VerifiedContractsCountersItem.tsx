@@ -10,23 +10,24 @@ type Props = {
 const VerifiedContractsCountersItem = ({ name, total, new24 }: Props) => {
   const itemBgColor = useColorModeValue('blue.50', 'blue.800');
   return (
-    <Box
-      w={{ base: '100%', lg: 'calc((100% - 12px)/2)' }}
+    <Flex
+      w='100%'
       borderRadius="12px"
       backgroundColor={ itemBgColor }
-      p={ 3 }
+      p={ 2 }
+      alignItems="center"
     >
-      <Text variant="secondary" fontSize="xs">{ name }</Text>
+      <Text variant="secondary" fontSize="xs" mr={2}>{ name }:</Text>
       <Flex alignItems="baseline">
-        <Text fontWeight={ 600 } mr={ 2 } fontSize="lg">{ Number(total).toLocaleString() }</Text>
+        <Text fontWeight={ 600 } mr={ 2 } fontSize="sm">{ Number(total).toLocaleString() }</Text>
         { Number(new24) > 0 && (
           <>
-            <Text fontWeight={ 600 } mr={ 1 } fontSize="lg" color="green.500">+{ Number(new24).toLocaleString() }</Text>
+            <Text fontWeight={ 600 } mr={ 1 } fontSize="2xs" color="green.500">+{ Number(new24).toLocaleString() }</Text>
             <Text variant="secondary" fontSize="sm">(24h)</Text>
           </>
         ) }
       </Flex>
-    </Box>
+    </Flex>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, AlertTitle, chakra, Flex, Skeleton, Text } from '@chakra-ui/react';
+import { Alert, AlertIcon, AlertTitle, Box, chakra, Flex, Skeleton, Text } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 
@@ -69,7 +69,7 @@ const IndexingAlertBlocks = ({ className }: { className?: string }) => {
   return (
      <Flex flexWrap="wrap" columnGap={ 8 } rowGap={ 6 } justifyContent="space-between" alignItems="center" mb={ 6 }>
       <Text fontSize={{base: '2xl', lg: '3xl'}} fontWeight={600}>BlockChain Explorer</Text>
-      <NetworkAddToWallet/>
+      <Box display={{ base: 'none', lg: 'block' }}><NetworkAddToWallet /></Box>
     </Flex>
   );
 };

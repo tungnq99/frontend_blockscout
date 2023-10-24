@@ -7,6 +7,7 @@ import * as mixpanel from 'lib/mixpanel/index';
 import useAddOrSwitchChain from 'lib/web3/useAddOrSwitchChain';
 import useProvider from 'lib/web3/useProvider';
 import { WALLETS_INFO } from 'lib/web3/wallets';
+import { useAccount } from 'wagmi';
 
 const feature = config.features.web3Wallet;
 
@@ -14,7 +15,8 @@ const NetworkAddToWallet = () => {
   const toast = useToast();
   const { provider, wallet } = useProvider();
   const addOrSwitchChain = useAddOrSwitchChain();
-
+  const [address, setAddress] = React.useState(null)
+  
   const handleClick = React.useCallback(async() => {
     if (!wallet || !provider) {
       return;
@@ -22,6 +24,12 @@ const NetworkAddToWallet = () => {
 
     try {
       await addOrSwitchChain();
+      const accounts = await provider.request({method: 'eth_accounts'});    
+           
+      if (accounts?.length > 0) {
+        // @ts-ignore:
+        setAddress(accounts[0]);
+      } 
 
       toast({
         position: 'top-right',
@@ -56,7 +64,7 @@ const NetworkAddToWallet = () => {
   return (
     <Button variant="outline" size="sm" onClick={ handleClick }>
       <Icon as={ WALLETS_INFO[wallet].icon } boxSize={ 5 } mr={ 2 }/>
-        Connect Wallet
+        {address ? address : "Connect"}
     </Button>
   );
 };

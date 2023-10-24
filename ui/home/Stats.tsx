@@ -1,4 +1,4 @@
-import { Grid } from '@chakra-ui/react';
+import { Box, Flex, Grid } from '@chakra-ui/react';
 import React from 'react';
 
 import { route } from 'nextjs-routes';
@@ -14,6 +14,7 @@ import { HOMEPAGE_STATS } from 'stubs/stats';
 
 import StatsGasPrices from './StatsGasPrices';
 import StatsItem from './StatsItem';
+import { base } from 'nextjs/getServerSideProps';
 
 const hasGasTracker = config.UI.homepage.showGasTracker;
 const hasAvgBlockTime = config.UI.homepage.showAvgBlockTime;
@@ -25,9 +26,9 @@ const Stats = () => {
     },
   });
 
-  if (isError) {
-    return null;
-  }
+  // if (isError) {
+  //   return null;
+  // }
 
   let content;
 
@@ -41,39 +42,42 @@ const Stats = () => {
     !data.gas_prices && itemsCount--;
     const isOdd = Boolean(itemsCount % 2);
     const gasLabel = hasGasTracker && data.gas_prices ? <StatsGasPrices gasPrices={ data.gas_prices }/> : null;
-
     content = (
       <>
-        <StatsItem
-          icon={ blockIcon }
-          title="Total blocks"
-          value={ Number(data.total_blocks).toLocaleString() }
-          url={ route({ pathname: '/blocks' }) }
-          isLoading={ isPlaceholderData }
-        />
-        { hasAvgBlockTime && (
+        <Flex gap={5} mb={5} mr={5} flexWrap="wrap">
           <StatsItem
-            icon={ clockIcon }
-            title="Average block time"
-            value={ `${ (data.average_block_time / 1000).toFixed(1) } s` }
+            icon={ blockIcon }
+            title="Total blocks"
+            value={ Number(data.total_blocks).toLocaleString() }
+            url={ route({ pathname: '/blocks' }) }
             isLoading={ isPlaceholderData }
           />
-        ) }
-        <StatsItem
-          icon={ txIcon }
-          title="Total transactions"
-          value={ Number(data.total_transactions).toLocaleString() }
-          url={ route({ pathname: '/txs' }) }
-          isLoading={ isPlaceholderData }
-        />
-        <StatsItem
-          icon={ walletIcon }
-          title="Wallet addresses"
-          value={ Number(data.total_addresses).toLocaleString() }
-          _last={ isOdd ? lastItemTouchStyle : undefined }
-          isLoading={ isPlaceholderData }
-        />
-        { hasGasTracker && data.gas_prices && (
+          { hasAvgBlockTime && (
+            <StatsItem
+              icon={ clockIcon }
+              title="Average block time"
+              value={ `${ (data.average_block_time / 1000).toFixed(1) } s` }
+              isLoading={ isPlaceholderData }
+            />
+          ) }
+        </Flex>
+        <Flex gap={5} flexWrap="wrap">
+          <StatsItem
+            icon={ txIcon }
+            title="Total transactions"
+            value={ Number(data.total_transactions).toLocaleString() }
+            url={ route({ pathname: '/txs' }) }
+            isLoading={ isPlaceholderData }
+          />
+          <StatsItem
+            icon={ walletIcon }
+            title="Wallet addresses"
+            value={ Number(data.total_addresses).toLocaleString() }
+            _last={ isOdd ? lastItemTouchStyle : undefined }
+            isLoading={ isPlaceholderData }
+          />
+        </Flex>
+        {/* { hasGasTracker && data.gas_prices && (
           <StatsItem
             icon={ gasIcon }
             title="Gas tracker"
@@ -83,20 +87,18 @@ const Stats = () => {
             isLoading={ isPlaceholderData }
            
           />
-        ) }
+        ) } */}
       </>
     );
   }
+  
+
+  
 
   return (
-    <Grid
-      gridTemplateColumns={{ lg: `repeat(${ itemsCount }, 1fr)`, base: '1fr 1fr' }}
-      gridTemplateRows={{ lg: 'none', base: undefined }}
-      gridGap="10px"
-      marginTop="24px"
-    >
+    <Flex flexDirection={{base: "row" , lg: "column"}}>
       { content }
-    </Grid>
+    </Flex>
 
   );
 };

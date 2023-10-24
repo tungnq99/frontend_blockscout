@@ -59,8 +59,9 @@ const Transactions = () => {
   const tabs: Array<RoutedTab> = [
     {
       id: 'validated',
-      title: verifiedTitle,
-      component: <TxsContent query={ txsQuery } showSocketInfo={ txsQuery.pagination.page === 1 } socketInfoNum={ num } socketInfoAlert={ socketAlert }/> },
+      title: "Success",
+      component: <TxsContent query={ txsQuery } showSocketInfo={ txsQuery.pagination.page === 1 } socketInfoNum={ num } socketInfoAlert={ socketAlert }/> 
+    },
     {
       id: 'pending',
       title: 'Pending',

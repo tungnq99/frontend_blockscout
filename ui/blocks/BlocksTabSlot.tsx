@@ -21,7 +21,7 @@ const BlocksTabSlot = ({ pagination }: Props) => {
 
   return (
     <Flex alignItems="center" columnGap={ 8 } display={{ base: 'none', lg: 'flex' }}>
-      { statsQuery.data?.network_utilization_percentage !== undefined && (
+      {/* { statsQuery.data?.network_utilization_percentage !== undefined && (
         <Box>
           <Text as="span" fontSize="sm">
               Network utilization (last 50 blocks):{ nbsp }
@@ -30,7 +30,7 @@ const BlocksTabSlot = ({ pagination }: Props) => {
             <span>{ statsQuery.data.network_utilization_percentage.toFixed(2) }%</span>
           </Skeleton>
         </Box>
-      ) }
+      ) } */}
       <Pagination my={ 1 } { ...pagination }/>
     </Flex>
   );

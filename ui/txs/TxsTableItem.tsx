@@ -75,9 +75,7 @@ const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, 
       transitionTimingFunction="linear"
       key={ tx.hash }
     >
-      <Td pl={ 4 }>
-        <TxAdditionalInfo tx={ tx } isLoading={ isLoading }/>
-      </Td>
+      
       <Td pr={ 4 }>
         <VStack alignItems="start" lineHeight="24px">
           <TxEntity

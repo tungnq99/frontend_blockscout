@@ -5,8 +5,8 @@ import React from 'react';
 import type { VerifiedContract } from 'types/api/contracts';
 
 import config from 'configs/app';
-import iconCheck from 'icons/check.svg';
-import iconCross from 'icons/cross.svg';
+import iconBolt from 'icons/bolt-fill.svg';
+import iconWrench from 'icons/wrench.svg';
 import iconSuccess from 'icons/status/success.svg';
 import dayjs from 'lib/date/dayjs';
 import Icon from 'ui/shared/chakra/Icon';
@@ -63,15 +63,13 @@ const VerifiedContractsTableItem = ({ data, isLoading }: Props) => {
         <Tooltip label={ isLoading ? undefined : 'Optimization' }>
           <chakra.span display="inline-block">
             { data.optimization_enabled ?
-              <Icon as={ iconCheck } boxSize={ 6 } color="green.500" cursor="pointer" isLoading={ isLoading }/> :
-              <Icon as={ iconCross } boxSize={ 6 } color="red.600" cursor="pointer" isLoading={ isLoading }/> }
+              <Icon as={ iconBolt } boxSize={ 6 } color="yellow.500" cursor="pointer" isLoading={ isLoading }/> : "" }
           </chakra.span>
         </Tooltip>
         <Tooltip label={ isLoading ? undefined : 'Constructor args' }>
           <chakra.span display="inline-block" ml={ 3 }>
             { data.has_constructor_args ?
-              <Icon as={ iconCheck } boxSize={ 6 } color="green.500" cursor="pointer" isLoading={ isLoading }/> :
-              <Icon as={ iconCross } boxSize={ 6 } color="red.600" cursor="pointer" isLoading={ isLoading }/> }
+              <Icon as={ iconWrench } boxSize={ 6 } color="blackAlpha.500" cursor="pointer" isLoading={ isLoading }/> : "" }
           </chakra.span>
         </Tooltip>
       </Td>

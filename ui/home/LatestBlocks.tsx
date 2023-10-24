@@ -104,18 +104,18 @@ const LatestBlocks = () => {
             ))) }
           </AnimatePresence>
         </VStack>
-        <Flex justifyContent="center">
-          <Button colorScheme='blue' size={'sm'} rightIcon={<Icon as={arrowRightIcon} />} variant='outline'>
-            <LinkInternal fontSize="sm" href={ route({ pathname: '/blocks' }) } color="blue.500" _hover={{color: "blue.500"}}>View all blocks</LinkInternal>
-          </Button>
-        </Flex>
       </>
     );
   }
 
   return (
-    <Box width={{ base: '100%', lg: '280px' }}>
-      <Heading as="h4" size="sm" mb={ 4 }>Latest blocks</Heading>
+    <Box width={{ base: '100%' }}>
+      <Flex justifyContent="space-between" alignItems='flex-start'>
+          <Heading as="h4" size="md" mb={ 4 }>Latest Blocks</Heading>
+          <LinkInternal fontSize="sm" href={ route({ pathname: '/blocks' })} p={1} px={2} border="1px solid" borderRadius="4px" _hover={{ textDecoration : "none", color:"blue.400"}}>
+              View all
+          </LinkInternal>
+      </Flex>
       { content }
     </Box>
   );

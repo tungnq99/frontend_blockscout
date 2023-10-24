@@ -31,7 +31,7 @@ const ContentLoader = ({ className, text }: Props) => {
           borderRadius: 'full',
         }}
       />
-      <Text mt={ 6 } variant="secondary">
+      <Text mt={ 6 } color="black">
         { text || 'Loading data, please wait...' }
       </Text>
     </Box>
