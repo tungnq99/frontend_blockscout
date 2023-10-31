@@ -36,7 +36,6 @@ const LatestBlocksItem = ({ block, h, isLoading }: Props) => {
       borderColor="blue.200"
       p={ 6 }
       h={ `${ h }px` }
-      minWidth={{ base: '100%', lg: '280px' }}
       w="100%"
     >
       <Flex alignItems="center" overflow="hidden" w="100%" mb={ 3 }>

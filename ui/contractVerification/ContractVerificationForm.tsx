@@ -44,7 +44,7 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
 
   const onFormSubmit: SubmitHandler<FormFields> = React.useCallback(async(data) => {
     const body = prepareRequestBody(data);
-
+  
     try {
       await apiFetch('contract_verification_via', {
         pathParams: { method: data.method.value, hash: hash.toLowerCase() },
@@ -63,6 +63,7 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
   }, [ apiFetch, hash ]);
 
   const handleNewSocketMessage: SocketMessage.ContractVerification['handler'] = React.useCallback(async(payload) => {
+   
     if (payload.status === 'error') {
       const errors = formatSocketErrors(payload.errors);
       errors.filter(Boolean).forEach(([ field, error ]) => setError(field, error));

@@ -70,12 +70,13 @@ const ChainIndicators = () => {
       alignItems="stretch"
       mt={ 8 }
     >
-        <Flex flexGrow={ 1 } flexDir="column" order={{ base: 2, lg: 1 }} p={{ base: 6, lg: 0 }} color="white">
+        <Flex flexGrow={ 1 } flexDir="column" order={1} p={{ base: 6, lg: 0 }} color="white">
           <Flex alignItems="center" color="white">
-            <Text fontWeight={ 500 } fontFamily="heading" fontSize="lg" color="white">Transactions</Text>
+            <Text fontWeight={ 500 } fontFamily="heading" fontSize="lg" color="white">Daily Transactions</Text>
           </Flex>
           { valueTitle }
           <ChainIndicatorChartContainer { ...queryResult }/>
+          <Stats isGas={true}/>
         </Flex>
 
         <Flex
@@ -85,9 +86,9 @@ const ChainIndicators = () => {
           p={ 3 }
           borderRadius="lg"
           rowGap={ 3 }
-          order={{ base: 1, lg: 2 }}
+          order={2}
         >
-          <Stats/>
+          <Stats isGas={false}/>
         </Flex>
         
     </Flex>

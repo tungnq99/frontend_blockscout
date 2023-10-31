@@ -15,9 +15,7 @@ import apiDocsIcon from 'icons/API.svg';
 import outputRootsIcon from 'icons/output_roots.svg';
 import privateTagIcon from 'icons/privattags.svg';
 import publicTagIcon from 'icons/publictags.svg';
-import discordIcon from 'icons/social/discord_filled.svg';
-import teleIcon from 'icons/social/telegram_filled.svg';
-import statsIcon from 'icons/stats.svg';
+import dashboardIcon from 'icons/dashboard.svg';
 import tokensIcon from 'icons/token.svg';
 import topAccountsIcon from 'icons/top-accounts.svg';
 import transactionsIcon from 'icons/transactions.svg';
@@ -116,7 +114,12 @@ export default function useNavItems(): ReturnType {
     ].filter(Boolean);
 
     const mainNavItems: ReturnType['mainNavItems'] = [
-     
+      {
+        text: 'Dashboard',
+        nextRoute: { pathname: '/' as const },
+        icon: dashboardIcon,
+        isActive: pathname === '/',
+      },
       blocks,
       verifiedContracts,
       txs,

@@ -24,11 +24,11 @@ const NetworkAddToWallet = () => {
 
     try {
       await addOrSwitchChain();
-      const accounts = await provider.request({method: 'eth_accounts'});    
-           
+      const accounts = await provider.request({method: 'eth_requestAccounts'});    
+
       if (accounts?.length > 0) {
         // @ts-ignore:
-        setAddress(accounts[0]);
+        setAddress(accounts[0].substring(0,5) + "..." + accounts[0].substring(accounts[0].length - 5, accounts[0].length -1));
       } 
 
       toast({
@@ -62,10 +62,18 @@ const NetworkAddToWallet = () => {
   }
 
   return (
-    <Button variant="outline" size="sm" onClick={ handleClick }>
-      <Icon as={ WALLETS_INFO[wallet].icon } boxSize={ 5 } mr={ 2 }/>
-        {address ? address : "Connect"}
-    </Button>
+    <>
+       {address ? 
+        <Button variant="outline" size="sm">
+          <Icon as={ WALLETS_INFO[wallet].icon } boxSize={ 5 } mr={ 2 }/>
+             {address}
+        </Button> : 
+        <Button variant="outline" size="sm" onClick={ handleClick }>
+          <Icon as={ WALLETS_INFO[wallet].icon } boxSize={ 5 } mr={ 2 }/>
+            Connect
+        </Button>
+        }
+    </>
   );
 };
 

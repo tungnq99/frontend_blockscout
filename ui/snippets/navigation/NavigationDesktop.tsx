@@ -78,7 +78,7 @@ const NavigationDesktop = () => {
   return (
     <Flex
       display={{ base: 'none', lg: 'flex' }}
-      position="relative"
+      position='relative'
       flexDirection="column"
       alignItems="stretch"
       borderRight="1px solid"
@@ -122,9 +122,9 @@ const NavigationDesktop = () => {
           }) }
         </VStack>
       </Box>
-      <Box as="nav" mt={ 20 } w="100%" h="50%" display="flex" alignItems="flex-end">
+      <Box as="nav" mt={ 20 } w="100%" display="flex" alignItems="flex-end" justifyContent="center">
         <VStack as="ul" spacing="1" >
-            <Flex justifyContent="space-between" alignItems="center" gap={6}>
+            <Flex justifyContent="space-between" alignItems="center" gap={6} flexDirection={{base: "column", xl: 'row'}}>
                 {BLOCKSCOUT_LINKS.map((item, index) => {
                   return <Link key={index} href={ item.url } variant="secondary" target="_blank" fontSize="xs">
                           { item.icon && (

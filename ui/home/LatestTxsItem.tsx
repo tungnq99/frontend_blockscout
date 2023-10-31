@@ -33,7 +33,7 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
   return (
     <Box
       width="100%"
-      minW="700px"
+      minW="600px"
       borderTop="1px solid"
       borderColor="divider"
       p={ 4 }

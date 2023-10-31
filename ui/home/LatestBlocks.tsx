@@ -109,7 +109,7 @@ const LatestBlocks = () => {
   }
 
   return (
-    <Box width={{ base: '100%' }}>
+    <Box >
       <Flex justifyContent="space-between" alignItems='flex-start'>
           <Heading as="h4" size="md" mb={ 4 }>Latest Blocks</Heading>
           <LinkInternal fontSize="sm" href={ route({ pathname: '/blocks' })} p={1} px={2} border="1px solid" borderRadius="4px" _hover={{ textDecoration : "none", color:"blue.400"}}>

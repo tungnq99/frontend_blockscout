@@ -43,7 +43,7 @@ const LatestTransactions = () => {
             />
           ))) }
         </Box>
-        <Box mb={ 4 } display={{ base: 'none', lg: 'block' }}>
+        <Box mb={ 4 }  display={{ base: 'none', lg: 'block' }}>
           { data.slice(0, txsCount).map(((tx, index) => (
             <LatestTxsItem
               key={ tx.hash + (isPlaceholderData ? index : '') }

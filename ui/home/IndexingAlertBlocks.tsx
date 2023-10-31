@@ -67,7 +67,7 @@ const IndexingAlertBlocks = ({ className }: { className?: string }) => {
   }
 
   return (
-     <Flex flexWrap="wrap" columnGap={ 8 } rowGap={ 6 } justifyContent="space-between" alignItems="center" mb={ 6 }>
+     <Flex flexWrap="wrap" justifyContent="space-between" alignItems="center" mb={ 6 }>
       <Text fontSize={{base: '2xl', lg: '3xl'}} fontWeight={600}>BlockChain Explorer</Text>
       <Box display={{ base: 'none', lg: 'block' }}><NetworkAddToWallet /></Box>
     </Flex>
