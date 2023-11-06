@@ -91,25 +91,17 @@ const NavigationDesktop = () => {
       
       <Box
         as="header"
-        display="flex"
-        justifyContent="flex-start"
-        alignItems="center"
-        flexDirection="row"
         w="100%"
-        pl={{ lg: isExpanded ? 3 : '15px', xl: isCollapsed ? '15px' : 3 }}
-        pr={{ lg: isExpanded ? 0 : '15px', xl: isCollapsed ? '15px' : 0 }}
         h={ 10 }
         transitionProperty="padding"
         transitionDuration="normal"
         transitionTimingFunction="ease"
       >
-        <Flex  flexDirection="column" justifyContent="flex-start" alignItems="center">
-          {/* { config.chain.isTestnet && <Icon as={ testnetIcon } h="14px" w="auto" color="red.400"  alignSelf="flex-start"/> } */}
-          <Box mt={2}>
+         {/* { config.chain.isTestnet && <Icon as={ testnetIcon } h="14px" w="auto" color="red.400"  alignSelf="flex-start"/> } */}
+         <Flex justifyContent="space-between" alignItems="center" mt={2}>
             <NetworkLogo isCollapsed={ isCollapsed }/>
             { Boolean(config.UI.sidebar.featuredNetworks) && <NetworkMenu isCollapsed={ isCollapsed }/> }
-          </Box>
-        </Flex>
+          </Flex>
       </Box>
       <Box as="nav" mt={ 20 } w="100%">
         <VStack as="ul" spacing="1" alignItems="flex-start">
