@@ -187,7 +187,6 @@ const ContractSourceCode = ({ address, implementationAddress }: Props) => {
         { heading }
         { editorSourceTypeSelector }
         { externalLibraries }
-        { diagramLink }
         { copyToClipboard }
       </Flex>
       { content }

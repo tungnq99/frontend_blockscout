@@ -60,7 +60,7 @@ const Header = ({ isHomePage, renderSearchBar }: Props) => {
             <Box width="100%">
               { searchBar }
             </Box>
-            { config.features.account.isEnabled && <ProfileMenuDesktop/> }
+            {/* { config.features.account.isEnabled && <ProfileMenuDesktop/> } */}
           </HStack>
         ) }
       </Box>
