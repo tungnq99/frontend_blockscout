@@ -28,7 +28,7 @@ const VerifiedContractsTable = ({ data, sort, onSortToggle, isLoading }: Props) 
           <Th width="130px" isNumeric>
             <Link display="flex" alignItems="center" justifyContent="flex-end" onClick={ isLoading ? undefined : onSortToggle('balance') } columnGap={ 1 }>
               { sort?.includes('balance') && <Icon as={ arrowIcon } boxSize={ 4 } transform={ sortIconTransform }/> }
-                Balance { config.chain.currency.symbol }
+                Balance
             </Link>
           </Th>
           <Th width="130px" isNumeric>

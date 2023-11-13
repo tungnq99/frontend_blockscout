@@ -41,7 +41,7 @@ const TxInternalsListItem = ({ type, from, to, value, success, error, gas_limit:
         ) }
       </Box>
       <HStack spacing={ 3 }>
-        <Skeleton isLoaded={ !isLoading } fontSize="sm" fontWeight={ 500 }>Value { config.chain.currency.symbol }</Skeleton>
+        <Skeleton isLoaded={ !isLoading } fontSize="sm" fontWeight={ 500 }>Value </Skeleton>
         <Skeleton isLoaded={ !isLoading } fontSize="sm" color="text_secondary">
           { BigNumber(value).div(BigNumber(10 ** config.chain.currency.decimals)).toFormat() }
         </Skeleton>

@@ -54,14 +54,14 @@ const TxsTable = ({
             <Link onClick={ sort('val') } display="flex" justifyContent="end">
               { sorting === 'val-asc' && <Icon boxSize={ 5 } as={ rightArrowIcon } transform="rotate(-90deg)"/> }
               { sorting === 'val-desc' && <Icon boxSize={ 5 } as={ rightArrowIcon } transform="rotate(90deg)"/> }
-              { `Value ${ config.chain.currency.symbol }` }
+              { `Value` }
             </Link>
           </Th>
           <Th width="20%" isNumeric pr={ 5 }>
             <Link onClick={ sort('fee') } display="flex" justifyContent="end">
               { sorting === 'fee-asc' && <Icon boxSize={ 5 } as={ rightArrowIcon } transform="rotate(-90deg)"/> }
               { sorting === 'fee-desc' && <Icon boxSize={ 5 } as={ rightArrowIcon } transform="rotate(90deg)"/> }
-              { `Fee ${ config.chain.currency.symbol }` }
+              { `Fee` }
             </Link>
           </Th>
         </Tr>

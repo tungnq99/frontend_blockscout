@@ -23,7 +23,7 @@ test.describe('all items', () => {
 
     component = await mount(
       <TestApp>
-        <Stats/>
+        <Stats isGas={true}/>
       </TestApp>,
     );
   });
@@ -57,7 +57,7 @@ test.describe('4 items', () => {
 
     const component = await mount(
       <TestApp>
-        <Stats/>
+        <Stats isGas={true}/>
       </TestApp>,
     );
 
@@ -82,7 +82,7 @@ test.describe('3 items', () => {
 
     const component = await mount(
       <TestApp>
-        <Stats/>
+        <Stats isGas={true}/>
       </TestApp>,
     );
 

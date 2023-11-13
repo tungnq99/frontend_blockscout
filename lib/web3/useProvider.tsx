@@ -17,11 +17,9 @@ export default function useProvider() {
     if (!('ethereum' in window && window.ethereum) || !feature.isEnabled) {
       return;
     }
-
     // if user has multiple wallets installed, they all are injected in the window.ethereum.providers array
     // if user has only one wallet, the provider is injected in the window.ethereum directly
     const providers = Array.isArray(window.ethereum.providers) ? window.ethereum.providers : [ window.ethereum ];
-  
     for (const wallet of feature.wallets) {
       const provider = providers.find((provider) => {
         return (

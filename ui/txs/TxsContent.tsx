@@ -40,6 +40,7 @@ const TxsContent = ({
   top,
 }: Props) => {
   const { data, isPlaceholderData, isError, setSortByField, setSortByValue, sorting } = useTxsSort(query);
+  console.log(data);
   const isMobile = useIsMobile();
 
   const content = data?.items ? (

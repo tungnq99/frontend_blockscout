@@ -91,7 +91,7 @@ const BlocksListItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
       </Box>
       { !config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.total_reward && (
         <Flex columnGap={ 2 }>
-          <Text fontWeight={ 500 }>Reward { config.chain.currency.symbol }</Text>
+          <Text fontWeight={ 500 }>Reward </Text>
           <Skeleton isLoaded={ !isLoading } display="inline-block" color="text_secondary">
             <span>{ totalReward.toFixed() }</span>
           </Skeleton>

@@ -6,23 +6,16 @@ import type { NavItemInternal, NavItem, NavGroupItem } from 'types/client/naviga
 import config from 'configs/app';
 import abiIcon from 'icons/ABI.svg';
 import apiKeysIcon from 'icons/API.svg';
-import appsIcon from 'icons/apps.svg';
-import withdrawalsIcon from 'icons/arrows/north-east.svg';
-import depositsIcon from 'icons/arrows/south-east.svg';
 import blocksIcon from 'icons/block.svg';
-import gearIcon from 'icons/gear.svg';
-import apiDocsIcon from 'icons/API.svg';
-import outputRootsIcon from 'icons/output_roots.svg';
+import dashboardIcon from 'icons/dashboard.svg';
 import privateTagIcon from 'icons/privattags.svg';
 import publicTagIcon from 'icons/publictags.svg';
-import dashboardIcon from 'icons/dashboard.svg';
+import apiDocsIcon from 'icons/restAPI.svg';
 import tokensIcon from 'icons/token.svg';
-import topAccountsIcon from 'icons/top-accounts.svg';
+import topAccountsIcon from "icons/top-accounts.svg";
 import transactionsIcon from 'icons/transactions.svg';
-import txnBatchIcon from 'icons/txn_batches.svg';
 import verifiedIcon from 'icons/verified.svg';
 import watchlistIcon from 'icons/watchlist.svg';
-import { rightLineArrow } from 'lib/html-entities';
 import UserAvatar from 'ui/shared/UserAvatar';
 
 interface ReturnType {
@@ -44,10 +37,10 @@ export default function useNavItems(): ReturnType {
   const pathname = router.pathname;
 
   return React.useMemo(() => {
-    let blockchainNavItems: Array<NavItem> | Array<Array<NavItem>> = [];
+    //let blockchainNavItems: Array<NavItem> | Array<Array<NavItem>> = [];
 
     const topAccounts = {
-      text: 'Top accounts',
+      text: 'Address',
       nextRoute: { pathname: '/accounts' as const },
       icon: topAccountsIcon,
       isActive: pathname === '/accounts',
@@ -68,50 +61,50 @@ export default function useNavItems(): ReturnType {
     // eslint-disable-next-line max-len
      { text: 'Verified contracts', nextRoute: { pathname: '/verified-contracts' as const }, icon: verifiedIcon, isActive: pathname === '/verified-contracts' };
 
-    if (config.features.rollup.isEnabled) {
-      blockchainNavItems = [
-        [
-          txs,
-          // eslint-disable-next-line max-len
-          { text: `Deposits (L1${ rightLineArrow }L2)`, nextRoute: { pathname: '/l2-deposits' as const }, icon: depositsIcon, isActive: pathname === '/l2-deposits' },
-          // eslint-disable-next-line max-len
-          { text: `Withdrawals (L2${ rightLineArrow }L1)`, nextRoute: { pathname: '/l2-withdrawals' as const }, icon: withdrawalsIcon, isActive: pathname === '/l2-withdrawals' },
-        ],
-        [
-          blocks,
-          // eslint-disable-next-line max-len
-          { text: 'Txn batches', nextRoute: { pathname: '/l2-txn-batches' as const }, icon: txnBatchIcon, isActive: pathname === '/l2-txn-batches' },
-          // eslint-disable-next-line max-len
-          { text: 'Output roots', nextRoute: { pathname: '/l2-output-roots' as const }, icon: outputRootsIcon, isActive: pathname === '/l2-output-roots' },
-        ],
-        [
-          topAccounts,
-          verifiedContracts,
-        ],
-      ];
-    } else {
-      blockchainNavItems = [
-        txs,
-        blocks,
-        topAccounts,
-        verifiedContracts,
-        config.features.beaconChain.isEnabled && {
-          text: 'Withdrawals',
-          nextRoute: { pathname: '/withdrawals' as const },
-          icon: withdrawalsIcon,
-          isActive: pathname === '/withdrawals',
-        },
-      ].filter(Boolean);
-    }
+    // if (config.features.rollup.isEnabled) {
+    //   blockchainNavItems = [
+    //     [
+    //       txs,
+    //       eslint-disable-next-line max-len
+    //       { text: `Deposits (L1${ rightLineArrow }L2)`, nextRoute: { pathname: '/l2-deposits' as const }, icon: depositsIcon, isActive: pathname === '/l2-deposits' },
+    //       eslint-disable-next-line max-len
+    //       { text: `Withdrawals (L2${ rightLineArrow }L1)`, nextRoute: { pathname: '/l2-withdrawals' as const }, icon: withdrawalsIcon, isActive: pathname === '/l2-withdrawals' },
+    //     ],
+    //     [
+    //       blocks,
+    //       eslint-disable-next-line max-len
+    //       { text: 'Txn batches', nextRoute: { pathname: '/l2-txn-batches' as const }, icon: txnBatchIcon, isActive: pathname === '/l2-txn-batches' },
+    //       eslint-disable-next-line max-len
+    //       { text: 'Output roots', nextRoute: { pathname: '/l2-output-roots' as const }, icon: outputRootsIcon, isActive: pathname === '/l2-output-roots' },
+    //     ],
+    //     [
+    //       topAccounts,
+    //       verifiedContracts,
+    //     ],
+    //   ];
+    // } else {
+    //   blockchainNavItems = [
+    //     txs,
+    //     blocks,
+    //     topAccounts,
+    //     verifiedContracts,
+    //     config.features.beaconChain.isEnabled && {
+    //       text: 'Withdrawals',
+    //       nextRoute: { pathname: '/withdrawals' as const },
+    //       icon: withdrawalsIcon,
+    //       isActive: pathname === '/withdrawals',
+    //     },
+    //   ].filter(Boolean);
+    // }
 
-    const apiNavItems: Array<NavItem> = [
-      config.features.restApiDocs.isEnabled ? {
-        text: 'REST API',
-        nextRoute: { pathname: '/api-docs' as const },
-        icon: apiDocsIcon,
-        isActive: pathname === '/api-docs',
-      } : null,
-    ].filter(Boolean);
+    // const apiNavItems: Array<NavItem> = [
+    //   config.features.restApiDocs.isEnabled ? {
+    //     text: 'REST API',
+    //     nextRoute: { pathname: '/api-docs' as const },
+    //     icon: apiDocsIcon,
+    //     isActive: pathname === '/api-docs',
+    //   } : null,
+    // ].filter(Boolean);
 
     const mainNavItems: ReturnType['mainNavItems'] = [
       {
@@ -129,6 +122,7 @@ export default function useNavItems(): ReturnType {
         icon: tokensIcon,
         isActive: pathname.startsWith('/token'),
       },
+      topAccounts,
       // config.features.marketplace.isEnabled ? {
       //   text: 'Apps',
       //   nextRoute: { pathname: '/apps' as const },
