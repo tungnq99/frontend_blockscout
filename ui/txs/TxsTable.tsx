@@ -13,7 +13,7 @@ import TheadSticky from 'ui/shared/TheadSticky';
 import TxsTableItem from './TxsTableItem';
 
 type Props = {
-  txs: Array<Transaction>;
+  txs: Array<any>;
   sort: (field: 'val' | 'fee') => () => void;
   sorting?: Sort;
   top: number;

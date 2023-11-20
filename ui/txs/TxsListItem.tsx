@@ -6,8 +6,6 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-import type { Transaction } from 'types/api/transaction';
-
 import config from 'configs/app';
 import rightArrowIcon from 'icons/arrows/east.svg';
 import getValueWithUnit from 'lib/getValueWithUnit';
@@ -23,7 +21,7 @@ import TxAdditionalInfo from 'ui/txs/TxAdditionalInfo';
 import TxType from 'ui/txs/TxType';
 
 type Props = {
-  tx: Transaction;
+  tx: any;
   showBlockInfo: boolean;
   currentAddress?: string;
   enableTimeIncrement?: boolean;

@@ -35,7 +35,7 @@ const BlocksTable = ({ data, isLoading, top, page, showSocketInfo, socketInfoNum
     (!config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.burnt_fees ? FEES_COL_WEIGHT : 0);
 
   return (
-    <Table variant="simple" minWidth="1040px" size="md" fontWeight={ 500 }>
+    <Table variant="simple" minWidth="900px" size="md" fontWeight={ 500 }>
       <Thead top={ top }>
         <Tr>
           <Th width="125px">Block</Th>

@@ -34,9 +34,9 @@ const DataListDisplay = (props: Props) => {
     );
   }
 
-  if (!props.items?.length) {
-    return props.emptyText ? <Text className={ props.className }>{ props.emptyText }</Text> : null;
-  }
+  // if (!props.items?.length) {
+  //   return props.emptyText ? <Text className={ props.className }>{ props.emptyText }</Text> : null;
+  // }
 
   return (
     <Box className={ props.className }>

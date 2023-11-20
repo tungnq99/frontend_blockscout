@@ -7,14 +7,12 @@ import teleIcon from 'icons/social/telegram_filled.svg';
 import discordIcon from 'icons/social/discord.svg';
 import twitterIcon from 'icons/social/tweet.svg';
 
-import testnetIcon from 'icons/testnet.svg';
 import { useAppContext } from 'lib/contexts/app';
 import * as cookies from 'lib/cookies';
 import useHasAccount from 'lib/hooks/useHasAccount';
 import useNavItems, { isGroupItem } from 'lib/hooks/useNavItems';
 import getDefaultTransitionProps from 'theme/utils/getDefaultTransitionProps';
 import NetworkLogo from 'ui/snippets/networkMenu/NetworkLogo';
-import NetworkMenu from 'ui/snippets/networkMenu/NetworkMenu';
 
 import NavLink from './NavLink';
 import NavLinkGroupDesktop from './NavLinkGroupDesktop';
@@ -89,45 +87,44 @@ const NavigationDesktop = () => {
       { ...getDefaultTransitionProps({ transitionProperty: 'width, padding' }) }
     >
       
-      <Box
-        as="header"
-        w="100%"
-        h={ 10 }
-        transitionProperty="padding"
-        transitionDuration="normal"
-        transitionTimingFunction="ease"
-      >
-         {/* { config.chain.isTestnet && <Icon as={ testnetIcon } h="14px" w="auto" color="red.400"  alignSelf="flex-start"/> } */}
-         <Flex justifyContent="space-between" alignItems="center" mt={2}>
-            <NetworkLogo isCollapsed={ isCollapsed }/>
-            { Boolean(config.UI.sidebar.featuredNetworks) && <NetworkMenu isCollapsed={ isCollapsed }/> }
-          </Flex>
-      </Box>
-      <Box as="nav" mt={ 20 } w="100%">
-        <VStack as="ul" spacing="1" alignItems="flex-start">
-          { mainNavItems.map((item) => {
-            if (isGroupItem(item)) {
-              return <NavLinkGroupDesktop key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
-            } else {
-              return <NavLink key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
-            }
-          }) }
-        </VStack>
-      </Box>
-      <Box as="nav" mt={ 20 } w="100%" display="flex" alignItems="flex-end" justifyContent="center">
-        <VStack as="ul" spacing="1" >
-            <Flex justifyContent="space-between" alignItems="center" gap={6} flexDirection={{base: "column", xl: 'row'}}>
-                {BLOCKSCOUT_LINKS.map((item, index) => {
-                  return <Link key={index} href={ item.url } variant="secondary" target="_blank" fontSize="xs">
-                          { item.icon && (
-                            <Center minW={ 6 } mr="6px">
-                              <Icon boxSize={ item.iconSize} as={ item.icon }/>
-                            </Center>
-                          ) }
-                        </Link> 
-                })}
-            </Flex>
-        </VStack>
+      <Box position="fixed">
+        <Box
+          as="header"
+          w="100%"
+          h={ 10 }
+          transitionProperty="padding"
+          transitionDuration="normal"
+          transitionTimingFunction="ease"
+        >
+          {/* { config.chain.isTestnet && <Icon as={ testnetIcon } h="14px" w="auto" color="red.400"  alignSelf="flex-start"/> } */}
+          <NetworkLogo isCollapsed={ isCollapsed }/>
+        </Box>
+        <Box as="nav" mt={ 20 } w="100%">
+          <VStack as="ul" spacing="1" alignItems="flex-start">
+            { mainNavItems.map((item) => {
+              if (isGroupItem(item)) {
+                return <NavLinkGroupDesktop key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
+              } else {
+                return <NavLink key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
+              }
+            }) }
+          </VStack>
+        </Box>
+        <Box as="nav" mt={ 20 } w="100%" display="flex" alignItems="flex-end" justifyContent="center">
+          <VStack as="ul" spacing="1" >
+              <Flex justifyContent="space-between" alignItems="center" gap={6} flexDirection={{base: "column", xl: 'row'}}>
+                  {BLOCKSCOUT_LINKS.map((item, index) => {
+                    return <Link key={index} href={ item.url } variant="secondary" target="_blank" fontSize="xs">
+                            { item.icon && (
+                              <Center minW={ 6 }>
+                                <Icon boxSize={ item.iconSize} as={ item.icon }/>
+                              </Center>
+                            ) }
+                          </Link> 
+                  })}
+              </Flex>
+          </VStack>
+        </Box>
       </Box>
       {/* { hasAccount && (
         <Box as="nav" borderTopWidth="1px" borderColor="divider" w="100%" mt={ 6 } pt={ 6 }>

@@ -12,7 +12,7 @@ const MainColumn = ({ children, className }: Props) => {
       className={ className }
       flexDir="column"
       flexGrow={ 1 }
-      w={{ base: '100%', lg: 'auto' }}
+      w={{ base: 'calc(100% - 92px)%', lg: 'calc(100% - 235px)' }}
       paddingX={{ base: 4, lg: 12 }}
       paddingTop={{ base: '138px', lg: 9 }}
       paddingBottom={ 10 }

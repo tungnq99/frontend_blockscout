@@ -92,7 +92,7 @@ const NavigationMobile = () => {
             }) }
           </VStack>
         </Box>
-        <Box as="nav" mt={ 20 } w="100%" h="50%" display="flex" alignItems="flex-end">
+        <Box as="nav" mt={ 20 } w="100%" h="50%" display="flex" alignItems="flex-end" justifyContent="center">
           <VStack as="ul" spacing="1" >
               <Flex justifyContent="space-between" alignItems="center" gap={6}>
                   {BLOCKSCOUT_LINKS.map((item) => {
