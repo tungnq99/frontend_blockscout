@@ -1,10 +1,10 @@
-import { Show, Hide } from '@chakra-ui/react';
+import { Show, Hide, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import type { InternalTransaction } from 'types/api/internalTransaction';
 
 import { SECOND } from 'lib/consts';
-// import { apos } from 'lib/html-entities';
+import { apos } from 'lib/html-entities';
 import { INTERNAL_TX } from 'stubs/internalTx';
 import { generateListStub } from 'stubs/utils';
 import ActionBar from 'ui/shared/ActionBar';
@@ -20,6 +20,7 @@ import type { Sort, SortField } from 'ui/tx/internals/utils';
 import TxPendingAlert from 'ui/tx/TxPendingAlert';
 import TxSocketAlert from 'ui/tx/TxSocketAlert';
 import useFetchTxInfo from 'ui/tx/useFetchTxInfo';
+import EmptySearchResult from 'ui/shared/EmptySearchResult';
 
 const SORT_SEQUENCE: Record<SortField, Array<Sort | undefined>> = {
   value: [ 'value-desc', 'value-asc', undefined ],
@@ -68,6 +69,7 @@ const TxInternals = () => {
   // const [ searchTerm, setSearchTerm ] = React.useState<string>('');
   const [ sort, setSort ] = React.useState<Sort>();
   const txInfo = useFetchTxInfo({ updateDelay: 5 * SECOND });
+ 
   const { data, isPlaceholderData, isError, pagination } = useQueryWithPages({
     resourceName: 'tx_internal_txs',
     pathParams: { hash: txInfo.data?.hash },
@@ -92,6 +94,10 @@ const TxInternals = () => {
 
   if (!txInfo.isPlaceholderData && !txInfo.isError && !txInfo.data?.status) {
     return txInfo.socketStatus ? <TxSocketAlert status={ txInfo.socketStatus }/> : <TxPendingAlert/>;
+  }
+
+  if (!txInfo?.data) {
+    return <Text as="span">There are no internal transactions for this transaction.</Text>;
   }
 
   const filteredData = data?.items
@@ -128,10 +134,10 @@ const TxInternals = () => {
       isError={ isError || txInfo.isError }
       items={ data?.items }
       emptyText="There are no internal transactions for this transaction."
-      // filterProps={{
-      // emptyFilteredText: `Couldn${ apos }t find any transaction that matches your query.`.
-      // hasActiveFilters: Boolean(filters.length || searchTerm),
-      // }}
+      filterProps={{
+        emptyFilteredText: `Couldn${ apos }t find any transaction that matches your query.`,
+        hasActiveFilters: Boolean(data?.items),
+      }}
       content={ content }
       actionBar={ actionBar }
     />

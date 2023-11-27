@@ -13,9 +13,12 @@ import useFetchTxInfo from 'ui/tx/useFetchTxInfo';
 
 import TxPendingAlert from './TxPendingAlert';
 import TxSocketAlert from './TxSocketAlert';
+import EmptySearchResult from 'ui/shared/EmptySearchResult';
+import { apos } from 'lib/html-entities';
 
 const TxState = () => {
   const txInfo = useFetchTxInfo({ updateDelay: 5 * SECOND });
+ 
   const { data, isPlaceholderData, isError, pagination } = useQueryWithPages({
     resourceName: 'tx_state_changes',
     pathParams: { hash: txInfo.data?.hash },
@@ -33,6 +36,10 @@ const TxState = () => {
 
   if (!txInfo.isLoading && !txInfo.isPlaceholderData && !txInfo.isError && !txInfo.data.status) {
     return txInfo.socketStatus ? <TxSocketAlert status={ txInfo.socketStatus }/> : <TxPendingAlert/>;
+  }
+
+  if (!txInfo?.data) {
+    return <Text as="span">There are no state changes for this transaction.</Text>;
   }
 
   const content = data ? (
@@ -54,10 +61,6 @@ const TxState = () => {
 
   return (
     <>
-      <Text mb={ 6 }>
-        A set of information that represents the current state is updated when a transaction takes place on the network.
-        The below is a summary of those changes.
-      </Text>
       <DataListDisplay
         isError={ isError }
         items={ data?.items }

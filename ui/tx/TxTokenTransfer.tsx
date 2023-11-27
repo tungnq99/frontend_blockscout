@@ -1,4 +1,4 @@
-import { Hide, Show } from '@chakra-ui/react';
+import { Hide, Show, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -20,6 +20,7 @@ import TokenTransferTable from 'ui/shared/TokenTransfer/TokenTransferTable';
 import TxPendingAlert from 'ui/tx/TxPendingAlert';
 import TxSocketAlert from 'ui/tx/TxSocketAlert';
 import useFetchTxInfo from 'ui/tx/useFetchTxInfo';
+import EmptySearchResult from 'ui/shared/EmptySearchResult';
 
 const TOKEN_TYPES = TOKEN_TYPE.map(i => i.id);
 
@@ -27,7 +28,6 @@ const getTokenFilterValue = (getFilterValuesFromQuery<TokenType>).bind(null, TOK
 
 const TxTokenTransfer = () => {
   const txsInfo = useFetchTxInfo({ updateDelay: 5 * SECOND });
-
   const router = useRouter();
 
   const [ typeFilter, setTypeFilter ] = React.useState<Array<TokenType>>(getTokenFilterValue(router.query.type) || []);
@@ -53,6 +53,10 @@ const TxTokenTransfer = () => {
 
   if (txsInfo.isError || tokenTransferQuery.isError) {
     return <DataFetchAlert/>;
+  }
+
+  if (!txsInfo?.data) {
+    return <Text as="span">There are no token transfers.</Text>;
   }
 
   const numActiveFilters = typeFilter.length;
@@ -88,7 +92,7 @@ const TxTokenTransfer = () => {
       emptyText="There are no token transfers."
       filterProps={{
         emptyFilteredText: `Couldn${ apos }t find any token transfer that matches your query.`,
-        hasActiveFilters: Boolean(numActiveFilters),
+        hasActiveFilters: Boolean(numActiveFilters || tokenTransferQuery.data?.items.length === 0),
       }}
       content={ content }
       actionBar={ actionBar }

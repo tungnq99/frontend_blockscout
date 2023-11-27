@@ -12,9 +12,11 @@ import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
 import TxPendingAlert from 'ui/tx/TxPendingAlert';
 import TxSocketAlert from 'ui/tx/TxSocketAlert';
 import useFetchTxInfo from 'ui/tx/useFetchTxInfo';
+import EmptySearchResult from 'ui/shared/EmptySearchResult';
 
 const TxLogs = () => {
   const txInfo = useFetchTxInfo({ updateDelay: 5 * SECOND });
+ 
   const { data, isPlaceholderData, isError, pagination } = useQueryWithPages({
     resourceName: 'tx_logs',
     pathParams: { hash: txInfo.data?.hash },
@@ -32,7 +34,7 @@ const TxLogs = () => {
     return <DataFetchAlert/>;
   }
 
-  if (!data?.items.length) {
+  if (!data?.items.length || !txInfo?.data) {
     return <Text as="span">There are no logs for this transaction.</Text>;
   }
 

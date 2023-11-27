@@ -57,13 +57,13 @@ const TransactionPageContent = () => {
   const backLink = React.useMemo(() => {
     const hasGoBackLink = appProps.referrer && appProps.referrer.includes('/txs');
 
-    if (!hasGoBackLink) {
-      return;
-    }
+    // if (!hasGoBackLink) {
+    //   return;
+    // }
 
     return {
       label: 'Back to transactions list',
-      url: appProps.referrer,
+      url: '/txs',
     };
   }, [ appProps.referrer ]);
 

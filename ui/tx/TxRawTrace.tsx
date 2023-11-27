@@ -15,6 +15,8 @@ import RawDataSnippet from 'ui/shared/RawDataSnippet';
 import TxPendingAlert from 'ui/tx/TxPendingAlert';
 import TxSocketAlert from 'ui/tx/TxSocketAlert';
 import useFetchTxInfo from 'ui/tx/useFetchTxInfo';
+import EmptySearchResult from 'ui/shared/EmptySearchResult';
+import { Text } from '@chakra-ui/react';
 
 const TxRawTrace = () => {
   const [ isQueryEnabled, setIsQueryEnabled ] = React.useState(false);
@@ -23,6 +25,7 @@ const TxRawTrace = () => {
   const hash = getQueryParamString(router.query.hash);
 
   const txInfo = useFetchTxInfo({ updateDelay: 5 * SECOND });
+ 
   const { data, isPlaceholderData, isError } = useApiQuery('tx_raw_trace', {
     pathParams: { hash },
     queryOptions: {
@@ -55,6 +58,10 @@ const TxRawTrace = () => {
 
   if (isError || txInfo.isError) {
     return <DataFetchAlert/>;
+  }
+
+  if (!txInfo?.data) {
+    return <Text as="span">No trace entries found.</Text>;
   }
 
   const dataToDisplay = rawTraces ? rawTraces : data;
