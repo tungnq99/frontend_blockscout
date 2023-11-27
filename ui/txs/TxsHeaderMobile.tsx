@@ -11,8 +11,6 @@ import Pagination from 'ui/shared/pagination/Pagination';
 import type { Option } from 'ui/shared/sort/Sort';
 import Sort from 'ui/shared/sort/Sort';
 
-// import TxsFilters from './TxsFilters';
-
 const SORT_OPTIONS: Array<Option<TSort>> = [
   { title: 'Default', id: undefined },
   { title: 'Value ascending', id: 'val-asc' },

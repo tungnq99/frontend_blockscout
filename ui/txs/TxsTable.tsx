@@ -28,8 +28,6 @@ type Props = {
 
 const TxsTable = ({
   txs,
-  sort,
-  sorting,
   top,
   showBlockInfo,
   showSocketInfo,
@@ -50,20 +48,8 @@ const TxsTable = ({
           <Th width={{ xl: '152px', base: '86px' }}>From</Th>
           <Th width={{ xl: currentAddress ? '48px' : '36px', base: currentAddress ? '52px' : '28px' }}></Th>
           <Th width={{ xl: '152px', base: '86px' }}>To</Th>
-          <Th width="20%" isNumeric>
-            <Link onClick={ sort('val') } display="flex" justifyContent="end">
-              { sorting === 'val-asc' && <Icon boxSize={ 5 } as={ rightArrowIcon } transform="rotate(-90deg)"/> }
-              { sorting === 'val-desc' && <Icon boxSize={ 5 } as={ rightArrowIcon } transform="rotate(90deg)"/> }
-              { `Value` }
-            </Link>
-          </Th>
-          <Th width="20%" isNumeric pr={ 5 }>
-            <Link onClick={ sort('fee') } display="flex" justifyContent="end">
-              { sorting === 'fee-asc' && <Icon boxSize={ 5 } as={ rightArrowIcon } transform="rotate(-90deg)"/> }
-              { sorting === 'fee-desc' && <Icon boxSize={ 5 } as={ rightArrowIcon } transform="rotate(90deg)"/> }
-              { `Fee` }
-            </Link>
-          </Th>
+          <Th width="20%" isNumeric> Value </Th>
+          <Th width="20%" isNumeric pr={ 5 }>Fee</Th>
         </Tr>
       </TheadSticky>
       <Tbody>

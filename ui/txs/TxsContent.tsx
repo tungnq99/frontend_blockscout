@@ -1,23 +1,21 @@
-import { Box, Show, Hide } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Box, Show, Hide, Flex } from '@chakra-ui/react';
+import React from 'react';
 import { useRouter } from 'next/router';
 
 import type { AddressFromToFilter } from 'types/api/address';
 import { apos } from 'lib/html-entities';
-import useIsMobile from 'lib/hooks/useIsMobile';
-import AddressCsvExportLink from 'ui/address/AddressCsvExportLink';
 import DataListDisplay from 'ui/shared/DataListDisplay';
 import type { QueryWithPagesResult } from 'ui/shared/pagination/useQueryWithPages';
 import * as SocketNewItemsNotice from 'ui/shared/SocketNewItemsNotice';
 
-import TxsHeaderMobile from './TxsHeaderMobile';
 import TxsListItem from './TxsListItem';
 import TxsTable from './TxsTable';
 import useTxsSort from './useTxsSort';
-import FilterInput from 'ui/shared/filters/FilterInput';
 import getQueryParamString from 'lib/router/getQueryParamString';
-import dataTransaction from './txs.json';
-import { Transaction } from 'types/api/transaction';
+import useTxsSortAPI from './useTxsSortApi';
+import TxsFiltersChain from './TxsFiltersChain';
+import TxsFilters from './TxsFilters';
+import { TTxsFilters, TypeFilter } from 'types/api/txsFilters';
 
 type Props = {
   query: QueryWithPagesResult<'txs_validated' | 'txs_pending'> | QueryWithPagesResult<'txs_watchlist'> | QueryWithPagesResult<'block_txs'>;
@@ -45,14 +43,15 @@ const TxsContent = ({
   top,
 }: Props) => {
   const router = useRouter();
-  const [dataTxs, setDataTxs] = useState(dataTransaction.items);
-  const { data, isPlaceholderData, isError, setSortByField, setSortByValue, sorting } = useTxsSort(query);
-  const [ searchTerm, setSearchTerm ] = React.useState(getQueryParamString(router.query.q) || undefined);
-  const [ type, setType ] = React.useState(getQueryParamString(router.query.filter) || undefined);
+  const params: any = new URLSearchParams(window.location.search);
   
-  const isMobile = useIsMobile();
+  const { data, isPlaceholderData, isError, setSortByField, setSortByValue, sorting } = useTxsSort(query);
+  const [ filterChain, setFilterChain ] = React.useState(0);
+  const {dataResult, callback } = useTxsSortAPI(params.get("tab"));
+  const [ type, setType ] = React.useState(getQueryParamString(router.query.filter) || undefined);
+  const [filteArr, setFilterArr] = React.useState<Partial<TTxsFilters>>();
 
-  const content = dataTxs ? (
+  const content = dataResult ? (
     <>
       <Show below="lg" ssr={ false }>
         <Box>
@@ -64,7 +63,7 @@ const TxsContent = ({
               isLoading={ isPlaceholderData }
             />
           ) }
-          { dataTxs.map((tx, index) => (
+          { dataResult.map((tx: any, index: number) => (
             <TxsListItem
               key={ tx.hash + (isPlaceholderData ? index : '') }
               tx={ tx }
@@ -78,7 +77,7 @@ const TxsContent = ({
       </Show>
       <Hide below="lg" ssr={ false }>
         <TxsTable
-          txs={ dataTxs }
+          txs={ dataResult }
           sort={ setSortByField }
           sorting={ sorting }
           showBlockInfo={ showBlockInfo }
@@ -94,53 +93,25 @@ const TxsContent = ({
     </>
   ) : null;
 
-  const onFilterChange = (value: string) => {
-    if (value == "") {
-      setDataTxs(dataTransaction.items)
-      return true;
-    };
-    setDataTxs(dataTxs.filter(item => item?.hash.includes(value)));
-  }
+  const handleFilterChain = React.useCallback((value: Partial<TTxsFilters>) => {
+    console.log(value);
+    
+  }, []);
 
-  const handleSearchTermChange = React.useCallback((value: string) => {
-    onFilterChange(value);
-    setSearchTerm(value);
-  }, [ type, onFilterChange ]);
+ 
 
-  const actionBar = isMobile ? (
-    <TxsHeaderMobile
-      mt={ -6 }
-      sorting={ sorting }
-      setSorting={ setSortByValue }
-      paginationProps={ query.pagination }
-      showPagination={ query.pagination.isVisible }
-      filterComponent={ filter }
-      linkSlot={ currentAddress ? (
-        <AddressCsvExportLink
-          address={ currentAddress }
-          params={{ type: 'transactions', filterType: 'address', filterValue }}
-          isLoading={ query.pagination.isLoading }
-        />
-      ) : null
-      }
-    />
-  ) : <FilterInput
-    w={{ base: '100%', lg: '250px' }}
-    mb={'15px'}
-    size="xs"
-    onChange={ handleSearchTermChange }
-    placeholder="Search by txn hash"
-    initialValue={ searchTerm }
-  />;
+  const actionBar = <Flex mb={2}>
+    <Box ml={2}> <TxsFilters filters={filteArr} appliedFiltersNum={1} onFiltersChange={handleFilterChain} /></Box>
+  </Flex>;
 
   return (
     <DataListDisplay
       isError={ isError }
-      items={ dataTxs }
+      items={ dataResult }
       emptyText="There are no transactions."
       filterProps={{
         emptyFilteredText: `Couldn${ apos }t find any contract that matches your query.`,
-        hasActiveFilters: Boolean(searchTerm || type),
+        hasActiveFilters: Boolean(filterChain || type),
       }}
       content={ content }
       actionBar={ actionBar }

@@ -32,6 +32,7 @@ const AddressTxsFilter = ({ onFilterChange, defaultFilter, isActive, isLoading }
           isLoading={ isInitialLoading }
           onClick={ onToggle }
           as="div"
+          label='Filter'
         />
       </MenuButton>
       <MenuList zIndex={ 2 }>

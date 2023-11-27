@@ -12,7 +12,7 @@ import PopoverFilter from 'ui/shared/filters/PopoverFilter';
 
 interface Props {
   appliedFiltersNum?: number;
-  filters: Partial<TTxsFilters>;
+  filters: Partial<TTxsFilters> | undefined;
   onFiltersChange: (val: Partial<TTxsFilters>) => void;
 }
 
@@ -34,8 +34,8 @@ const METHOD_OPTIONS = [
 
 const TxsFilters = ({ filters, appliedFiltersNum }: Props) => {
 
-  const [ typeFilter, setTypeFilter ] = useState<Array<TypeFilter>>(filters.type || []);
-  const [ methodFilter, setMethodFilter ] = useState<Array<MethodFilter>>(filters.method || []);
+  const [ typeFilter, setTypeFilter ] = useState<Array<TypeFilter>>(filters?.type || []);
+  const [ methodFilter, setMethodFilter ] = useState<Array<MethodFilter>>(filters?.method || []);
 
   const onTypeFilterChange = useCallback((val: Array<TypeFilter>) => {
     setTypeFilter(val);
@@ -46,7 +46,7 @@ const TxsFilters = ({ filters, appliedFiltersNum }: Props) => {
   }, []);
 
   return (
-    <PopoverFilter contentProps={{ w: { md: '100%', lg: '438px' } }} appliedFiltersNum={ appliedFiltersNum }>
+    <PopoverFilter contentProps={{ w: { md: '100%', lg: '438px' }}}>
       <Text variant="secondary" fontWeight="600" fontSize="sm">Type</Text>
       <Grid gridTemplateColumns="1fr 1fr" rowGap={ 5 } mt={ 4 } mb={ 4 } pb={ 6 } borderBottom="1px solid" borderColor="divider">
         <CheckboxGroup size="lg" onChange={ onTypeFilterChange } defaultValue={ typeFilter }>

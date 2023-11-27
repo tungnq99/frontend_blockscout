@@ -12,9 +12,10 @@ interface Props {
   appliedFiltersNum?: number;
   onClick: () => void;
   as?: As;
+  label: string;
 }
 
-const FilterButton = ({ isActive, isLoading, appliedFiltersNum, onClick, as }: Props, ref: React.ForwardedRef<HTMLButtonElement>) => {
+const FilterButton = ({ isActive, isLoading, appliedFiltersNum, onClick, as, label }: Props, ref: React.ForwardedRef<HTMLButtonElement>) => {
   const badgeColor = useColorModeValue('white', 'black');
   const badgeBgColor = useColorModeValue('blue.700', 'gray.50');
 
@@ -37,7 +38,7 @@ const FilterButton = ({ isActive, isLoading, appliedFiltersNum, onClick, as }: P
       as={ as }
     >
       { FilterIcon }
-      <Box display={{ base: 'none', lg: 'block' }}>Filter</Box>
+      <Box display={{ base: 'none', lg: 'block' }}>{label ? label : "Filter"}</Box>
     </Button>
   );
 };

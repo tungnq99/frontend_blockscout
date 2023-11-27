@@ -48,7 +48,6 @@ export default function useNewTxsSocket() {
   const { topic, event } = getSocketParams(router);
 
   const handleNewTxMessage = React.useCallback((response: { transaction: number } | { pending_transaction: number } | unknown) => {
-    
     if (assertIsNewTxResponse(response)) {
       setNum(response.transaction);
     }

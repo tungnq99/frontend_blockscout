@@ -62,6 +62,11 @@ export interface TransactionsResponseValidated {
   } | null;
 }
 
+export interface TransactionsResponseFiltersChain {
+  q: string | undefined;
+  filter: "0";
+}
+
 export interface TransactionsResponsePending {
   items: Array<Transaction>;
   next_page_params: {

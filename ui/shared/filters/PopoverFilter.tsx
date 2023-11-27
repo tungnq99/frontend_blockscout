@@ -29,6 +29,7 @@ const PopoverFilter = ({ appliedFiltersNum, children, contentProps, isActive, is
           onClick={ onToggle }
           appliedFiltersNum={ appliedFiltersNum }
           isLoading={ isLoading }
+          label='Filter'
         />
       </PopoverTrigger>
       <PopoverContent { ...contentProps }>

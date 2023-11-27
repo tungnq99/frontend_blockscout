@@ -28,6 +28,7 @@ const VerifiedContractsFilter = ({ onChange, defaultValue, isActive }: Props) =>
           isActive={ isOpen || isActive }
           onClick={ onToggle }
           as="div"
+          label='Filter'
         />
       </MenuButton>
       <MenuList zIndex="popover">
