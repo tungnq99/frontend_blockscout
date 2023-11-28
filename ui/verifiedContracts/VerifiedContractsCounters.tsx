@@ -4,16 +4,17 @@ import React from 'react';
 import useApiQuery from 'lib/api/useApiQuery';
 
 import VerifiedContractsCountersItem from './VerifiedContractsCountersItem';
+import useMultiAPI from 'playwright/utils/useMultiApi';
 
 const VerifiedContractsCounters = () => {
-  const countersQuery = useApiQuery('verified_contracts_counters');
-
-  if (countersQuery.isError) {
+  const { data, isError, isPlaceholderData, pagination, callback } = useMultiAPI("smart-contracts/counters");
+  
+  if (isError) {
     return null;
   }
 
   const content = (() => {
-    if (countersQuery.isLoading) {
+    if (isPlaceholderData) {
       return (
         <>
             <Skeleton>
@@ -38,13 +39,13 @@ const VerifiedContractsCounters = () => {
       <>
         <VerifiedContractsCountersItem
           name="Total"
-          total={ countersQuery.data.smart_contracts }
-          new24={ countersQuery.data.new_smart_contracts_24h }
+          total={ data[0].smart_contracts }
+          new24={ data[0].new_smart_contracts_24h }
         />
         <VerifiedContractsCountersItem
           name="Verified"
-          total={ countersQuery.data.verified_smart_contracts }
-          new24={ countersQuery.data.new_verified_smart_contracts_24h }
+          total={ data[0].verified_smart_contracts }
+          new24={ data[0].new_verified_smart_contracts_24h }
         />
       </>
     );

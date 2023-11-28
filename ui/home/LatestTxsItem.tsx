@@ -29,7 +29,7 @@ type Props = {
 const LatestTxsItem = ({ tx, isLoading }: Props) => {
   const dataTo = tx.to ? tx.to : tx.created_contract;
   const timeAgo = useTimeAgoIncrement(tx.timestamp || '0', true);
-
+  
   return (
     <Box
       width="100%"

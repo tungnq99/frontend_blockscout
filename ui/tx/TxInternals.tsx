@@ -21,6 +21,10 @@ import TxPendingAlert from 'ui/tx/TxPendingAlert';
 import TxSocketAlert from 'ui/tx/TxSocketAlert';
 import useFetchTxInfo from 'ui/tx/useFetchTxInfo';
 import EmptySearchResult from 'ui/shared/EmptySearchResult';
+import useFetchCallApi from '../../playwright/utils/useFetchCallApi';
+import { setApiChain } from 'playwright/utils/utilString';
+import { useRouter } from 'next/router';
+import DataFetchAlert from 'ui/shared/DataFetchAlert';
 
 const SORT_SEQUENCE: Record<SortField, Array<Sort | undefined>> = {
   value: [ 'value-desc', 'value-asc', undefined ],
@@ -67,21 +71,26 @@ const TxInternals = () => {
   // filters are not implemented yet in api
   // const [ filters, setFilters ] = React.useState<Array<TxInternalsType>>([]);
   // const [ searchTerm, setSearchTerm ] = React.useState<string>('');
+  const router = useRouter();
   const [ sort, setSort ] = React.useState<Sort>();
   const txInfo = useFetchTxInfo({ updateDelay: 5 * SECOND });
- 
-  const { data, isPlaceholderData, isError, pagination } = useQueryWithPages({
-    resourceName: 'tx_internal_txs',
-    pathParams: { hash: txInfo.data?.hash },
-    options: {
-      enabled: !txInfo.isPlaceholderData && Boolean(txInfo.data?.hash) && Boolean(txInfo.data?.status),
-      placeholderData: generateListStub<'tx_internal_txs'>(INTERNAL_TX, 3, { next_page_params: null }),
-    },
-  });
+  const { dataResult, isError, isPlaceholderData, error, pagination, callback } = useFetchCallApi(`${setApiChain(router)}/internal-transactions`, setApiChain(router));
+  // const { data, isPlaceholderData, isError, pagination } = useQueryWithPages({
+  //   resourceName: 'tx_internal_txs',
+  //   pathParams: { hash: txInfo.data?.hash },
+  //   options: {
+  //     enabled: !txInfo.isPlaceholderData && Boolean(txInfo.data?.hash) && Boolean(txInfo.data?.status),
+  //     placeholderData: generateListStub<'tx_internal_txs'>(INTERNAL_TX, 3, { next_page_params: null }),
+  //   },
+  // });
 
   // const handleFilterChange = React.useCallback((nextValue: Array<TxInternalsType>) => {
   //   setFilters(nextValue);
   // }, []);
+
+  if (error) {
+    return <DataFetchAlert />
+  }
 
   const handleSortToggle = React.useCallback((field: SortField) => {
     return () => {
@@ -100,7 +109,7 @@ const TxInternals = () => {
     return <Text as="span">There are no internal transactions for this transaction.</Text>;
   }
 
-  const filteredData = data?.items
+  const filteredData = dataResult?.items
     .slice()
   // .filter(({ type }) => filters.length > 0 ? filters.includes(type) : true)
   // .filter(searchFn(searchTerm))
@@ -114,14 +123,14 @@ const TxInternals = () => {
           data={ filteredData }
           sort={ sort }
           onSortToggle={ handleSortToggle }
-          top={ pagination.isVisible ? 80 : 0 }
+          top={ pagination?.isVisible ? 80 : 0 }
           isLoading={ isPlaceholderData }
         />
       </Hide>
     </>
   ) : null;
 
-  const actionBar = pagination.isVisible ? (
+  const actionBar = pagination?.isVisible ? (
     <ActionBar mt={ -6 }>
       { /* <TxInternalsFilter onFilterChange={ handleFilterChange } defaultFilters={ filters } appliedFiltersNum={ filters.length }/> */ }
       { /* <FilterInput onChange={ setSearchTerm } maxW="360px" ml={ 3 } size="xs" placeholder="Search by addresses, hash, method..."/> */ }
@@ -132,11 +141,11 @@ const TxInternals = () => {
   return (
     <DataListDisplay
       isError={ isError || txInfo.isError }
-      items={ data?.items }
+      items={ dataResult?.items }
       emptyText="There are no internal transactions for this transaction."
       filterProps={{
         emptyFilteredText: `Couldn${ apos }t find any transaction that matches your query.`,
-        hasActiveFilters: Boolean(data?.items),
+        hasActiveFilters: Boolean(dataResult?.items),
       }}
       content={ content }
       actionBar={ actionBar }

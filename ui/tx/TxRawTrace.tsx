@@ -17,6 +17,8 @@ import TxSocketAlert from 'ui/tx/TxSocketAlert';
 import useFetchTxInfo from 'ui/tx/useFetchTxInfo';
 import EmptySearchResult from 'ui/shared/EmptySearchResult';
 import { Text } from '@chakra-ui/react';
+import { setApiChain } from 'playwright/utils/utilString';
+import useFetchCallApi from '../../playwright/utils/useFetchCallApi';
 
 const TxRawTrace = () => {
   const [ isQueryEnabled, setIsQueryEnabled ] = React.useState(false);
@@ -25,32 +27,32 @@ const TxRawTrace = () => {
   const hash = getQueryParamString(router.query.hash);
 
   const txInfo = useFetchTxInfo({ updateDelay: 5 * SECOND });
- 
-  const { data, isPlaceholderData, isError } = useApiQuery('tx_raw_trace', {
-    pathParams: { hash },
-    queryOptions: {
-      enabled: Boolean(hash) && Boolean(txInfo.data?.status) && isQueryEnabled,
-      placeholderData: TX_RAW_TRACE,
-    },
-  });
+  const { dataResult, isError, isPlaceholderData, error, pagination, callback } = useFetchCallApi(`${setApiChain(router)}/raw-trace`, setApiChain(router));
+  // const { data, isPlaceholderData, isError } = useApiQuery('tx_raw_trace', {
+  //   pathParams: { hash },
+  //   queryOptions: {
+  //     enabled: Boolean(hash) && Boolean(txInfo.data?.status) && isQueryEnabled,
+  //     placeholderData: TX_RAW_TRACE,
+  //   },
+  // });
 
-  const handleRawTraceMessage: SocketMessage.TxRawTrace['handler'] = React.useCallback((payload) => {
-    setRawTraces(payload);
-  }, [ ]);
+  // const handleRawTraceMessage: SocketMessage.TxRawTrace['handler'] = React.useCallback((payload) => {
+  //   setRawTraces(payload);
+  // }, [ ]);
 
-  const enableQuery = React.useCallback(() => setIsQueryEnabled(true), []);
+  // const enableQuery = React.useCallback(() => setIsQueryEnabled(true), []);
 
-  const channel = useSocketChannel({
-    topic: `transactions:${ hash }`,
-    isDisabled: !hash || txInfo.isPlaceholderData || !txInfo.data?.status,
-    onJoin: enableQuery,
-    onSocketError: enableQuery,
-  });
-  useSocketMessage({
-    channel,
-    event: 'raw_trace',
-    handler: handleRawTraceMessage,
-  });
+  // const channel = useSocketChannel({
+  //   topic: `transactions:${ hash }`,
+  //   isDisabled: !hash || txInfo.isPlaceholderData || !txInfo.data?.status,
+  //   onJoin: enableQuery,
+  //   onSocketError: enableQuery,
+  // });
+  // useSocketMessage({
+  //   channel,
+  //   event: 'raw_trace',
+  //   handler: handleRawTraceMessage,
+  // });
 
   if (!txInfo.isLoading && !txInfo.isPlaceholderData && !txInfo.isError && !txInfo.data.status) {
     return txInfo.socketStatus ? <TxSocketAlert status={ txInfo.socketStatus }/> : <TxPendingAlert/>;
@@ -64,7 +66,7 @@ const TxRawTrace = () => {
     return <Text as="span">No trace entries found.</Text>;
   }
 
-  const dataToDisplay = rawTraces ? rawTraces : data;
+  const dataToDisplay = rawTraces ? rawTraces : dataResult;
 
   if (!isPlaceholderData && dataToDisplay?.length === 0) {
     return <span>No trace entries found.</span>;

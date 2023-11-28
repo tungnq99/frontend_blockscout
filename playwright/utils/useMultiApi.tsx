@@ -3,21 +3,23 @@ const axios = require('axios');
 import { APIS } from 'lib/api/apis';
 import useToast from 'lib/hooks/useToast';
 
-export default function useTxsSortAPI(query: string) {
+export default function useMultiAPI(hash: string) {
   const toast = useToast();
-  const [ dataResult, setData ] = React.useState<any>();
+  const [ data, setData ] = React.useState<any>();
   const [ isError, setIsError ] = React.useState<boolean>(false);
   const [ isPlaceholderData, setIsPlaceholderData ] = React.useState<boolean>(true);
+  const [ pagination, setPagination ] = React.useState<any>(10);
 
-  const getMyData = async (query: string) => {
+  const getMyData = async (q?: any, filter?: any) => {
     try {
-      const promises = APIS.map((url) => axios.get(`${url}/transactions?filter=${query}`));
+      const query = q !== undefined || filter !== undefined ? `?q=${q}&filter=${filter}` : '';
+      const promises = APIS.map((url) => axios.get(`${url}/${hash}${query}`));
    
       const responses = await Promise.all(promises);
       
       const getData = responses.map(res => {
         if (res.status !== 200) {
-          setIsError(true)
+          setIsError(true);
           toast({
             position: 'top-right',
             title: 'Error',
@@ -29,13 +31,13 @@ export default function useTxsSortAPI(query: string) {
           return [];
         }
        
-        return res?.data?.items;
+        return res?.data;
       });
+
+      const result = getData[0]?.items?.length >= 0 ? getData[0]?.items : getData[0]?.length >= 0 ? getData[0] : getData;
+      setData(result.sort((x: any, y: any) => Date.parse(y.timestamp) -  Date.parse(x.timestamp)));
       
-      setData(getData[0].sort((x: any, y: any) => Date.parse(y.timestamp) -  Date.parse(x.timestamp)));
-      setTimeout(() => {
-        setIsPlaceholderData(false);
-      }, 1000);
+      setIsPlaceholderData(result?.length === 0);
     } catch (error: any) {
       toast({
         position: 'top-right',
@@ -48,23 +50,19 @@ export default function useTxsSortAPI(query: string) {
     }
   }
 
-  const callback: any = () => {
-    getMyData(query);
+  const callback: any = (q: any, filter: any) => {
+    getMyData(q, filter);
   }
 
   useEffect(() => {
-    getMyData(query);
+    getMyData();
   }, [])
 
-  React.useCallback(() => () => {
-    getMyData(query);
-  }, [ query ]);
-
-
   return {
-    dataResult,
-    isPlaceholderData,
+    data,
+    isPlaceholderData, 
     isError,
+    pagination,
     callback
   };
 

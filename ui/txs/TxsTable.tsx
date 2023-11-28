@@ -1,12 +1,6 @@
 import { Link, Table, Tbody, Tr, Th, Icon } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
-
-import type { Transaction } from 'types/api/transaction';
-import type { Sort } from 'types/client/txs-sort';
-
-import config from 'configs/app';
-import rightArrowIcon from 'icons/arrows/east.svg';
 import * as SocketNewItemsNotice from 'ui/shared/SocketNewItemsNotice';
 import TheadSticky from 'ui/shared/TheadSticky';
 
@@ -14,8 +8,6 @@ import TxsTableItem from './TxsTableItem';
 
 type Props = {
   txs: Array<any>;
-  sort: (field: 'val' | 'fee') => () => void;
-  sorting?: Sort;
   top: number;
   showBlockInfo: boolean;
   showSocketInfo: boolean;

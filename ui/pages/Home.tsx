@@ -29,7 +29,7 @@ const Home = () => {
         <Box boxShadow="lg" w={{base: '100%', lg: "35%"}} p={5} borderRadius={8}>
           <LatestBlocks />
         </Box>
-        <Box  boxShadow="lg"  p={5} borderRadius={8}>
+        <Box  boxShadow="lg"  p={5} borderRadius={8} w={{base: '100%', lg: "65%"}}>
           <Transactions/>
         </Box>
       </Flex>

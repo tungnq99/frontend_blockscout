@@ -1,6 +1,6 @@
 import { Box, Hide, HStack, Show } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import type { VerifiedContractsFilters } from 'types/api/contracts';
 
@@ -23,6 +23,8 @@ import VerifiedContractsCounters from 'ui/verifiedContracts/VerifiedContractsCou
 import VerifiedContractsFilter from 'ui/verifiedContracts/VerifiedContractsFilter';
 import VerifiedContractsList from 'ui/verifiedContracts/VerifiedContractsList';
 import VerifiedContractsTable from 'ui/verifiedContracts/VerifiedContractsTable';
+import useMultiAPI from 'playwright/utils/useMultiApi';
+
 
 const VerifiedContracts = () => {
   const router = useRouter();
@@ -34,27 +36,36 @@ const VerifiedContracts = () => {
 
   const isMobile = useIsMobile();
 
-  const { isError, isPlaceholderData, data, pagination, onFilterChange } = useQueryWithPages({
-    resourceName: 'verified_contracts',
-    filters: { q: debouncedSearchTerm, filter: type },
-    options: {
-      placeholderData: generateListStub<'verified_contracts'>(
-        VERIFIED_CONTRACT_INFO,
-        50,
-        {
-          next_page_params: {
-            items_count: '50',
-            smart_contract_id: '50',
-          },
-        },
-      ),
-    },
-  });
+  const { data, isError, isPlaceholderData, pagination, callback } = useMultiAPI("smart-contracts")
+  
+  // const { isError, isPlaceholderData, data, pagination, onFilterChange } = useQueryWithPages({
+  //   resourceName: 'verified_contracts',
+  //   filters: { q: debouncedSearchTerm, filter: type },
+  //   options: {
+  //     placeholderData: generateListStub<'verified_contracts'>(
+  //       VERIFIED_CONTRACT_INFO,
+  //       50,
+  //       {
+  //         next_page_params: {
+  //           items_count: '50',
+  //           smart_contract_id: '50',
+  //         },
+  //       },
+  //     ),
+  //   },
+  // });
+
+  // useEffect(() => {
+  //   //callback(searchTerm, type);
+  //   console.log(type)
+  // }, [searchTerm, type])
+
 
   const handleSearchTermChange = React.useCallback((value: string) => {
-    onFilterChange({ q: value, filter: type });
+    console.log(value)
+    callback(value, type);
     setSearchTerm(value);
-  }, [ type, onFilterChange ]);
+  }, [ type ]);
 
   const handleTypeChange = React.useCallback((value: string | Array<string>) => {
     if (Array.isArray(value)) {
@@ -62,17 +73,16 @@ const VerifiedContracts = () => {
     }
 
     const filter = value === 'all' ? undefined : value as VerifiedContractsFilters['filter'];
-
-    onFilterChange({ q: debouncedSearchTerm, filter });
+    callback(debouncedSearchTerm, filter);
     setType(filter);
-  }, [ debouncedSearchTerm, onFilterChange ]);
+  }, [ debouncedSearchTerm ]);
 
   const handleSortToggle = React.useCallback((field: SortField) => {
     return () => {
       setSort(getNextSortValue(field));
     };
   }, []);
-
+  
   const typeFilter = <VerifiedContractsFilter onChange={ handleTypeChange } defaultValue={ type } isActive={ Boolean(type) }/>;
 
   const filterInput = (
@@ -102,7 +112,7 @@ const VerifiedContracts = () => {
         { sortButton }
         { filterInput }
       </HStack>
-      { (!isMobile || pagination.isVisible) && (
+      { (!isMobile || pagination?.isVisible) && (
         <ActionBar mt={ -6 }>
           <HStack spacing={ 3 } display={{ base: 'none', lg: 'flex' }}>
             { typeFilter }
@@ -119,8 +129,8 @@ const VerifiedContracts = () => {
     </>
   );
 
-  const sortedData = data?.items.slice().sort(sortFn(sort));
-
+  const sortedData = data?.slice();
+  
   const content = sortedData ? (
     <>
       <Show below="lg" ssr={ false }>
@@ -137,7 +147,7 @@ const VerifiedContracts = () => {
       <PageTitle title="Verified contracts" withTextAd/>
       <DataListDisplay
         isError={ isError }
-        items={ data?.items }
+        items={ data }
         emptyText="There are no verified contracts."
         filterProps={{
           emptyFilteredText: `Couldn${ apos }t find any contract that matches your query.`,

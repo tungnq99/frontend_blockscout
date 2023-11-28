@@ -45,9 +45,9 @@ const TxsContent = ({
   const router = useRouter();
   const params: any = new URLSearchParams(window.location.search);
   
-  const { data, isPlaceholderData, isError, setSortByField, setSortByValue, sorting } = useTxsSort(query);
+  //const { data, isPlaceholderData, isError, setSortByField, setSortByValue, sorting } = useTxsSort(query);
   const [ filterChain, setFilterChain ] = React.useState(0);
-  const {dataResult, callback } = useTxsSortAPI(params.get("tab"));
+  const {dataResult, isPlaceholderData, isError, callback } = useTxsSortAPI(params.get("tab"));
   const [ type, setType ] = React.useState(getQueryParamString(router.query.filter) || undefined);
   const [filteArr, setFilterArr] = React.useState<Partial<TTxsFilters>>();
 
@@ -78,8 +78,6 @@ const TxsContent = ({
       <Hide below="lg" ssr={ false }>
         <TxsTable
           txs={ dataResult }
-          sort={ setSortByField }
-          sorting={ sorting }
           showBlockInfo={ showBlockInfo }
           showSocketInfo={ showSocketInfo }
           socketInfoAlert={ socketInfoAlert }

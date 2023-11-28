@@ -12,10 +12,9 @@ import delay from 'lib/delay';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import useSocketChannel from 'lib/socket/useSocketChannel';
 import useSocketMessage from 'lib/socket/useSocketMessage';
-import { TX } from 'stubs/tx';
-import { APIS_KEY } from 'lib/api/apis';
 import axios from 'axios';
 import useToast from 'lib/hooks/useToast';
+import { setApiChain } from 'playwright/utils/utilString';
 
 interface Params {
   onTxStatusUpdate?: () => void;
@@ -36,17 +35,16 @@ export default function useFetchTxInfo({ onTxStatusUpdate, updateDelay }: Params
   const [ isError, setIsError ] = React.useState<boolean>(false);
   const [ error, setError ] = React.useState<any>(null);
   const [ isPlaceholderData, setIsPlaceholderData ] = React.useState<boolean>(true);
-
   const hash = getQueryParamString(router.query.hash);
-  const key = hash.substring(2,6);
 
   const queryTxChain = async () => {
     try {
-      if (APIS_KEY[key] === undefined) {
+
+      if (setApiChain(router) === undefined) {
         return;
       }
-
-      const res: any = await axios.get(APIS_KEY[key] + hash);
+      
+      const res: any = await axios.get(setApiChain(router));
       setIsPlaceholderData(true);
      
       if (res.status !== 200) {
@@ -62,9 +60,10 @@ export default function useFetchTxInfo({ onTxStatusUpdate, updateDelay }: Params
         setIsError(true);
         return;
       }
+   
       setStatus(res.status);
-      setIsPlaceholderData(false);
       setData(res.data);
+      setIsPlaceholderData(res.status !== 200);
     } catch (error) {
         if (error) setIsError(true);
         setError(error)
@@ -74,8 +73,6 @@ export default function useFetchTxInfo({ onTxStatusUpdate, updateDelay }: Params
 
   useEffect(() => {
     queryTxChain();
-    console.log(1);
-    
   }, [])
   
   const queryResult: any = {data, isPlaceholderData, isError, error}
