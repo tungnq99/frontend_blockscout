@@ -14,9 +14,10 @@ export default function useTxsSortAPI(query: string) {
     try {
       const promises = APIS.map((url) => axios.get(`${url}/transactions?filter=${query}`));
    
-      const responses = await Promise.all(promises);
+      const responses = (await Promise.allSettled(promises)).filter(res => res.status === 'fulfilled');
       
-      const getData = responses.map(res => {
+      const getData = responses.map((response: any ) => {
+        const res = response?.value;
         if (res.status !== 200) {
           setIsError(true)
           toast({

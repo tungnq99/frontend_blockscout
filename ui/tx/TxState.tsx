@@ -15,6 +15,7 @@ import TxSocketAlert from './TxSocketAlert';
 import useFetchCallApi from '../../playwright/utils/useFetchCallApi';
 import { setApiChain } from 'playwright/utils/utilString';
 import { useRouter } from 'next/router';
+import DataFetchAlert from 'ui/shared/DataFetchAlert';
 
 const TxState = () => {
   const txInfo = useFetchTxInfo({ updateDelay: 5 * SECOND });
@@ -37,6 +38,10 @@ const TxState = () => {
 
   if (!txInfo.isLoading && !txInfo.isPlaceholderData && !txInfo.isError && !txInfo.data.status) {
     return txInfo.socketStatus ? <TxSocketAlert status={ txInfo.socketStatus }/> : <TxPendingAlert/>;
+  }
+
+  if (error ) {
+    return <DataFetchAlert />
   }
 
   if (!txInfo?.data) {

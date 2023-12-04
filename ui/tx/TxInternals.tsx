@@ -88,10 +88,6 @@ const TxInternals = () => {
   //   setFilters(nextValue);
   // }, []);
 
-  if (error) {
-    return <DataFetchAlert />
-  }
-
   const handleSortToggle = React.useCallback((field: SortField) => {
     return () => {
       if (isPlaceholderData) {
@@ -105,9 +101,15 @@ const TxInternals = () => {
     return txInfo.socketStatus ? <TxSocketAlert status={ txInfo.socketStatus }/> : <TxPendingAlert/>;
   }
 
+  if (error ) {
+    return <DataFetchAlert />
+  }
+
   if (!txInfo?.data) {
     return <Text as="span">There are no internal transactions for this transaction.</Text>;
   }
+
+  
 
   const filteredData = dataResult?.items
     .slice()

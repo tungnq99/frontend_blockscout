@@ -15,23 +15,26 @@ export default function useMultiAPI(hash: string) {
       const query = text_page === 'contract' ? `?q=${q}&filter=${filter}` : 
                     text_page === 'token_transfer' ? `?type=${q}&filter=${filter === 'all' ? '' : filter}` : 
                     text_page === 'tokens' ? `?type=${q}` : 
-                    text_page === 'internal' ? `?filter=${q}` :'';
+                    text_page === 'internal' ? `?filter=${q}` : '';
       const promises = APIS.map((url, index) => axios.get(`${url}/${hash}${query}`));
-      const responses = await Promise.all(promises);
 
-      const getData = responses.map((res, idx) => {
-        if (res.status !== 200) {
+      const responses = (await Promise.allSettled(promises)).filter(res => res.status === 'fulfilled');
+      const getData = responses.map((response: any, idx) => {
+        const res = response?.value;
+        if (res?.status !== 200) {
           setIsError(true);
           toast({
             position: 'top-right',
             title: 'Error',
-            description: res?.message || 'Something went wrong',
+            description: res?.reason?.message || 'Something went wrong',
             status: 'error',
             variant: 'subtle',
             isClosable: true,
           });
           return [];
         }
+       
+        
         const results = res?.data?.items?.length >= 0 ?  res?.data?.items : res?.data;
         return results;
       });
