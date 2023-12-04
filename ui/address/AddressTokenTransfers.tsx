@@ -32,6 +32,7 @@ import TokenTransferList from 'ui/shared/TokenTransfer/TokenTransferList';
 import TokenTransferTable from 'ui/shared/TokenTransfer/TokenTransferTable';
 
 import AddressCsvExportLink from './AddressCsvExportLink';
+import useMultiAPI from 'playwright/utils/useMultiApi';
 
 type Filters = {
   type: Array<TokenType>;
@@ -88,110 +89,112 @@ const AddressTokenTransfers = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Pr
     },
   );
 
-  const { isError, isPlaceholderData, data, pagination, onFilterChange } = useQueryWithPages({
-    resourceName: 'address_token_transfers',
-    pathParams: { hash: currentAddress },
-    filters: tokenFilter ? { token: tokenFilter } : filters,
-    scrollRef,
-    options: {
-      placeholderData: getTokenTransfersStub(undefined, {
-        block_number: 7793535,
-        index: 46,
-        items_count: 50,
-      }),
-    },
-  });
-
+  const { isError, isPlaceholderData, data, pagination, callback } = useMultiAPI(`addresses/${currentAddress}/token-transfers`); 
+  
+  // const { isError, isPlaceholderData, data, pagination, onFilterChange } = useQueryWithPages({
+  //   resourceName: 'address_token_transfers',
+  //   pathParams: { hash: currentAddress },
+  //   filters: tokenFilter ? { token: tokenFilter } : filters,
+  //   scrollRef,
+  //   options: {
+  //     placeholderData: getTokenTransfersStub(undefined, {
+  //       block_number: 7793535,
+  //       index: 46,
+  //       items_count: 50,
+  //     }),
+  //   },
+  // });
+  
   const handleTypeFilterChange = React.useCallback((nextValue: Array<TokenType>) => {
-    onFilterChange({ ...filters, type: nextValue });
+    callback("token_transfer", nextValue, filters?.filter);
     setFilters((prevState) => ({ ...prevState, type: nextValue }));
-  }, [ filters, onFilterChange ]);
+  }, [ filters ]);
 
   const handleAddressFilterChange = React.useCallback((nextValue: string) => {
+    callback("token_transfer", filters?.type, nextValue);
     const filterVal = getAddressFilterValue(nextValue);
-    onFilterChange({ ...filters, filter: filterVal });
     setFilters((prevState) => ({ ...prevState, filter: filterVal }));
-  }, [ filters, onFilterChange ]);
+  }, [ filters ]);
 
   const resetTokenFilter = React.useCallback(() => {
-    onFilterChange({});
-  }, [ onFilterChange ]);
+  
+  }, [  ]);
 
   const resetTokenIconColor = useColorModeValue('blue.600', 'blue.300');
   const resetTokenIconHoverColor = useColorModeValue('blue.400', 'blue.200');
 
-  const handleNewSocketMessage: SocketMessage.AddressTokenTransfer['handler'] = (payload) => {
-    setSocketAlert('');
+  // const handleNewSocketMessage: SocketMessage.AddressTokenTransfer['handler'] = (payload) => {
+  //   setSocketAlert('');
 
-    const newItems: Array<TokenTransfer> = [];
-    let newCount = 0;
+  //   const newItems: Array<TokenTransfer> = [];
+  //   let newCount = 0;
 
-    payload.token_transfers.forEach(transfer => {
-      if (data?.items && data.items.length + newItems.length >= overloadCount) {
-        if (matchFilters(filters, transfer, currentAddress)) {
-          newCount++;
-        }
-      } else {
-        if (matchFilters(filters, transfer, currentAddress)) {
-          newItems.push(transfer);
-        }
-      }
-    });
+  //   payload.token_transfers.forEach(transfer => {
+  //     if (data?.items && data.items?.length + newItems?.length >= overloadCount) {
+  //       if (matchFilters(filters, transfer, currentAddress)) {
+  //         newCount++;
+  //       }
+  //     } else {
+  //       if (matchFilters(filters, transfer, currentAddress)) {
+  //         newItems.push(transfer);
+  //       }
+  //     }
+  //   });
 
-    if (newCount > 0) {
-      setNewItemsCount(prev => prev + newCount);
-    }
+  //   if (newCount > 0) {
+  //     setNewItemsCount(prev => prev + newCount);
+  //   }
 
-    if (newItems.length > 0) {
-      queryClient.setQueryData(
-        getResourceKey('address_token_transfers', { pathParams: { hash: currentAddress }, queryParams: { ...filters } }),
-        (prevData: AddressTokenTransferResponse | undefined) => {
-          if (!prevData) {
-            return;
-          }
+  //   if (newItems?.length > 0) {
+  //     queryClient.setQueryData(
+  //       getResourceKey('address_token_transfers', { pathParams: { hash: currentAddress }, queryParams: { ...filters } }),
+  //       (prevData: AddressTokenTransferResponse | undefined) => {
+  //         if (!prevData) {
+  //           return;
+  //         }
 
-          return {
-            ...prevData,
-            items: [
-              ...newItems,
-              ...prevData.items,
-            ],
-          };
-        },
-      );
-    }
+  //         return {
+  //           ...prevData,
+  //           items: [
+  //             ...newItems,
+  //             ...prevData.items,
+  //           ],
+  //         };
+  //       },
+  //     );
+  //   }
 
-  };
+  // };
 
-  const handleSocketClose = React.useCallback(() => {
-    setSocketAlert('Connection is lost. Please refresh the page to load new token transfers.');
-  }, []);
+  // const handleSocketClose = React.useCallback(() => {
+  //   setSocketAlert('Connection is lost. Please refresh the page to load new token transfers.');
+  // }, []);
 
-  const handleSocketError = React.useCallback(() => {
-    setSocketAlert('An error has occurred while fetching new token transfers. Please refresh the page.');
-  }, []);
+  // const handleSocketError = React.useCallback(() => {
+  //   setSocketAlert('An error has occurred while fetching new token transfers. Please refresh the page.');
+  // }, []);
 
-  const channel = useSocketChannel({
-    topic: `addresses:${ currentAddress.toLowerCase() }`,
-    onSocketClose: handleSocketClose,
-    onSocketError: handleSocketError,
-    isDisabled: pagination.page !== 1 || Boolean(tokenFilter),
-  });
+  // const channel = useSocketChannel({
+  //   topic: `addresses:${ currentAddress.toLowerCase() }`,
+  //   onSocketClose: handleSocketClose,
+  //   onSocketError: handleSocketError,
+  //   isDisabled: pagination.page !== 1 || Boolean(tokenFilter),
+  // });
 
-  useSocketMessage({
-    channel,
-    event: 'token_transfer',
-    handler: handleNewSocketMessage,
-  });
+  // useSocketMessage({
+  //   channel,
+  //   event: 'token_transfer',
+  //   handler: handleNewSocketMessage,
+  // });
 
   const numActiveFilters = (filters.type?.length || 0) + (filters.filter ? 1 : 0);
-  const isActionBarHidden = !tokenFilter && !numActiveFilters && !data?.items.length && !currentAddress;
+  const isActionBarHidden = !tokenFilter && !numActiveFilters && !data?.length && !currentAddress;
 
-  const content = data?.items ? (
+  const content = data ? (
     <>
       <Hide below="lg" ssr={ false }>
         <TokenTransferTable
-          data={ data?.items }
+          data={ data }
           baseAddress={ currentAddress }
           showTxInfo
           top={ isActionBarHidden ? 0 : 80 }
@@ -213,7 +216,7 @@ const AddressTokenTransfers = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Pr
           />
         ) }
         <TokenTransferList
-          data={ data?.items }
+          data={ data }
           baseAddress={ currentAddress }
           showTxInfo
           enableTimeIncrement
@@ -255,10 +258,10 @@ const AddressTokenTransfers = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Pr
 
   const actionBar = (
     <>
-      { isMobile && tokenFilterComponent }
+      {/* { isMobile && tokenFilterComponent } */}
       { !isActionBarHidden && (
         <ActionBar mt={ -6 }>
-          { !isMobile && tokenFilterComponent }
+          {/* { !isMobile && tokenFilterComponent } */}
           { !tokenFilter && (
             <TokenTransferFilter
               defaultTypeFilters={ filters.type }
@@ -278,7 +281,7 @@ const AddressTokenTransfers = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Pr
               isLoading={ isPlaceholderData }
             />
           ) }
-          <Pagination ml={{ base: 'auto', lg: 8 }} { ...pagination }/>
+          {/* <Pagination ml={{ base: 'auto', lg: 8 }} { ...pagination }/> */}
         </ActionBar>
       ) }
     </>
@@ -287,11 +290,11 @@ const AddressTokenTransfers = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Pr
   return (
     <DataListDisplay
       isError={ isError }
-      items={ data?.items }
+      items={ data }
       emptyText="There are no token transfers."
       filterProps={{
         emptyFilteredText: `Couldn${ apos }t find any token transfer that matches your query.`,
-        hasActiveFilters: Boolean(numActiveFilters),
+        hasActiveFilters: Boolean(data?.length === 0 ),
       }}
       content={ content }
       actionBar={ actionBar }

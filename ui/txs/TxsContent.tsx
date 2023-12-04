@@ -5,20 +5,15 @@ import { useRouter } from 'next/router';
 import type { AddressFromToFilter } from 'types/api/address';
 import { apos } from 'lib/html-entities';
 import DataListDisplay from 'ui/shared/DataListDisplay';
-import type { QueryWithPagesResult } from 'ui/shared/pagination/useQueryWithPages';
 import * as SocketNewItemsNotice from 'ui/shared/SocketNewItemsNotice';
 
 import TxsListItem from './TxsListItem';
 import TxsTable from './TxsTable';
-import useTxsSort from './useTxsSort';
 import getQueryParamString from 'lib/router/getQueryParamString';
-import useTxsSortAPI from './useTxsSortApi';
-import TxsFiltersChain from './TxsFiltersChain';
-import TxsFilters from './TxsFilters';
-import { TTxsFilters, TypeFilter } from 'types/api/txsFilters';
 
+//query: QueryWithPagesResult<'txs_validated' | 'txs_pending'> | QueryWithPagesResult<'txs_watchlist'> | QueryWithPagesResult<'block_txs'>
 type Props = {
-  query: QueryWithPagesResult<'txs_validated' | 'txs_pending'> | QueryWithPagesResult<'txs_watchlist'> | QueryWithPagesResult<'block_txs'>;
+  query: any;
   showBlockInfo?: boolean;
   showSocketInfo?: boolean;
   socketInfoAlert?: string;
@@ -44,14 +39,12 @@ const TxsContent = ({
 }: Props) => {
   const router = useRouter();
   const params: any = new URLSearchParams(window.location.search);
-  
   //const { data, isPlaceholderData, isError, setSortByField, setSortByValue, sorting } = useTxsSort(query);
   const [ filterChain, setFilterChain ] = React.useState(0);
-  const {dataResult, isPlaceholderData, isError, callback } = useTxsSortAPI(params.get("tab"));
+  const {data, isPlaceholderData, isError, callback } = query;
   const [ type, setType ] = React.useState(getQueryParamString(router.query.filter) || undefined);
-  const [filteArr, setFilterArr] = React.useState<Partial<TTxsFilters>>();
-
-  const content = dataResult ? (
+  
+  const content = data ? (
     <>
       <Show below="lg" ssr={ false }>
         <Box>
@@ -63,7 +56,7 @@ const TxsContent = ({
               isLoading={ isPlaceholderData }
             />
           ) }
-          { dataResult.map((tx: any, index: number) => (
+          { data.map((tx: any, index: number) => (
             <TxsListItem
               key={ tx.hash + (isPlaceholderData ? index : '') }
               tx={ tx }
@@ -77,7 +70,7 @@ const TxsContent = ({
       </Show>
       <Hide below="lg" ssr={ false }>
         <TxsTable
-          txs={ dataResult }
+          txs={ data }
           showBlockInfo={ showBlockInfo }
           showSocketInfo={ showSocketInfo }
           socketInfoAlert={ socketInfoAlert }
@@ -91,25 +84,18 @@ const TxsContent = ({
     </>
   ) : null;
 
-  const handleFilterChain = React.useCallback((value: Partial<TTxsFilters>) => {
-    console.log(value);
-    
-  }, []);
-
- 
-
   const actionBar = <Flex mb={2}>
-    <Box ml={2}> <TxsFilters filters={filteArr} appliedFiltersNum={1} onFiltersChange={handleFilterChain} /></Box>
+    <Box ml={2}></Box>
   </Flex>;
 
   return (
     <DataListDisplay
       isError={ isError }
-      items={ dataResult }
+      items={ data }
       emptyText="There are no transactions."
       filterProps={{
         emptyFilteredText: `Couldn${ apos }t find any contract that matches your query.`,
-        hasActiveFilters: Boolean(filterChain || type),
+        hasActiveFilters: Boolean(filterChain || type || data?.length <= 0),
       }}
       content={ content }
       actionBar={ actionBar }

@@ -29,6 +29,8 @@ import NetworkExplorers from 'ui/shared/NetworkExplorers';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import RoutedTabs from 'ui/shared/Tabs/RoutedTabs';
 import TabsSkeleton from 'ui/shared/Tabs/TabsSkeleton';
+import { APIS } from 'lib/api/apis';
+import useFetchCallApi from 'playwright/utils/useFetchCallApi';
 
 export const tokenTabsByType: Record<TokenType, string> = {
   'ERC-20': 'tokens_erc20',
@@ -46,83 +48,78 @@ const AddressPageContent = () => {
   const tabsScrollRef = React.useRef<HTMLDivElement>(null);
   const hash = getQueryParamString(router.query.hash);
 
-  const addressQuery = useApiQuery('address', {
-    pathParams: { hash },
-    queryOptions: {
-      enabled: Boolean(hash),
-      placeholderData: ADDRESS_INFO,
-    },
-  });
+  const addressQuery = useFetchCallApi(`${APIS[0]}/addresses/${hash}`, null)
+  const addressTabsCountersQuery = useFetchCallApi(`${APIS[0]}/addresses/${hash}/tabs-counters`, null)
+  //console.log(address_query);
+  // const addressQuery = useApiQuery('address', {
+  //   pathParams: { hash },
+  //   queryOptions: {
+  //     enabled: Boolean(hash),
+  //     placeholderData: ADDRESS_INFO,
+  //   },
+  // });
 
-  const addressTabsCountersQuery = useApiQuery('address_tabs_counters', {
-    pathParams: { hash },
-    queryOptions: {
-      enabled: Boolean(hash),
-      placeholderData: ADDRESS_TABS_COUNTERS,
-    },
-  });
+  // const addressTabsCountersQuery = useApiQuery('address_tabs_counters', {
+  //   pathParams: { hash },
+  //   queryOptions: {
+  //     enabled: Boolean(hash),
+  //     placeholderData: ADDRESS_TABS_COUNTERS,
+  //   },
+  // });
 
-  const contractTabs = useContractTabs(addressQuery.data);
+  const contractTabs = useContractTabs(addressQuery.dataResult);
 
   const tabs: Array<RoutedTab> = React.useMemo(() => {
     return [
       {
         id: 'txs',
         title: 'Transactions',
-        count: addressTabsCountersQuery.data?.transactions_count,
         component: <AddressTxs scrollRef={ tabsScrollRef }/>,
       },
       config.features.beaconChain.isEnabled ?
         {
           id: 'withdrawals',
           title: 'Withdrawals',
-          count: addressTabsCountersQuery.data?.withdrawals_count,
           component: <AddressWithdrawals scrollRef={ tabsScrollRef }/>,
         } :
         undefined,
       {
         id: 'token_transfers',
         title: 'Token transfers',
-        count: addressTabsCountersQuery.data?.token_transfers_count,
         component: <AddressTokenTransfers scrollRef={ tabsScrollRef }/>,
       },
       {
         id: 'tokens',
         title: 'Tokens',
-        count: addressTabsCountersQuery.data?.token_balances_count,
         component: <AddressTokens/>,
         subTabs: TOKEN_TABS,
       },
       {
         id: 'internal_txns',
         title: 'Internal txns',
-        count: addressTabsCountersQuery.data?.internal_txs_count,
         component: <AddressInternalTxs scrollRef={ tabsScrollRef }/>,
       },
-      {
-        id: 'coin_balance_history',
-        title: 'Coin balance history',
-        count: addressTabsCountersQuery.data?.coin_balances_count,
-        component: <AddressCoinBalance/>,
-      },
-      config.chain.verificationType === 'validation' ?
-        {
-          id: 'blocks_validated',
-          title: 'Blocks validated',
-          count: addressTabsCountersQuery.data?.validations_count,
-          component: <AddressBlocksValidated scrollRef={ tabsScrollRef }/>,
-        } :
-        undefined,
+      // {
+      //   id: 'coin_balance_history',
+      //   title: 'Coin balance history',
+      //   component: <AddressCoinBalance/>,
+      // },
+      // config.chain.verificationType === 'validation' ?
+      //   {
+      //     id: 'blocks_validated',
+      //     title: 'Blocks validated',
+      //     component: <AddressBlocksValidated scrollRef={ tabsScrollRef }/>,
+      //   } :
+      //   undefined,
       {
         id: 'logs',
         title: 'Logs',
-        count: addressTabsCountersQuery.data?.logs_count,
         component: <AddressLogs scrollRef={ tabsScrollRef }/>,
       },
-      addressQuery.data?.is_contract ? {
+      addressQuery.dataResult?.is_contract ? {
         id: 'contract',
         title: () => {
-          if (addressQuery.data.is_verified) {
+          if (addressQuery.dataResult.is_verified) {
             return (
               <>
                 <span>Contract</span>
@@ -137,16 +134,16 @@ const AddressPageContent = () => {
         subTabs: contractTabs.map(tab => tab.id),
       } : undefined,
     ].filter(Boolean);
-  }, [ addressQuery.data, contractTabs, addressTabsCountersQuery.data ]);
+  }, [ addressQuery.dataResult, contractTabs, addressTabsCountersQuery.dataResult ]);
 
   const tags = (
     <EntityTags
-      data={ addressQuery.data }
+      data={ addressQuery.dataResult }
       isLoading={ addressQuery.isPlaceholderData }
       tagsBefore={ [
-        addressQuery.data?.is_contract ? { label: 'contract', display_name: 'Contract' } : { label: 'eoa', display_name: 'EOA' },
-        addressQuery.data?.implementation_address ? { label: 'proxy', display_name: 'Proxy' } : undefined,
-        addressQuery.data?.token ? { label: 'token', display_name: 'Token' } : undefined,
+        addressQuery.dataResult?.is_contract ? { label: 'contract', display_name: 'Contract' } : { label: 'eoa', display_name: 'EOA' },
+        addressQuery.dataResult?.implementation_address ? { label: 'proxy', display_name: 'Proxy' } : undefined,
+        addressQuery.dataResult?.token ? { label: 'token', display_name: 'Token' } : undefined,
       ] }
       contentAfter={
         <NetworkExplorers type="address" pathParam={ hash } ml="auto" hideText={ isMobile }/>
@@ -173,7 +170,7 @@ const AddressPageContent = () => {
     <>
       <TextAd mb={ 6 }/>
       <PageTitle
-        title={ `${ addressQuery.data?.is_contract ? 'Contract' : 'Address' } details` }
+        title={ `${ addressQuery.dataResult?.is_contract ? 'Contract' : 'Address' } details` }
         backLink={ backLink }
         contentAfter={ tags }
         isLoading={ addressQuery.isPlaceholderData }

@@ -17,12 +17,13 @@ interface Props {
 }
 
 const AddressesTable = ({ items, totalSupply, pageStartIndex, top, isLoading }: Props) => {
+  
   const hasPercentage = Boolean(totalSupply && totalSupply !== '0');
   return (
     <Table variant="simple" size="sm">
       <Thead top={ top }>
         <Tr>
-          <Th width="64px">Rank</Th>
+          <Th width="64px">ID</Th>
           <Th width={ hasPercentage ? '30%' : '40%' }>Address</Th>
           <Th width="20%" pl={ 10 }>Public tag</Th>
           <Th width={ hasPercentage ? '20%' : '25%' } isNumeric>{ `Balance` }</Th>
@@ -36,7 +37,7 @@ const AddressesTable = ({ items, totalSupply, pageStartIndex, top, isLoading }: 
             key={ item.hash + (isLoading ? index : '') }
             item={ item }
             totalSupply={ totalSupply }
-            index={ pageStartIndex + index }
+            index={ index+1 }
             hasPercentage={ hasPercentage }
             isLoading={ isLoading }
           />

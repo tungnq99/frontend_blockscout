@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import type { SocketMessage } from 'lib/socket/types';
 import type { AddressTokenBalance, AddressTokensBalancesSocketMessage, AddressTokensResponse } from 'types/api/address';
@@ -24,6 +24,8 @@ import ERC1155Tokens from './tokens/ERC1155Tokens';
 import ERC20Tokens from './tokens/ERC20Tokens';
 import ERC721Tokens from './tokens/ERC721Tokens';
 import TokenBalances from './tokens/TokenBalances';
+import useMultiAPI from 'playwright/utils/useMultiApi';
+
 
 const TAB_LIST_PROPS = {
   marginBottom: 0,
@@ -50,117 +52,121 @@ const AddressTokens = () => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
   const tab = getQueryParamString(router.query.tab);
-  const hash = getQueryParamString(router.query.hash);
+  const hash = getQueryParamString(router.query.hash); 
+  
+  const dataResultToken  = useMultiAPI(`addresses/${hash}/tokens`);
+  // const erc20Query = useQueryWithPages({
+  //   resourceName: 'address_tokens',
+  //   pathParams: { hash },
+  //   filters: { type: 'ERC-20' },
+  //   scrollRef,
+  //   options: {
+  //     refetchOnMount: false,
+  //     placeholderData: generateListStub<'address_tokens'>(ADDRESS_TOKEN_BALANCE_ERC_20, 10, { next_page_params: null }),
+  //   },
+  // });
 
-  const erc20Query = useQueryWithPages({
-    resourceName: 'address_tokens',
-    pathParams: { hash },
-    filters: { type: 'ERC-20' },
-    scrollRef,
-    options: {
-      refetchOnMount: false,
-      placeholderData: generateListStub<'address_tokens'>(ADDRESS_TOKEN_BALANCE_ERC_20, 10, { next_page_params: null }),
-    },
-  });
+  // const erc721Query = useQueryWithPages({
+  //   resourceName: 'address_tokens',
+  //   pathParams: { hash },
+  //   filters: { type: 'ERC-721' },
+  //   scrollRef,
+  //   options: {
+  //     refetchOnMount: false,
+  //     placeholderData: generateListStub<'address_tokens'>(ADDRESS_TOKEN_BALANCE_ERC_721, 10, { next_page_params: null }),
+  //   },
+  // });
 
-  const erc721Query = useQueryWithPages({
-    resourceName: 'address_tokens',
-    pathParams: { hash },
-    filters: { type: 'ERC-721' },
-    scrollRef,
-    options: {
-      refetchOnMount: false,
-      placeholderData: generateListStub<'address_tokens'>(ADDRESS_TOKEN_BALANCE_ERC_721, 10, { next_page_params: null }),
-    },
-  });
+  // const erc1155Query = useQueryWithPages({
+  //   resourceName: 'address_tokens',
+  //   pathParams: { hash },
+  //   filters: { type: 'ERC-1155' },
+  //   scrollRef,
+  //   options: {
+  //     refetchOnMount: false,
+  //     placeholderData: generateListStub<'address_tokens'>(ADDRESS_TOKEN_BALANCE_ERC_1155, 10, { next_page_params: null }),
+  //   },
+  // });
 
-  const erc1155Query = useQueryWithPages({
-    resourceName: 'address_tokens',
-    pathParams: { hash },
-    filters: { type: 'ERC-1155' },
-    scrollRef,
-    options: {
-      refetchOnMount: false,
-      placeholderData: generateListStub<'address_tokens'>(ADDRESS_TOKEN_BALANCE_ERC_1155, 10, { next_page_params: null }),
-    },
-  });
+  //const queryClient = useQueryClient();
 
-  const queryClient = useQueryClient();
+  // const updateTokensData = React.useCallback((type: TokenType, payload: AddressTokensBalancesSocketMessage) => {
+  //   const queryKey = getResourceKey('address_tokens', { pathParams: { hash }, queryParams: { type } });
 
-  const updateTokensData = React.useCallback((type: TokenType, payload: AddressTokensBalancesSocketMessage) => {
-    const queryKey = getResourceKey('address_tokens', { pathParams: { hash }, queryParams: { type } });
+  //   queryClient.setQueryData(queryKey, (prevData: AddressTokensResponse | undefined) => {
+  //     const items = prevData?.items.map((currentItem) => {
+  //       const updatedData = payload.token_balances.find(tokenBalanceItemIdentityFactory(currentItem));
+  //       return updatedData ?? currentItem;
+  //     }) || [];
 
-    queryClient.setQueryData(queryKey, (prevData: AddressTokensResponse | undefined) => {
-      const items = prevData?.items.map((currentItem) => {
-        const updatedData = payload.token_balances.find(tokenBalanceItemIdentityFactory(currentItem));
-        return updatedData ?? currentItem;
-      }) || [];
+  //     const extraItems = prevData?.next_page_params ?
+  //       [] :
+  //       payload.token_balances.filter((socketItem) => !items.some(tokenBalanceItemIdentityFactory(socketItem)));
 
-      const extraItems = prevData?.next_page_params ?
-        [] :
-        payload.token_balances.filter((socketItem) => !items.some(tokenBalanceItemIdentityFactory(socketItem)));
+  //     if (!prevData) {
+  //       return {
+  //         items: extraItems,
+  //         next_page_params: null,
+  //       };
+  //     }
 
-      if (!prevData) {
-        return {
-          items: extraItems,
-          next_page_params: null,
-        };
-      }
+  //     return {
+  //       items: items.concat(extraItems),
+  //       next_page_params: prevData.next_page_params,
+  //     };
+  //   });
+  // }, [ hash, queryClient ]);
 
-      return {
-        items: items.concat(extraItems),
-        next_page_params: prevData.next_page_params,
-      };
-    });
-  }, [ hash, queryClient ]);
+  // const handleTokenBalancesErc20Message: SocketMessage.AddressTokenBalancesErc20['handler'] = React.useCallback((payload) => {
+  //   updateTokensData('ERC-20', payload);
+  // }, [ updateTokensData ]);
 
-  const handleTokenBalancesErc20Message: SocketMessage.AddressTokenBalancesErc20['handler'] = React.useCallback((payload) => {
-    updateTokensData('ERC-20', payload);
-  }, [ updateTokensData ]);
+  // const handleTokenBalancesErc721Message: SocketMessage.AddressTokenBalancesErc721['handler'] = React.useCallback((payload) => {
+  //   updateTokensData('ERC-721', payload);
+  // }, [ updateTokensData ]);
 
-  const handleTokenBalancesErc721Message: SocketMessage.AddressTokenBalancesErc721['handler'] = React.useCallback((payload) => {
-    updateTokensData('ERC-721', payload);
-  }, [ updateTokensData ]);
+  // const handleTokenBalancesErc1155Message: SocketMessage.AddressTokenBalancesErc1155['handler'] = React.useCallback((payload) => {
+  //   updateTokensData('ERC-1155', payload);
+  // }, [ updateTokensData ]);
 
-  const handleTokenBalancesErc1155Message: SocketMessage.AddressTokenBalancesErc1155['handler'] = React.useCallback((payload) => {
-    updateTokensData('ERC-1155', payload);
-  }, [ updateTokensData ]);
+  // const channel = useSocketChannel({
+  //   topic: `addresses:${ hash.toLowerCase() }`,
+  //   isDisabled: erc20Query.isPlaceholderData || erc721Query.isPlaceholderData || erc1155Query.isPlaceholderData,
+  // });
 
-  const channel = useSocketChannel({
-    topic: `addresses:${ hash.toLowerCase() }`,
-    isDisabled: erc20Query.isPlaceholderData || erc721Query.isPlaceholderData || erc1155Query.isPlaceholderData,
-  });
-
-  useSocketMessage({
-    channel,
-    event: 'updated_token_balances_erc_20',
-    handler: handleTokenBalancesErc20Message,
-  });
-  useSocketMessage({
-    channel,
-    event: 'updated_token_balances_erc_721',
-    handler: handleTokenBalancesErc721Message,
-  });
-  useSocketMessage({
-    channel,
-    event: 'updated_token_balances_erc_1155',
-    handler: handleTokenBalancesErc1155Message,
-  });
+  // useSocketMessage({
+  //   channel,
+  //   event: 'updated_token_balances_erc_20',
+  //   handler: handleTokenBalancesErc20Message,
+  // });
+  // useSocketMessage({
+  //   channel,
+  //   event: 'updated_token_balances_erc_721',
+  //   handler: handleTokenBalancesErc721Message,
+  // });
+  // useSocketMessage({
+  //   channel,
+  //   event: 'updated_token_balances_erc_1155',
+  //   handler: handleTokenBalancesErc1155Message,
+  // });
+  useEffect(()=> {
+    if (tab !== undefined) dataResultToken?.callback('tokens', tab === 'tokens_erc20' ? 'ERC-20' : tab === 'tokens_erc721' ? 'ERC-721' : tab === 'tokens_erc1155' ? 'ERC-1155' : 'ERC-20')
+  }, [tab])
 
   const tabs = [
-    { id: tokenTabsByType['ERC-20'], title: 'ERC-20', component: <ERC20Tokens tokensQuery={ erc20Query }/> },
-    { id: tokenTabsByType['ERC-721'], title: 'ERC-721', component: <ERC721Tokens tokensQuery={ erc721Query }/> },
-    { id: tokenTabsByType['ERC-1155'], title: 'ERC-1155', component: <ERC1155Tokens tokensQuery={ erc1155Query }/> },
+    { id: tokenTabsByType['ERC-20'], title: 'ERC-20', component: <ERC20Tokens tokensQuery={ dataResultToken }/> },
+    { id: tokenTabsByType['ERC-721'], title: 'ERC-721', component: <ERC721Tokens tokensQuery={ dataResultToken }/> },
+    { id: tokenTabsByType['ERC-1155'], title: 'ERC-1155', component: <ERC1155Tokens tokensQuery={ dataResultToken }/> },
   ];
 
   let pagination: PaginationParams | undefined;
 
   if (tab === tokenTabsByType['ERC-1155']) {
-    pagination = erc1155Query.pagination;
+    pagination = dataResultToken.pagination;
   } else if (tab === tokenTabsByType['ERC-721']) {
-    pagination = erc721Query.pagination;
+    pagination = dataResultToken.pagination;
   } else {
-    pagination = erc20Query.pagination;
+    pagination = dataResultToken.pagination;
   }
 
   return (
@@ -174,7 +180,7 @@ const AddressTokens = () => {
         colorScheme="gray"
         size="sm"
         tabListProps={ isMobile ? TAB_LIST_PROPS_MOBILE : TAB_LIST_PROPS }
-        rightSlot={ pagination.isVisible && !isMobile ? <Pagination { ...pagination }/> : null }
+        rightSlot={ dataResultToken.pagination.isVisible && !isMobile ? <Pagination { ...dataResultToken.pagination }/> : null }
         stickyEnabled={ !isMobile }
       />
     </>

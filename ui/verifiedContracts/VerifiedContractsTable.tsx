@@ -19,7 +19,7 @@ interface Props {
 
 const VerifiedContractsTable = ({ data, sort, onSortToggle, isLoading }: Props) => {
   const sortIconTransform = sort?.includes('asc') ? 'rotate(-90deg)' : 'rotate(90deg)';
-
+  
   return (
     <Table variant="simple" size="sm">
       <Thead top={ 80 }>
@@ -46,7 +46,7 @@ const VerifiedContractsTable = ({ data, sort, onSortToggle, isLoading }: Props) 
       <Tbody>
         { data.map((item, index) => (
           <VerifiedContractsTableItem
-            key={ item.address.hash + (isLoading ? index : '') }
+            key={ item?.address?.hash + (isLoading ? index : '') }
             data={ item }
             isLoading={ isLoading }/>
         )) }

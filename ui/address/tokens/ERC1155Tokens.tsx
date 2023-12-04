@@ -8,9 +8,10 @@ import Pagination from 'ui/shared/pagination/Pagination';
 import type { QueryWithPagesResult } from 'ui/shared/pagination/useQueryWithPages';
 
 import NFTItem from './NFTItem';
+import { apos } from 'lib/html-entities';
 
 type Props = {
-  tokensQuery: QueryWithPagesResult<'address_tokens'>;
+  tokensQuery: any;
 }
 
 const ERC1155Tokens = ({ tokensQuery }: Props) => {
@@ -24,14 +25,14 @@ const ERC1155Tokens = ({ tokensQuery }: Props) => {
     </ActionBar>
   );
 
-  const content = data?.items ? (
+  const content = data ? (
     <Grid
       w="100%"
       columnGap={{ base: 3, lg: 6 }}
       rowGap={{ base: 3, lg: 6 }}
       gridTemplateColumns={{ base: 'repeat(2, calc((100% - 12px)/2))', lg: 'repeat(auto-fill, minmax(210px, 1fr))' }}
     >
-      { data.items.map((item, index) => {
+      { data.map((item: any, index: number) => {
         const key = item.token.address + '_' + (item.token_instance?.id && !isPlaceholderData ? `id_${ item.token_instance?.id }` : `index_${ index }`);
 
         return (
@@ -48,8 +49,9 @@ const ERC1155Tokens = ({ tokensQuery }: Props) => {
   return (
     <DataListDisplay
       isError={ isError }
-      items={ data?.items }
+      items={ data }
       emptyText="There are no tokens of selected type."
+      filterProps={{ emptyFilteredText: `Couldn${ apos }t find any transaction that matches your query.`, hasActiveFilters: Boolean(data?.length <= 0) }}
       content={ content }
       actionBar={ actionBar }
     />

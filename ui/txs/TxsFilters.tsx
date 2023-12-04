@@ -38,6 +38,8 @@ const TxsFilters = ({ filters, appliedFiltersNum }: Props) => {
   const [ methodFilter, setMethodFilter ] = useState<Array<MethodFilter>>(filters?.method || []);
 
   const onTypeFilterChange = useCallback((val: Array<TypeFilter>) => {
+    console.log(val);
+    
     setTypeFilter(val);
   }, []);
 

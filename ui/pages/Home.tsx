@@ -1,15 +1,11 @@
 import { Box, Heading, Flex, LightMode } from '@chakra-ui/react';
 import React from 'react';
 
-import config from 'configs/app';
 import ChainIndicators from 'ui/home/indicators/ChainIndicators';
 import LatestBlocks from 'ui/home/LatestBlocks';
-import Stats from 'ui/home/Stats';
 import Transactions from 'ui/home/Transactions';
-import AdBanner from 'ui/shared/ad/AdBanner';
-import ProfileMenuDesktop from 'ui/snippets/profileMenu/ProfileMenuDesktop';
+
 import SearchBar from 'ui/snippets/searchBar/SearchBar';
-import NetworkAddToWallet from 'ui/shared/NetworkAddToWallet';
 
 const Home = () => {
   return (

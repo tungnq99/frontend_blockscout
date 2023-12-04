@@ -43,7 +43,7 @@ const Header = ({ isHomePage, renderSearchBar }: Props) => {
         >
           <Burger/>
           <NetworkLogo/>
-          <NetworkAddToWallet/>
+          {/* <NetworkAddToWallet/> */}
           {/* { config.features.account.isEnabled ? <ProfileMenuMobile/> : <Box boxSize={ 10 }/> } */}
         </Flex>
         { !isHomePage && searchBar }

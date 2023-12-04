@@ -19,6 +19,7 @@ import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
 import AddressCsvExportLink from './AddressCsvExportLink';
 import AddressTxsFilter from './AddressTxsFilter';
 import AddressIntTxsList from './internals/AddressIntTxsList';
+import useMultiAPI from 'playwright/utils/useMultiApi';
 
 const getFilterValue = (getFilterValueFromQuery<AddressFromToFilter>).bind(null, AddressFromToFilterValues);
 
@@ -27,33 +28,33 @@ const AddressInternalTxs = ({ scrollRef }: {scrollRef?: React.RefObject<HTMLDivE
   const [ filterValue, setFilterValue ] = React.useState<AddressFromToFilter>(getFilterValue(router.query.filter));
 
   const hash = getQueryParamString(router.query.hash);
-
-  const { data, isPlaceholderData, isError, pagination, onFilterChange } = useQueryWithPages({
-    resourceName: 'address_internal_txs',
-    pathParams: { hash },
-    filters: { filter: filterValue },
-    scrollRef,
-    options: {
-      placeholderData: generateListStub<'address_internal_txs'>(
-        INTERNAL_TX,
-        50,
-        {
-          next_page_params: {
-            block_number: 8987561,
-            index: 2,
-            items_count: 50,
-            transaction_index: 67,
-          },
-        },
-      ),
-    },
-  });
+  const { data, isPlaceholderData, isError, pagination, callback }  = useMultiAPI(`addresses/${hash}/internal-transactions`);
+  // const { data, isPlaceholderData, isError, pagination, onFilterChange } = useQueryWithPages({
+  //   resourceName: 'address_internal_txs',
+  //   pathParams: { hash },
+  //   filters: { filter: filterValue },
+  //   scrollRef,
+  //   options: {
+  //     placeholderData: generateListStub<'address_internal_txs'>(
+  //       INTERNAL_TX,
+  //       50,
+  //       {
+  //         next_page_params: {
+  //           block_number: 8987561,
+  //           index: 2,
+  //           items_count: 50,
+  //           transaction_index: 67,
+  //         },
+  //       },
+  //     ),
+  //   },
+  // });
 
   const handleFilterChange = React.useCallback((val: string | Array<string>) => {
-    const newVal = getFilterValue(val);
+    const newVal: any = val === 'all' ? '' : val;
+    callback('internal', newVal);
     setFilterValue(newVal);
-    onFilterChange({ filter: newVal });
-  }, [ onFilterChange ]);
+  }, []);
 
   const content = data?.items ? (
     <>
@@ -87,8 +88,8 @@ const AddressInternalTxs = ({ scrollRef }: {scrollRef?: React.RefObject<HTMLDivE
   return (
     <DataListDisplay
       isError={ isError }
-      items={ data?.items }
-      filterProps={{ emptyFilteredText: `Couldn${ apos }t find any transaction that matches your query.`, hasActiveFilters: Boolean(filterValue) }}
+      items={ data }
+      filterProps={{ emptyFilteredText: `Couldn${ apos }t find any transaction that matches your query.`, hasActiveFilters: Boolean(filterValue || data?.length <= 0) }}
       emptyText="There are no internal transactions for this address."
       content={ content }
       actionBar={ actionBar }

@@ -9,9 +9,10 @@ import type { QueryWithPagesResult } from 'ui/shared/pagination/useQueryWithPage
 
 import ERC20TokensListItem from './ERC20TokensListItem';
 import ERC20TokensTable from './ERC20TokensTable';
+import { apos } from 'lib/html-entities';
 
 type Props = {
-  tokensQuery: QueryWithPagesResult<'address_tokens'>;
+  tokensQuery: any;
 }
 
 const ERC20Tokens = ({ tokensQuery }: Props) => {
@@ -25,10 +26,10 @@ const ERC20Tokens = ({ tokensQuery }: Props) => {
     </ActionBar>
   );
 
-  const content = data?.items ? (
+  const content = data ? (
     <>
-      <Hide below="lg" ssr={ false }><ERC20TokensTable data={ data.items } top={ pagination.isVisible ? 72 : 0 } isLoading={ isPlaceholderData }/></Hide>
-      <Show below="lg" ssr={ false }>{ data.items.map((item, index) => (
+      <Hide below="lg" ssr={ false }><ERC20TokensTable data={ data } top={ pagination.isVisible ? 72 : 0 } isLoading={ isPlaceholderData }/></Hide>
+      <Show below="lg" ssr={ false }>{ data.map((item: any, index: number) => (
         <ERC20TokensListItem
           key={ item.token.address + (isPlaceholderData ? index : '') }
           { ...item }
@@ -40,8 +41,9 @@ const ERC20Tokens = ({ tokensQuery }: Props) => {
   return (
     <DataListDisplay
       isError={ isError }
-      items={ data?.items }
+      items={ data }
       emptyText="There are no tokens of selected type."
+      filterProps={{ emptyFilteredText: `Couldn${ apos }t find any transaction that matches your query.`, hasActiveFilters: Boolean(data?.length <= 0) }}
       content={ content }
       actionBar={ actionBar }
     />

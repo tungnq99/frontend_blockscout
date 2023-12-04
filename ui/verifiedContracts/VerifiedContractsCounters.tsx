@@ -1,5 +1,5 @@
 import { Flex, Skeleton } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import useApiQuery from 'lib/api/useApiQuery';
 
@@ -8,6 +8,15 @@ import useMultiAPI from 'playwright/utils/useMultiApi';
 
 const VerifiedContractsCounters = () => {
   const { data, isError, isPlaceholderData, pagination, callback } = useMultiAPI("smart-contracts/counters");
+
+  function totalSum(num: any, name: any) {
+    if (data?.length > 0) {
+      for (let index = 0; index < data?.length; index++) {
+        num += Number(data[index][name]);
+      }
+      return num.toString();
+    }
+  }
   
   if (isError) {
     return null;
@@ -39,13 +48,13 @@ const VerifiedContractsCounters = () => {
       <>
         <VerifiedContractsCountersItem
           name="Total"
-          total={ data[0].smart_contracts }
-          new24={ data[0].new_smart_contracts_24h }
+          total={ totalSum(0, "smart_contracts") }
+          new24={ totalSum(0, "new_smart_contracts_24h")}
         />
         <VerifiedContractsCountersItem
           name="Verified"
-          total={ data[0].verified_smart_contracts }
-          new24={ data[0].new_verified_smart_contracts_24h }
+          total={ totalSum(0, "verified_smart_contracts")}
+          new24={ totalSum(0, "new_verified_smart_contracts_24h")}
         />
       </>
     );

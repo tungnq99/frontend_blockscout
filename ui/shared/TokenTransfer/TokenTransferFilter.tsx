@@ -33,7 +33,8 @@ const TokenTransferFilter = ({
   isLoading,
 }: Props) => {
   const isInitialLoading = useIsInitialLoading(isLoading);
-
+  console.log(isLoading);
+  
   return (
     <PopoverFilter appliedFiltersNum={ appliedFiltersNum } contentProps={{ w: '200px' }} isLoading={ isInitialLoading }>
       { withAddressFilter && (

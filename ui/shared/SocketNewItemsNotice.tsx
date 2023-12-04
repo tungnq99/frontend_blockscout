@@ -40,17 +40,17 @@ const SocketNewItemsNotice = chakra(({ children, className, url, num, alert, typ
         name = 'transaction';
         break;
     }
+    return   <Link href={ url }>Scan new { name }s</Link>;
+    // if (!num) {
+      
+    // }
 
-    if (!num) {
-      return `scanning new ${ name }s...`;
-    }
-
-    return (
-      <>
-        <Link href={ url }>{ num.toLocaleString() } more { name }{ num > 1 ? 's' : '' }</Link>
-        <Text whiteSpace="pre"> ha{ num > 1 ? 've' : 's' } come in</Text>
-      </>
-    );
+    // return (
+    //   <>
+    //     <Link href={ url }>{ num.toLocaleString() } more { name }{ num > 1 ? 's' : '' }</Link>
+    //     <Text whiteSpace="pre"> ha{ num > 1 ? 've' : 's' } come in</Text>
+    //   </>
+    // );
   })();
 
   const color = useColorModeValue('blackAlpha.800', 'whiteAlpha.800');

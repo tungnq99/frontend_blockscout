@@ -11,7 +11,7 @@ import LinkInternal from 'ui/shared/LinkInternal';
 
 interface Props {
   prop: keyof AddressCounters;
-  query: UseQueryResult<AddressCounters>;
+  query: any;
   address: string;
   onClick: () => void;
   isAddressQueryLoading: boolean;
@@ -28,8 +28,7 @@ const AddressCounterItem = ({ prop, query, address, onClick, isAddressQueryLoadi
     return <Skeleton h={ 5 } w="80px" borderRadius="full"/>;
   }
 
-  const data = query.data?.[prop];
-
+  const data = query?.dataResult[prop];
   if (query.isError || data === null || data === undefined) {
     return <span>0</span>;
   }

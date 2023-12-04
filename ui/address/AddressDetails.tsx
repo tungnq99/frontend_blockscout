@@ -21,9 +21,11 @@ import TxEntity from 'ui/shared/entities/tx/TxEntity';
 import AddressBalance from './details/AddressBalance';
 import AddressNameInfo from './details/AddressNameInfo';
 import TokenSelect from './tokenSelect/TokenSelect';
+import useFetchCallApi from 'playwright/utils/useFetchCallApi';
+import { APIS } from 'lib/api/apis';
 
 interface Props {
-  addressQuery: UseQueryResult<TAddress, ResourceError>;
+  addressQuery: any;
   scrollRef?: React.RefObject<HTMLDivElement>;
 }
 
@@ -31,14 +33,15 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
   const router = useRouter();
 
   const addressHash = getQueryParamString(router.query.hash);
-
-  const countersQuery = useApiQuery('address_counters', {
-    pathParams: { hash: addressHash },
-    queryOptions: {
-      enabled: Boolean(addressHash) && Boolean(addressQuery.data),
-      placeholderData: ADDRESS_COUNTERS,
-    },
-  });
+  const countersQuery = useFetchCallApi(`${APIS[0]}/addresses/${addressHash}/counters`, null)
+  
+  // const countersQuery = useApiQuery('address_counters', {
+  //   pathParams: { hash: addressHash },
+  //   queryOptions: {
+  //     enabled: Boolean(addressHash) && Boolean(addressQuery.dataResult),
+  //     placeholderData: ADDRESS_COUNTERS,
+  //   },
+  // });
 
   const handleCounterItemClick = React.useCallback(() => {
     window.setTimeout(() => {
@@ -76,7 +79,7 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
     return <DataFetchAlert/>;
   }
 
-  const data = addressQuery.isError ? errorData : addressQuery.data;
+  const data = addressQuery.isError ? errorData : addressQuery.dataResult;
 
   if (!data) {
     return null;
@@ -128,7 +131,7 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
             alignSelf="center"
             py={ 0 }
           >
-            { addressQuery.data ? <TokenSelect onClick={ handleCounterItemClick }/> : <Box py="6px">0</Box> }
+            { addressQuery.dataResult ? <TokenSelect onClick={ handleCounterItemClick }/> : <Box py="6px">0</Box> }
           </DetailsInfoItem>
         ) }
         <DetailsInfoItem
@@ -136,11 +139,11 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
           hint="Number of transactions related to this address"
           isLoading={ addressQuery.isPlaceholderData || countersQuery.isPlaceholderData }
         >
-          { addressQuery.data ? (
+          { addressQuery.dataResult ? (
             <AddressCounterItem
               prop="transactions_count"
               query={ countersQuery }
-              address={ data.hash }
+              address={ data?.hash }
               onClick={ handleCounterItemClick }
               isAddressQueryLoading={ addressQuery.isPlaceholderData }
             />
@@ -153,11 +156,11 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
             hint="Number of transfers to/from this address"
             isLoading={ addressQuery.isPlaceholderData || countersQuery.isPlaceholderData }
           >
-            { addressQuery.data ? (
+            { addressQuery.dataResult ? (
               <AddressCounterItem
                 prop="token_transfers_count"
                 query={ countersQuery }
-                address={ data.hash }
+                address={ data?.hash }
                 onClick={ handleCounterItemClick }
                 isAddressQueryLoading={ addressQuery.isPlaceholderData }
               />
@@ -170,11 +173,11 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
           hint="Gas used by the address"
           isLoading={ addressQuery.isPlaceholderData || countersQuery.isPlaceholderData }
         >
-          { addressQuery.data ? (
+          { addressQuery.dataResult ? (
             <AddressCounterItem
               prop="gas_usage_count"
               query={ countersQuery }
-              address={ data.hash }
+              address={ data?.hash }
               onClick={ handleCounterItemClick }
               isAddressQueryLoading={ addressQuery.isPlaceholderData }
             />
@@ -187,11 +190,11 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
             hint="Number of blocks validated by this validator"
             isLoading={ addressQuery.isPlaceholderData || countersQuery.isPlaceholderData }
           >
-            { addressQuery.data ? (
+            { addressQuery.dataResult ? (
               <AddressCounterItem
                 prop="validations_count"
                 query={ countersQuery }
-                address={ data.hash }
+                address={ data?.hash }
                 onClick={ handleCounterItemClick }
                 isAddressQueryLoading={ addressQuery.isPlaceholderData }
               />

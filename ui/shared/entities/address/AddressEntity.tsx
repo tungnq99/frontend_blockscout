@@ -17,7 +17,7 @@ import { getIconProps } from '../base/utils';
 type LinkProps = EntityBase.LinkBaseProps & Pick<EntityProps, 'address'>;
 
 const Link = chakra((props: LinkProps) => {
-  const defaultHref = route({ pathname: '/address/[hash]', query: { ...props.query, hash: props.address.hash } });
+  const defaultHref = route({ pathname: '/address/[hash]', query: { ...props.query, hash: props.address.hash} });
 
   return (
     <EntityBase.Link
@@ -126,7 +126,7 @@ export interface EntityProps extends EntityBase.EntityBaseProps {
 const AddressEntry = (props: EntityProps) => {
   const linkProps = _omit(props, [ 'className' ]);
   const partsProps = _omit(props, [ 'className', 'onClick' ]);
-
+  
   return (
     <Container className={ props.className }>
       {/* <Icon { ...partsProps }/> */}

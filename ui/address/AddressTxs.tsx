@@ -22,6 +22,7 @@ import TxsContent from 'ui/txs/TxsContent';
 
 import AddressCsvExportLink from './AddressCsvExportLink';
 import AddressTxsFilter from './AddressTxsFilter';
+import useMultiAPI from 'playwright/utils/useMultiApi';
 
 const OVERLOAD_COUNT = 75;
 
@@ -55,100 +56,100 @@ const AddressTxs = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Props) => {
   const [ newItemsCount, setNewItemsCount ] = React.useState(0);
 
   const isMobile = useIsMobile();
-  const currentAddress = getQueryParamString(router.query.hash);
-
+  const hash = getQueryParamString(router.query.hash);
   const [ filterValue, setFilterValue ] = React.useState<AddressFromToFilter>(getFilterValue(router.query.filter));
+  const addressTxsQuery = useMultiAPI(`addresses/${hash}/transactions`); 
 
-  const addressTxsQuery = useQueryWithPages({
-    resourceName: 'address_txs',
-    pathParams: { hash: currentAddress },
-    filters: { filter: filterValue },
-    scrollRef,
-    options: {
-      placeholderData: generateListStub<'address_txs'>(TX, 50, { next_page_params: {
-        block_number: 9005713,
-        index: 5,
-        items_count: 50,
-      } }),
-    },
-  });
+  // const addressTxsQuery = useQueryWithPages({
+  //   resourceName: 'address_txs',
+  //   pathParams: { hash: hash },
+  //   filters: { filter: filterValue },
+  //   scrollRef,
+  //   options: {
+  //     placeholderData: generateListStub<'address_txs'>(TX, 50, { next_page_params: {
+  //       block_number: 9005713,
+  //       index: 5,
+  //       items_count: 50,
+  //     } }),
+  //   },
+  // });
 
   const handleFilterChange = React.useCallback((val: string | Array<string>) => {
 
     const newVal = getFilterValue(val);
     setFilterValue(newVal);
-    addressTxsQuery.onFilterChange({ filter: newVal });
+    //addressTxsQuery.onFilterChange({ filter: newVal });
   }, [ addressTxsQuery ]);
 
-  const handleNewSocketMessage: SocketMessage.AddressTxs['handler'] = (payload) => {
-    setSocketAlert('');
+  // const handleNewSocketMessage: SocketMessage.AddressTxs['handler'] = (payload) => {
+  //   setSocketAlert('');
 
-    queryClient.setQueryData(
-      getResourceKey('address_txs', { pathParams: { hash: currentAddress }, queryParams: { filter: filterValue } }),
-      (prevData: AddressTransactionsResponse | undefined) => {
-        if (!prevData) {
-          return;
-        }
+  //   queryClient.setQueryData(
+  //     getResourceKey('address_txs', { pathParams: { hash: hash }, queryParams: { filter: filterValue } }),
+  //     (prevData: AddressTransactionsResponse | undefined) => {
+  //       if (!prevData) {
+  //         return;
+  //       }
 
-        const newItems: Array<Transaction> = [];
-        let newCount = 0;
+  //       const newItems: Array<Transaction> = [];
+  //       let newCount = 0;
 
-        payload.transactions.forEach(tx => {
-          const currIndex = prevData.items.findIndex((item) => item.hash === tx.hash);
+  //       payload.transactions.forEach(tx => {
+  //         const currIndex = prevData.items.findIndex((item) => item.hash === tx.hash);
 
-          if (currIndex > -1) {
-            prevData.items[currIndex] = tx;
-          } else {
-            if (matchFilter(filterValue, tx, currentAddress)) {
-              if (newItems.length + prevData.items.length >= overloadCount) {
-                newCount++;
-              } else {
-                newItems.push(tx);
-              }
-            }
-          }
-        });
+  //         if (currIndex > -1) {
+  //           prevData.items[currIndex] = tx;
+  //         } else {
+  //           if (matchFilter(filterValue, tx, hash)) {
+  //             if (newItems.length + prevData.items.length >= overloadCount) {
+  //               newCount++;
+  //             } else {
+  //               newItems.push(tx);
+  //             }
+  //           }
+  //         }
+  //       });
 
-        if (newCount > 0) {
-          setNewItemsCount(prev => prev + newCount);
-        }
+  //       if (newCount > 0) {
+  //         setNewItemsCount(prev => prev + newCount);
+  //       }
 
-        return {
-          ...prevData,
-          items: [
-            ...newItems,
-            ...prevData.items,
-          ],
-        };
-      });
-  };
+  //       return {
+  //         ...prevData,
+  //         items: [
+  //           ...newItems,
+  //           ...prevData.items,
+  //         ],
+  //       };
+  //     });
+  // };
 
-  const handleSocketClose = React.useCallback(() => {
-    setSocketAlert('Connection is lost. Please refresh the page to load new transactions.');
-  }, []);
+  // const handleSocketClose = React.useCallback(() => {
+  //   setSocketAlert('Connection is lost. Please refresh the page to load new transactions.');
+  // }, []);
 
-  const handleSocketError = React.useCallback(() => {
-    setSocketAlert('An error has occurred while fetching new transactions. Please refresh the page.');
-  }, []);
+  // const handleSocketError = React.useCallback(() => {
+  //   setSocketAlert('An error has occurred while fetching new transactions. Please refresh the page.');
+  // }, []);
 
-  const channel = useSocketChannel({
-    topic: `addresses:${ currentAddress?.toLowerCase() }`,
-    onSocketClose: handleSocketClose,
-    onSocketError: handleSocketError,
-    isDisabled: addressTxsQuery.pagination.page !== 1 || addressTxsQuery.isPlaceholderData,
-  });
+  // const channel = useSocketChannel({
+  //   topic: `addresses:${ hash?.toLowerCase() }`,
+  //   onSocketClose: handleSocketClose,
+  //   onSocketError: handleSocketError,
+  //   isDisabled: addressTxsQuery.pagination.page !== 1 || addressTxsQuery.isPlaceholderData,
+  // });
 
-  useSocketMessage({
-    channel,
-    event: 'transaction',
-    handler: handleNewSocketMessage,
-  });
+  // useSocketMessage({
+  //   channel,
+  //   event: 'transaction',
+  //   handler: handleNewSocketMessage,
+  // });
 
-  useSocketMessage({
-    channel,
-    event: 'pending_transaction',
-    handler: handleNewSocketMessage,
-  });
+  // useSocketMessage({
+  //   channel,
+  //   event: 'pending_transaction',
+  //   handler: handleNewSocketMessage,
+  // });
 
   const filter = (
     <AddressTxsFilter
@@ -161,7 +162,7 @@ const AddressTxs = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Props) => {
 
   const csvExportLink = (
     <AddressCsvExportLink
-      address={ currentAddress }
+      address={ hash }
       params={{ type: 'transactions', filterType: 'address', filterValue }}
       ml="auto"
       isLoading={ addressTxsQuery.pagination.isLoading }
@@ -172,8 +173,8 @@ const AddressTxs = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Props) => {
     <>
       { !isMobile && (
         <ActionBar mt={ -6 }>
-          { filter }
-          { currentAddress && csvExportLink }
+          {/* { filter } */}
+          { hash && csvExportLink }
           <Pagination { ...addressTxsQuery.pagination } ml={ 8 }/>
         </ActionBar>
       ) }
@@ -181,9 +182,8 @@ const AddressTxs = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Props) => {
         filter={ filter }
         filterValue={ filterValue }
         query={ addressTxsQuery }
-        currentAddress={ typeof currentAddress === 'string' ? currentAddress : undefined }
         enableTimeIncrement
-        showSocketInfo={ addressTxsQuery.pagination.page === 1 }
+        showSocketInfo={ true }
         socketInfoAlert={ socketAlert }
         socketInfoNum={ newItemsCount }
         top={ 80 }

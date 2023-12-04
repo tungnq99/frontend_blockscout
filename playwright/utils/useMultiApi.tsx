@@ -10,14 +10,16 @@ export default function useMultiAPI(hash: string) {
   const [ isPlaceholderData, setIsPlaceholderData ] = React.useState<boolean>(true);
   const [ pagination, setPagination ] = React.useState<any>(10);
 
-  const getMyData = async (q?: any, filter?: any) => {
+  const getMyData = async (text_page?: any, q?: any, filter?: any, ) => {
     try {
-      const query = q !== undefined || filter !== undefined ? `?q=${q}&filter=${filter}` : '';
-      const promises = APIS.map((url) => axios.get(`${url}/${hash}${query}`));
-   
+      const query = text_page === 'contract' ? `?q=${q}&filter=${filter}` : 
+                    text_page === 'token_transfer' ? `?type=${q}&filter=${filter === 'all' ? '' : filter}` : 
+                    text_page === 'tokens' ? `?type=${q}` : 
+                    text_page === 'internal' ? `?filter=${q}` :'';
+      const promises = APIS.map((url, index) => axios.get(`${url}/${hash}${query}`));
       const responses = await Promise.all(promises);
-      
-      const getData = responses.map(res => {
+
+      const getData = responses.map((res, idx) => {
         if (res.status !== 200) {
           setIsError(true);
           toast({
@@ -30,14 +32,15 @@ export default function useMultiAPI(hash: string) {
           });
           return [];
         }
-       
-        return res?.data;
+        const results = res?.data?.items?.length >= 0 ?  res?.data?.items : res?.data;
+        return results;
       });
 
-      const result = getData[0]?.items?.length >= 0 ? getData[0]?.items : getData[0]?.length >= 0 ? getData[0] : getData;
+      const flatArr = getData.flat();
+      const result =  hash === "addresses" ? removeDuplicateArr(flatArr) : flatArr;
       setData(result.sort((x: any, y: any) => Date.parse(y.timestamp) -  Date.parse(x.timestamp)));
       
-      setIsPlaceholderData(result?.length === 0);
+      setIsPlaceholderData(false);
     } catch (error: any) {
       toast({
         position: 'top-right',
@@ -50,8 +53,20 @@ export default function useMultiAPI(hash: string) {
     }
   }
 
-  const callback: any = (q: any, filter: any) => {
-    getMyData(q, filter);
+  function removeDuplicateArr(array: any) {
+    const uniqueObjectsMap = new Map();
+
+    // Iterate through the array and add each object to the Map
+    for (const obj of array) {
+        uniqueObjectsMap.set(obj.hash, obj);
+    }
+
+    // Convert the Map back to an array
+    return Array.from(uniqueObjectsMap.values());
+  }
+
+  const callback: any = (text_page?: any, q?: any, filter?: any) => {
+    getMyData(text_page, q, filter);
   }
 
   useEffect(() => {

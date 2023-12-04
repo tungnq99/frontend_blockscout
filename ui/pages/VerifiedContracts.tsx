@@ -36,8 +36,7 @@ const VerifiedContracts = () => {
 
   const isMobile = useIsMobile();
 
-  const { data, isError, isPlaceholderData, pagination, callback } = useMultiAPI("smart-contracts")
-  
+  const { data, isError, isPlaceholderData, pagination, callback } = useMultiAPI("smart-contracts");
   // const { isError, isPlaceholderData, data, pagination, onFilterChange } = useQueryWithPages({
   //   resourceName: 'verified_contracts',
   //   filters: { q: debouncedSearchTerm, filter: type },
@@ -62,8 +61,7 @@ const VerifiedContracts = () => {
 
 
   const handleSearchTermChange = React.useCallback((value: string) => {
-    console.log(value)
-    callback(value, type);
+    callback("contract", value, type);
     setSearchTerm(value);
   }, [ type ]);
 
@@ -73,7 +71,7 @@ const VerifiedContracts = () => {
     }
 
     const filter = value === 'all' ? undefined : value as VerifiedContractsFilters['filter'];
-    callback(debouncedSearchTerm, filter);
+    callback("contract", debouncedSearchTerm, filter);
     setType(filter);
   }, [ debouncedSearchTerm ]);
 
@@ -128,16 +126,14 @@ const VerifiedContracts = () => {
       ) }
     </>
   );
-
-  const sortedData = data?.slice();
   
-  const content = sortedData ? (
+  const content = data ? (
     <>
       <Show below="lg" ssr={ false }>
-        <VerifiedContractsList data={ sortedData } isLoading={ isPlaceholderData }/>
+        <VerifiedContractsList data={ data } isLoading={ isPlaceholderData }/>
       </Show>
       <Hide below="lg" ssr={ false }>
-        <VerifiedContractsTable data={ sortedData } sort={ sort } onSortToggle={ handleSortToggle } isLoading={ isPlaceholderData }/>
+        <VerifiedContractsTable data={ data } sort={ sort } onSortToggle={ handleSortToggle } isLoading={ isPlaceholderData }/>
       </Hide>
     </>
   ) : null;

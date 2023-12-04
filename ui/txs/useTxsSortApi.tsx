@@ -5,9 +5,10 @@ import useToast from 'lib/hooks/useToast';
 
 export default function useTxsSortAPI(query: string) {
   const toast = useToast();
-  const [ dataResult, setData ] = React.useState<any>();
+  const [ data, setData ] = React.useState<any>([]);
   const [ isError, setIsError ] = React.useState<boolean>(false);
   const [ isPlaceholderData, setIsPlaceholderData ] = React.useState<boolean>(true);
+  const [ pagination, setPagination ] = React.useState<any>(50);
 
   const getMyData = async (query: string) => {
     try {
@@ -31,11 +32,10 @@ export default function useTxsSortAPI(query: string) {
        
         return res?.data?.items;
       });
-      
-      setData(getData[0].sort((x: any, y: any) => Date.parse(y.timestamp) -  Date.parse(x.timestamp)));
-      setTimeout(() => {
-        setIsPlaceholderData(false);
-      }, 1000);
+     
+      const flatArr = getData.flat();
+      setData(flatArr.sort((x: any, y: any) => Date.parse(y.timestamp) -  Date.parse(x.timestamp)));
+      setIsPlaceholderData(false);
     } catch (error: any) {
       toast({
         position: 'top-right',
@@ -48,23 +48,19 @@ export default function useTxsSortAPI(query: string) {
     }
   }
 
-  const callback: any = () => {
+  const callback: any = React.useCallback(() => {
     getMyData(query);
-  }
+  }, [query])
 
   useEffect(() => {
     getMyData(query);
   }, [])
 
-  React.useCallback(() => () => {
-    getMyData(query);
-  }, [ query ]);
-
-
   return {
-    dataResult,
+    data,
     isPlaceholderData,
     isError,
+    pagination,
     callback
   };
 
