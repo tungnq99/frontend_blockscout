@@ -31,6 +31,7 @@ import RoutedTabs from 'ui/shared/Tabs/RoutedTabs';
 import TabsSkeleton from 'ui/shared/Tabs/TabsSkeleton';
 import { APIS } from 'lib/api/apis';
 import useFetchCallApi from 'playwright/utils/useFetchCallApi';
+import useMultiAPI from 'playwright/utils/useMultiApi';
 
 export const tokenTabsByType: Record<TokenType, string> = {
   'ERC-20': 'tokens_erc20',
@@ -39,7 +40,7 @@ export const tokenTabsByType: Record<TokenType, string> = {
 } as const;
 
 const TOKEN_TABS = Object.values(tokenTabsByType);
-
+let _addressQuery: any;
 const AddressPageContent = () => {
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -47,10 +48,11 @@ const AddressPageContent = () => {
 
   const tabsScrollRef = React.useRef<HTMLDivElement>(null);
   const hash = getQueryParamString(router.query.hash);
+  const {data, isError, isPlaceholderData, pagination, callback} = useMultiAPI(`addresses/${hash}`)
+  if (data?.length == 2 && data[0]?.is_contract) _addressQuery = { dataResult: data[0], isError, isPlaceholderData, pagination };
 
   const addressQuery = useFetchCallApi(`${APIS[0]}/addresses/${hash}`, null)
-  const addressTabsCountersQuery = useFetchCallApi(`${APIS[0]}/addresses/${hash}/tabs-counters`, null)
-  //console.log(address_query);
+  //const addressTabsCountersQuery = useFetchCallApi(`${APIS[0]}/addresses/${hash}/tabs-counters`, null)
   // const addressQuery = useApiQuery('address', {
   //   pathParams: { hash },
   //   queryOptions: {
@@ -134,7 +136,7 @@ const AddressPageContent = () => {
         subTabs: contractTabs.map(tab => tab.id),
       } : undefined,
     ].filter(Boolean);
-  }, [ addressQuery.dataResult, contractTabs, addressTabsCountersQuery.dataResult ]);
+  }, [ addressQuery.dataResult, contractTabs]);
 
   const tags = (
     <EntityTags
@@ -178,7 +180,7 @@ const AddressPageContent = () => {
       <AddressDetails addressQuery={ addressQuery } scrollRef={ tabsScrollRef }/>
       { /* should stay before tabs to scroll up with pagination */ }
       <Box ref={ tabsScrollRef }></Box>
-      { (addressQuery.isPlaceholderData || addressTabsCountersQuery.isPlaceholderData) ? <TabsSkeleton tabs={ tabs }/> : content }
+      { (addressQuery.isPlaceholderData) ? <TabsSkeleton tabs={ tabs }/> : content }
     </>
   );
 };

@@ -45,14 +45,14 @@ export default function useMultiAPI(hash: string) {
       
       setIsPlaceholderData(false);
     } catch (error: any) {
-      toast({
-        position: 'top-right',
-        title: 'Error',
-        description: error?.message || 'Something went wrong',
-        status: 'error',
-        variant: 'subtle',
-        isClosable: true,
-      });
+      // toast({
+      //   position: 'top-right',
+      //   title: 'Error',
+      //   description: error?.message || 'Something went wrong',
+      //   status: 'error',
+      //   variant: 'subtle',
+      //   isClosable: true,
+      // });
     }
   }
 
