@@ -16,7 +16,7 @@ export default function useMultiAPI(hash: string) {
                     text_page === 'token_transfer' ? `?type=${q}&filter=${filter === 'all' ? '' : filter}` : 
                     text_page === 'tokens' ? `?type=${q}` : 
                     text_page === 'internal' ? `?filter=${q}` : '';
-      const promises = APIS.map((url, index) => axios.get(`${url}/${hash}${query}`));
+      const promises = APIS.map((url: any, index: number) => axios.get(`${url}/${hash}${query}`));
 
       const responses = (await Promise.allSettled(promises)).filter(res => res.status === 'fulfilled');
       const getData = responses.map((response: any, idx) => {

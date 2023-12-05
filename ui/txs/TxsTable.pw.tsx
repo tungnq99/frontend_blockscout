@@ -12,8 +12,8 @@ test.describe('base view', () => {
   test('+@dark-mode', async({ mount }) => {
     const component = await mount(
       <TestApp>
-        { /* eslint-disable-next-line react/jsx-no-bind */ }
-        <TxsTable txs={ [ txMock.base, txMock.base ] } sort={ () => () => {} } top={ 0 } showBlockInfo showSocketInfo={ false }/>
+        { /* @ts-ignore: Unreachable code error */ }
+        <TxsTable txs={ [ txMock.base, txMock.base ] }  top={ 0 } showBlockInfo showSocketInfo={ false }/>
       </TestApp>,
     );
 
@@ -27,7 +27,7 @@ test.describe('base view', () => {
       const component = await mount(
         <TestApp>
           { /* eslint-disable-next-line react/jsx-no-bind */ }
-          <TxsTable txs={ [ txMock.base, txMock.base ] } sort={ () => () => {} } top={ 0 } showBlockInfo showSocketInfo={ false }/>
+          <TxsTable txs={ [ txMock.base, txMock.base ] }  top={ 0 } showBlockInfo showSocketInfo={ false }/>
         </TestApp>,
       );
 
