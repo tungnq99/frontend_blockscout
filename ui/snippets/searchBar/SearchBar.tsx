@@ -151,7 +151,7 @@ const SearchBar = ({ isHomepage }: Props) => {
             { searchTerm.trim().length === 0 && recentSearchKeywords.length > 0 && (
               <SearchBarRecentKeywords onClick={ handleSearchTermChange } onClear={ onClose }/>
             ) }
-            { searchTerm.trim().length > 0 && (
+            { searchTerm.trim().length > 0 && query !== undefined && (
               <SearchBarSuggest
                 query={ query }
                 searchTerm={ debouncedSearchTerm }

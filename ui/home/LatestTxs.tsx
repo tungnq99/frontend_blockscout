@@ -14,7 +14,7 @@ import useMultiAPI from '../../playwright/utils/useMultiApi';
 const LatestTransactions = () => {
   const isMobile = useIsMobile();
   const txsCount = isMobile ? 2 : 6;
-  const { data, isPlaceholderData, isError } = useMultiAPI("main-page/transactions");
+  const { data, isPlaceholderData, isError } = useMultiAPI("main-page/transactions", true);
   
   const { num, socketAlert } = useNewTxsSocket();
 

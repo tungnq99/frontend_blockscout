@@ -3,7 +3,7 @@ const axios = require('axios');
 import { APIS } from 'lib/api/apis';
 import useToast from 'lib/hooks/useToast';
 
-export default function useMultiAPI(hash: string) {
+export default function useMultiAPI(hash: string, isEnable?: any) {
   const toast = useToast();
   const [ data, setData ] = React.useState<any>();
   const [ isError, setIsError ] = React.useState<boolean>(false);
@@ -12,8 +12,7 @@ export default function useMultiAPI(hash: string) {
 
   const getMyData = async (text_page?: any, q?: any, filter?: any) => {
     try {
-      const query = text_page === 'search' ? `?q=${q}` : 
-                    text_page === 'contract' ? `?q=${q}&filter=${filter}` : 
+      const query = text_page === 'contract' ? `?q=${q}&filter=${filter}` : 
                     text_page === 'token_transfer' ? `?type=${q}&filter=${filter === 'all' ? '' : filter}` : 
                     text_page === 'tokens' ? `?type=${q}` : 
                     text_page === 'internal' ? `?filter=${q}` : '';
@@ -41,7 +40,7 @@ export default function useMultiAPI(hash: string) {
       });
 
       const flatArr = getData.flat();
-      const result =  hash === "addresses" ? removeDuplicateArr(flatArr) : flatArr;
+      const result =  hash === "addresses" || text_page === "search" ? removeDuplicateArr(flatArr) : flatArr;
       setData(result.sort((x: any, y: any) => Date.parse(y.timestamp) -  Date.parse(x.timestamp)));
       
       setIsPlaceholderData(false);
@@ -74,7 +73,9 @@ export default function useMultiAPI(hash: string) {
   }
 
   useEffect(() => {
-    getMyData();
+    if (isEnable) {
+      getMyData();
+    }
   }, [])
 
   return {

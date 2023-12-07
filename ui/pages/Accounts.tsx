@@ -33,7 +33,7 @@ const Accounts = () => {
   //   },
   // });
 
-  const { isError, isPlaceholderData, data, pagination } = useMultiAPI("addresses"); 
+  const { isError, isPlaceholderData, data, pagination } = useMultiAPI("addresses", true); 
   
   const actionBar = pagination.isVisible && (
     <ActionBar mt={ -6 }>

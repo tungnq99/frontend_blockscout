@@ -89,7 +89,7 @@ const AddressTokenTransfers = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Pr
     },
   );
 
-  const { isError, isPlaceholderData, data, pagination, callback } = useMultiAPI(`addresses/${currentAddress}/token-transfers`); 
+  const { isError, isPlaceholderData, data, pagination, callback } = useMultiAPI(`addresses/${currentAddress}/token-transfers`, true); 
   
   // const { isError, isPlaceholderData, data, pagination, onFilterChange } = useQueryWithPages({
   //   resourceName: 'address_token_transfers',

@@ -36,7 +36,7 @@ const VerifiedContracts = () => {
 
   const isMobile = useIsMobile();
 
-  const { data, isError, isPlaceholderData, pagination, callback } = useMultiAPI("smart-contracts");
+  const { data, isError, isPlaceholderData, pagination, callback } = useMultiAPI("smart-contracts", true);
   // const { isError, isPlaceholderData, data, pagination, onFilterChange } = useQueryWithPages({
   //   resourceName: 'verified_contracts',
   //   filters: { q: debouncedSearchTerm, filter: type },

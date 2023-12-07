@@ -28,7 +28,7 @@ const AddressInternalTxs = ({ scrollRef }: {scrollRef?: React.RefObject<HTMLDivE
   const [ filterValue, setFilterValue ] = React.useState<AddressFromToFilter>(getFilterValue(router.query.filter));
 
   const hash = getQueryParamString(router.query.hash);
-  const { data, isPlaceholderData, isError, pagination, callback }  = useMultiAPI(`addresses/${hash}/internal-transactions`);
+  const { data, isPlaceholderData, isError, pagination, callback }  = useMultiAPI(`addresses/${hash}/internal-transactions`, true);
   // const { data, isPlaceholderData, isError, pagination, onFilterChange } = useQueryWithPages({
   //   resourceName: 'address_internal_txs',
   //   pathParams: { hash },

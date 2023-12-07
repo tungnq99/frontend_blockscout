@@ -58,7 +58,7 @@ const AddressTxs = ({ scrollRef, overloadCount = OVERLOAD_COUNT }: Props) => {
   const isMobile = useIsMobile();
   const hash = getQueryParamString(router.query.hash);
   const [ filterValue, setFilterValue ] = React.useState<AddressFromToFilter>(getFilterValue(router.query.filter));
-  const addressTxsQuery = useMultiAPI(`addresses/${hash}/transactions`); 
+  const addressTxsQuery = useMultiAPI(`addresses/${hash}/transactions`, true); 
 
   // const addressTxsQuery = useQueryWithPages({
   //   resourceName: 'address_txs',

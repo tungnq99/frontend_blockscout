@@ -54,7 +54,7 @@ const AddressTokens = () => {
   const tab = getQueryParamString(router.query.tab);
   const hash = getQueryParamString(router.query.hash); 
   
-  const dataResultToken  = useMultiAPI(`addresses/${hash}/tokens`);
+  const dataResultToken  = useMultiAPI(`addresses/${hash}/tokens`, true);
   // const erc20Query = useQueryWithPages({
   //   resourceName: 'address_tokens',
   //   pathParams: { hash },

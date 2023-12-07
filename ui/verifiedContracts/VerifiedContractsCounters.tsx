@@ -7,7 +7,7 @@ import VerifiedContractsCountersItem from './VerifiedContractsCountersItem';
 import useMultiAPI from 'playwright/utils/useMultiApi';
 
 const VerifiedContractsCounters = () => {
-  const { data, isError, isPlaceholderData, pagination, callback } = useMultiAPI("smart-contracts/counters");
+  const { data, isError, isPlaceholderData, pagination, callback } = useMultiAPI("smart-contracts/counters", true);
 
   function totalSum(num: any, name: any) {
     if (data?.length > 0) {

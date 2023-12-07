@@ -18,7 +18,7 @@ import SearchBarSuggestApp from './SearchBarSuggestApp';
 import SearchBarSuggestItem from './SearchBarSuggestItem';
 
 interface Props {
-  query: UseQueryResult<Array<SearchResultItem>, ResourceError<unknown>>;
+  query: any;
   searchTerm: string;
   onItemClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
   containerId: string;
@@ -36,7 +36,7 @@ const SearchBarSuggest = ({ query, searchTerm, onItemClick, containerId }: Props
 
   const handleScroll = React.useCallback(() => {
     const container = document.getElementById(containerId);
-    if (!container || !query.data?.length) {
+    if (!container || !query?.data?.length) {
       return;
     }
     const topLimit = container.getBoundingClientRect().y + (tabsRef.current?.clientHeight || 0) + 24;
@@ -50,7 +50,7 @@ const SearchBarSuggest = ({ query, searchTerm, onItemClick, containerId }: Props
         break;
       }
     }
-  }, [ containerId, query.data ]);
+  }, [ containerId, query?.data ]);
 
   React.useEffect(() => {
     const container = document.getElementById(containerId);
@@ -66,11 +66,11 @@ const SearchBarSuggest = ({ query, searchTerm, onItemClick, containerId }: Props
   }, [ containerId, handleScroll ]);
 
   const itemsGroups = React.useMemo(() => {
-    if (!query.data && !marketplaceApps.displayedApps) {
+    if (!query?.data && !marketplaceApps.displayedApps) {
       return {};
     }
     const map: Partial<ItemsCategoriesMap> = {};
-    query.data?.forEach(item => {
+    query?.data?.forEach((item: any) => {
       const cat = getItemCategory(item) as ApiCategory;
       if (cat) {
         if (cat in map) {
@@ -84,7 +84,7 @@ const SearchBarSuggest = ({ query, searchTerm, onItemClick, containerId }: Props
       map.app = marketplaceApps.displayedApps;
     }
     return map;
-  }, [ query.data, marketplaceApps.displayedApps ]);
+  }, [ query?.data, marketplaceApps.displayedApps ]);
 
   const scrollToCategory = React.useCallback((index: number) => () => {
     setTabIndex(index);
@@ -107,7 +107,7 @@ const SearchBarSuggest = ({ query, searchTerm, onItemClick, containerId }: Props
       return <Text color="black">Something went wrong. Try refreshing the page or come back later.</Text>;
     }
 
-    if (!query.data || query.data.length === 0) {
+    if (!query?.data || query?.data?.length === 0) {
       return <Text>No results found.</Text>;
     }
 

@@ -48,7 +48,7 @@ const AddressPageContent = () => {
 
   const tabsScrollRef = React.useRef<HTMLDivElement>(null);
   const hash = getQueryParamString(router.query.hash);
-  const {data, isError, isPlaceholderData, pagination, callback} = useMultiAPI(`addresses/${hash}`)
+  const {data, isError, isPlaceholderData, pagination, callback} = useMultiAPI(`addresses/${hash}`, true)
   if (data?.length == 2 && data[0]?.is_contract) _addressQuery = { dataResult: data[0], isError, isPlaceholderData, pagination };
 
   const addressQuery = useFetchCallApi(`${APIS[0]}/addresses/${hash}`, null)

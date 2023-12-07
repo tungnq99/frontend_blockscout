@@ -15,7 +15,7 @@ const AddressLogs = ({ scrollRef }: {scrollRef?: React.RefObject<HTMLDivElement>
   const router = useRouter();
 
   const hash = getQueryParamString(router.query.hash);
-  const { data, isPlaceholderData, isError, pagination, callback }  = useMultiAPI(`addresses/${hash}/logs`);
+  const { data, isPlaceholderData, isError, pagination, callback }  = useMultiAPI(`addresses/${hash}/logs`, true);
   // const { data, isPlaceholderData, isError, pagination } = useQueryWithPages({
   //   resourceName: 'address_logs',
   //   pathParams: { hash },
