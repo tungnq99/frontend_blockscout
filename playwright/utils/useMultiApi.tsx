@@ -10,9 +10,10 @@ export default function useMultiAPI(hash: string) {
   const [ isPlaceholderData, setIsPlaceholderData ] = React.useState<boolean>(true);
   const [ pagination, setPagination ] = React.useState<any>(10);
 
-  const getMyData = async (text_page?: any, q?: any, filter?: any, ) => {
+  const getMyData = async (text_page?: any, q?: any, filter?: any) => {
     try {
-      const query = text_page === 'contract' ? `?q=${q}&filter=${filter}` : 
+      const query = text_page === 'search' ? `?q=${q}` : 
+                    text_page === 'contract' ? `?q=${q}&filter=${filter}` : 
                     text_page === 'token_transfer' ? `?type=${q}&filter=${filter === 'all' ? '' : filter}` : 
                     text_page === 'tokens' ? `?type=${q}` : 
                     text_page === 'internal' ? `?filter=${q}` : '';

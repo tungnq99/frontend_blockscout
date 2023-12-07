@@ -38,6 +38,7 @@ const SearchBar = ({ isHomepage }: Props) => {
 
   const handleSubmit = React.useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+   
     if (searchTerm) {
       const url = route({ pathname: '/search-results', query: { q: searchTerm } });
       mixpanel.logEvent(mixpanel.EventTypes.SEARCH_QUERY, {
@@ -160,7 +161,7 @@ const SearchBar = ({ isHomepage }: Props) => {
             ) }
           </Box>
         </PopoverBody>
-        { searchTerm.trim().length > 0 && query.data && query.data.length >= 50 && (
+        { searchTerm.trim().length > 0 && query?.data && query?.data.length >= 50 && (
           <PopoverFooter>
             <LinkInternal
               href={ route({ pathname: '/search-results', query: { q: searchTerm } }) }
